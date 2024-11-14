@@ -52,13 +52,13 @@ class User(AbstractBaseUser,PermissionsMixin):
     profile_image = models.ImageField(upload_to="profiles",null=True, blank=True)
     is_staff = models.BooleanField(default=False)
     is_superuser = models.BooleanField(default=False)
-    department = models.OneToOneField(Department, on_delete=models.SET_NULL, on_update=models.CASCADE,null=True,blank=True)
-    assigned_route = models.ForeignKey('Route', on_delete=models.SET_NULL, null=True, blank=True, related_name='users')
+    department = models.OneToOneField(Department, on_delete=models.SET_NULL,null=True,blank=True)
+    assigned_route = models.ForeignKey(Route, on_delete=models.SET_NULL, null=True, blank=True, related_name='users')
 
     objects = CustomUserManager()
 
     USERNAME_FIELD = "email" #fields that can help log in (IF roll no then for admin it starts from 00k-0000)
-    REQUIRED_FIELDS = ['name','email'] #fields needed when creating superuser
+    REQUIRED_FIELDS = ['name'] #fields needed when creating superuser
 
     def __str__(self):
         return self.roll_num
