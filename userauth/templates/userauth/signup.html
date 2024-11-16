@@ -1,0 +1,43 @@
+{% extends 'index.html' %}
+{% load static %}
+
+{% block customjs %}
+  <script src="{% static 'js/toggleforms.js' %}"></script>
+{% endblock %}
+
+{% block customcss %}
+  <link href="{% static 'css/login.css ' %}" rel="stylesheet" />
+{% endblock %}
+
+{% block navbar %}
+
+{% endblock %}
+
+{% block main_content %}
+  <div class="container" id="signupForm">
+    <div class="auth-container">
+      <div class="auth-logo">
+        <i class="fa fa-bus fa-2x"></i>
+        <h4 class="mt-3">Create Account</h4>
+      </div>
+      <form method="post" enctype="multipart/form-data" class="d-flex flex-column">
+        {% csrf_token %}
+        {% for field in form %}
+          <div class="mb-2">{{ field }}</div>
+          {% if field.errors %}
+            <ul class="errorlist">
+              {% for error in field.errors %}
+                <li>{{ error }}</li>
+              {% endfor %}
+            </ul>
+          {% endif %}
+        {% endfor %}
+        <button type="submit" class="btn btn-primary">Sign Up</button>
+      </form>
+      <div class="auth-switch">
+        <span>Already have an account?</span>
+        <a href="#" onclick="toggleForms()">Login</a>
+      </div>
+    </div>
+  </div>
+{% endblock %}

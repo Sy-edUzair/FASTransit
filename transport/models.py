@@ -35,8 +35,14 @@ class CapacityType(models.Model):
     vehicle_type = models.CharField(max_length=50)
     max_capacity = models.IntegerField(validators=[MaxValueValidator(50)])
 
+    def __str__(self):
+        return f"{self.vehicle_type} & {self.max_capacity}"
+
 class NearestLandmark(models.Model):
     landmark_name = models.CharField(max_length=100)
+
+    def __str__(self):
+        return self.landmark_name
 
 class Stop(models.Model):
     name = models.CharField(max_length=100)
@@ -53,7 +59,7 @@ class Route(models.Model):
     stops = models.ManyToManyField(Stop,related_name='stops')
 
     def __str__(self):
-        return self.route_num
+        return f"Route {self.route_num}"
     
 
 class Vehicle(models.Model):
@@ -73,7 +79,7 @@ class Vehicle(models.Model):
     route_no = models.OneToOneField(Route, on_delete=models.CASCADE)
 
     def __str__(self):
-        return self.registration_number
+        return self.license_plate
 
 
 

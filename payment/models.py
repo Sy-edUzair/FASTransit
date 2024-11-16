@@ -10,7 +10,7 @@ class Receipt(models.Model):
     def __str__(self):
         return f"Receipt {self.receipt_id}"
 
-class PaymentMethod(models.Model):
+class PaymentMethod(models.Model):  
     method_id = models.AutoField(primary_key=True)
     method_name = models.CharField(max_length=100)
 

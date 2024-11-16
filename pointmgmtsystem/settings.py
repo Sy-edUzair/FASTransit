@@ -145,11 +145,11 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 
 JAZZMIN_SETTINGS={
-    "site_title": "FASTransit Admin",
-    'site_header':'PFASTransit',
-    'site_brand':'FASTransit',
+    "site_title": "FastTransit Admin",
+    'site_header':'PFastTransit',
+    'site_brand':'FastTransit',
     #'site_logo':'images/cart.png',
-    'copyright':'FASTransiteam-software.com',
+    'copyright':'FastTransiteam-software.com',
 }
 
 

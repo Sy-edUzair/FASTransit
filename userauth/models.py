@@ -4,8 +4,8 @@ from django.core.validators import RegexValidator
 from transport.models import Route
 
 Gender=(
-    ("Male","M"),
-    ("Female","F"),
+    ("Male","Male"),
+    ("Female","Female"),
     ("Other","N/S"),
 )
 
@@ -57,7 +57,7 @@ class User(AbstractBaseUser,PermissionsMixin):
 
     objects = CustomUserManager()
 
-    USERNAME_FIELD = "email" #fields that can help log in (IF roll no then for admin it starts from 00k-0000)
+    USERNAME_FIELD = "email" 
     REQUIRED_FIELDS = ['name'] #fields needed when creating superuser
 
     def __str__(self):
