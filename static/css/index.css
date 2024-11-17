@@ -69,3 +69,24 @@ body {
         margin-left: 0;
     }
 }
+
+.messages {
+    list-style-type: none;
+    padding: 0;
+}
+
+.messages li {
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 5px;
+}
+
+.messages li.error {
+    background-color: #f8d7da;
+    color: #721c24;
+}
+
+.messages li.success {
+    background-color: #d4edda;
+    color: #155724;
+}

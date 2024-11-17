@@ -1,10 +1,6 @@
 {% extends 'index.html' %}
 {% load static %}
 
-{% block customjs %}
-  <script src="{% static 'js/toggleforms.js' %}"></script>
-{% endblock %}
-
 {% block customcss %}
   <link href="{% static 'css/login.css ' %}" rel="stylesheet" />
 {% endblock %}
@@ -36,7 +32,7 @@
       </form>
       <div class="auth-switch">
         <span>Already have an account?</span>
-        <a href="#" onclick="toggleForms()">Login</a>
+        <a href="#">Login</a>
       </div>
     </div>
   </div>

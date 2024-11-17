@@ -85,6 +85,13 @@
       {% block main_content %}
         <!-- Main content -->
         <div class="main-content">
+          {% if messages %}
+            <ul class="messages">
+              {% for message in messages %}
+                <li class="{{ message.tags }}">{{ message }}</li>
+              {% endfor %}
+            </ul>
+          {% endif %}
           <!-- Top navbar -->
           <nav class="navbar navbar-expand-lg navbar-light top-navbar mb-4">
             <div class="container-fluid">
