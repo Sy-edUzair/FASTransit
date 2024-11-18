@@ -45,7 +45,7 @@ INSTALLED_APPS = [
     'userauth',
     'transport',
     'payment',
-    'noticeboard',
+    'noticeandfeedback',
     'driver',
 ]
 
@@ -60,6 +60,8 @@ MIDDLEWARE = [
 ]
 CSRF_COOKIE_NAME = 'csrf_token'
 ROOT_URLCONF = 'pointmgmtsystem.urls'
+
+
 
 TEMPLATES = [
     {
@@ -154,4 +156,4 @@ JAZZMIN_SETTINGS={
 
 
 AUTH_USER_MODEL = 'userauth.User' 
-#LOGIN_URL = '/userauth/login/'
+LOGIN_URL = '/userauth/login/'

@@ -82,11 +82,42 @@ body {
 }
 
 .messages li.error {
-    background-color: #f8d7da;
+    background-color: #ee8f8f;
     color: #721c24;
 }
 
 .messages li.success {
-    background-color: #d4edda;
+    background-color: #aeeda6;
     color: #155724;
+}
+
+.messages li.warning {
+    background-color: #eef67d;
+    color: #736d04;
+}
+
+.messages {
+    transition: opacity 0.5s ease-in-out;
+}
+
+.fade-out {
+    opacity: 0;
+}
+
+.custom-select {
+    background-color: #f8f9fa;
+    border: 1px solid #ced4da;
+    border-radius: .25rem;
+    padding: .375rem .75rem;
+    font-size: 1rem;
+}
+
+.custom-select option {
+    background-color: #ffffff;
+    color: #495057;
+}
+
+.custom-select:focus {
+    border-color: #80bdff;
+    box-shadow: 0 0 0 .2rem rgba(38, 143, 255, .25);
 }
