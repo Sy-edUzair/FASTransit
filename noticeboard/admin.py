@@ -8,12 +8,12 @@ class ComplaintStatusAdmin(admin.ModelAdmin):
 
 class FeedbackAdmin(admin.ModelAdmin):
     list_display = ['user', 'rating', 'submitted_at', 'responded_at', 'complaint_status']
-    search_fields = ['user__usernam', 'comments']  
+    search_fields = ['user__username', 'comments']  
     list_filter = ['rating', 'complaint_status'] 
 
 class NoticeAdmin(admin.ModelAdmin):
     list_display = ['user', 'title', 'date_posted']
-    search_fields = ['user__usernam', 'title', 'message']  
+    search_fields = ['user__username', 'title', 'message']  
     list_filter = ['date_posted',] 
 
 

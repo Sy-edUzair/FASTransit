@@ -15,7 +15,7 @@ import os
 # Create your views here.
 def dashboard(request):
      if request.user.is_authenticated:
-          return render(request,'index.html')
+          return render(request,'index.html',{'user':request.user})
      else:
           return render(request,'userauth/login.html')
 
