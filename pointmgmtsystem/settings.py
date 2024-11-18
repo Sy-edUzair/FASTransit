@@ -45,7 +45,7 @@ INSTALLED_APPS = [
     'userauth',
     'transport',
     'payment',
-    'noticeandfeedback',
+    'noticeboard',
     'driver',
 ]
 
