@@ -3,6 +3,7 @@ from userauth.models import User
 from django.db import connection
 from django.core.mail import send_mail
 from django.utils.timezone import now
+
 # Create your models here.
 class ComplaintStatus(models.Model):
     status_id = models.AutoField(primary_key=True)
@@ -47,6 +48,12 @@ class Notification(models.Model):
 
     def __str__(self):
         return self.title
+
+class Notice(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE,related_name ='notices')
+    title = models.CharField(max_length=200)
+    message = models.TextField()
+    date_posted = models.DateTimeField(auto_now_add=True)
 
 
 
