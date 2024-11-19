@@ -47,7 +47,7 @@ INSTALLED_APPS = [
     'payment',
     'noticeboard',
     'driver',
-]
+    ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -153,7 +153,11 @@ JAZZMIN_SETTINGS={
     #'site_logo':'images/cart.png',
     'copyright':'FastTransiteam-software.com',
 }
+RECAPTCHA_PUBLIC_KEY = '6LcTVYIqAAAAAJGJPG6ICGxqxWFyvJQU-dP7xaTr'
+RECAPTCHA_PRIVATE_KEY = '6LcTVYIqAAAAANiZBX49elN97tX6nivQHsw5BQBO'
 
+# Enable reCAPTCHA in production only
+RECAPTCHA_USE_SSL = True
 
 AUTH_USER_MODEL = 'userauth.User' 
 LOGIN_URL = '/userauth/login/'

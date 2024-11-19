@@ -36,7 +36,7 @@ class Notification(models.Model):
     def send_email_notification(self):
         # Raw SQL query 
         with connection.cursor() as cursor:
-            cursor.execute("SELECT email FROM User WHERE email IS NOT NULL")
+            cursor.execute("SELECT email FROM userauth_user WHERE email IS NOT NULL")
             recipient_emails = [row[0] for row in cursor.fetchall()] 
 
         send_mail(
