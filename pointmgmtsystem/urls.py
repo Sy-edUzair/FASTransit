@@ -22,6 +22,7 @@ from django.conf import settings
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('',include('userauth.urls')),
+    path('',include('noticeboard.urls')),
 ]
 
 if settings.DEBUG:
