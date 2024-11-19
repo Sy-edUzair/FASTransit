@@ -161,3 +161,13 @@ RECAPTCHA_USE_SSL = True
 
 AUTH_USER_MODEL = 'userauth.User' 
 LOGIN_URL = '/userauth/login/'
+
+# Email configuration
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True  # Use TLS (Transport Layer Security) for encryption
+EMAIL_USE_SSL = False
+EMAIL_HOST_USER = 'tahatahir09@gmail.com'
+EMAIL_HOST_PASSWORD = 'vqhjavlxftavevum'  
+DEFAULT_FROM_EMAIL = 'tahatahir09@gmail.com'
