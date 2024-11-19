@@ -27,10 +27,8 @@ def login_view(request):
           
           try:
                user = User.objects.get(email__iexact=email)# using email since it is a unique field
-               print(user)
                auth_user = authenticate(request,username=email,password=password)
-               print(auth_user)
-
+     
                if auth_user is not None:
                     login(request,auth_user)
                     messages.success(request,"You are logged in")
@@ -41,7 +39,9 @@ def login_view(request):
           except:
                messages.warning(request,f"User with {email} does not exist")
                print(f"User with {email} does not exist")
-     context={}
+     context={
+          'form':LoginForm
+     }
      return render(request,"userauth/login.html",context)
 
 @csrf_protect

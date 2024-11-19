@@ -1,4 +1,6 @@
 from django import forms
+from django_recaptcha.fields import ReCaptchaField
+from django_recaptcha.widgets import ReCaptchaV2Checkbox
 from .models import User
 
 class UserForm(forms.ModelForm):
@@ -32,3 +34,8 @@ class UserForm(forms.ModelForm):
             'profile_image': 'Profile Image',
             'department': 'Department',
         }
+
+class LoginForm(forms.Form):
+    email = forms.CharField(widget=forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'NU Email'}))
+    password = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'form-control',"placeholder":"Password"}))
+    captcha = ReCaptchaField(widget=ReCaptchaV2Checkbox())
