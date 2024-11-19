@@ -35,7 +35,7 @@ class CustomUserManager(BaseUserManager):
 class User(AbstractBaseUser,PermissionsMixin):
     roll_num_validator = RegexValidator(
         regex=r'^\d{2}[A-Z]-\d{4}$', 
-        message='Roll number must be in the format XXk-XXXX, e.g., 22k-4586.'
+        message='Roll number must be in the format XXk-XXXX, e.g., 22K-4586.'
     )
     roll_num = models.CharField(
         max_length = 9,
