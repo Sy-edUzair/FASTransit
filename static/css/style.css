@@ -3292,7 +3292,7 @@ ul {
 }
 /*=============== 6.6 Login Page ==================*/
 .login-page-wrap {
-  background-image: url('img/figure/login-e.jpg');
+  background-image: url('../img/figure/login-e.jpg');
   background-repeat: no-repeat;
   background-position: top;
   position: fixed;
