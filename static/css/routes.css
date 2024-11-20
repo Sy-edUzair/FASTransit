@@ -21,22 +21,23 @@
 
 .stop-list {
     list-style-type: none;
-    margin: 10px 15px;
+    margin: 10px 40px;
     padding: 10px;
     padding-left: 0px;
-    background-color: #e9ecef; /* Light gray for dropdown stops */
     border-radius: 6px; /* Rounded corners for dropdown */
     display: none;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1); /* Subtle shadow */
 }
 
 .stop-list li {
-    padding: 5px 10px;
-    border-bottom: 1px solid #dcdcdc; /* Separator between stops */
+    padding: 8px 20px; /* Increased padding for better spacing */
+    margin-bottom: 8px; /* Space between each stop */
+    background-color: #f8f9fa; /* Light background for individual stops */
+    border-radius: 4px; /* Slightly rounded stops */
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1); /* Subtle shadow for stops */
 }
 
 .stop-list li:last-child {
-    border-bottom: none; /* Remove last item's border */
+    margin-bottom: 0; /* Remove space below the last stop */
 }
 
 .dropdown-icon {
