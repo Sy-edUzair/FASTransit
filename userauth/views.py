@@ -15,32 +15,36 @@ import os
 # Create your views here.
 def dashboard(request):
      if request.user.is_authenticated:
-          return render(request,'index.html',{'user':request.user})
+          return render(request,'index3.html',{'user':request.user})
      else:
           return render(request,'userauth/login.html')
-
+     
+@csrf_protect
 def login_view(request):
      if request.method=="POST":
-          email = request.POST.get("email","").strip()
-          print(email)
-          password=request.POST.get('password')
+          form = LoginForm(request.POST)
+          if form.is_valid():
+               email = form.cleaned_data['email']
+               password = form.cleaned_data['password']
           
-          try:
-               user = User.objects.get(email__iexact=email)# using email since it is a unique field
-               auth_user = authenticate(request,username=email,password=password)
-     
-               if auth_user is not None:
-                    login(request,auth_user)
-                    messages.success(request,"You are logged in")
-                    return HttpResponseRedirect(reverse('userauth:dashboard'))
-               else:
-                    messages.warning(request,"Incorrect Password, Please Try Again!")
-                    print("Incorrect Password, Please Try Again!")
-          except:
-               messages.warning(request,f"User with {email} does not exist")
-               print(f"User with {email} does not exist")
+               try:
+                    user = User.objects.get(email__iexact=email)# using email since it is a unique field
+                    auth_user = authenticate(request,username=email,password=password)
+          
+                    if auth_user is not None:
+                         login(request,auth_user)
+                         messages.success(request,"You are logged in")
+                         return HttpResponseRedirect(reverse('userauth:dashboard'))
+                    else:
+                         messages.warning(request,"Incorrect Password, Please Try Again!")
+                         print("Incorrect Password, Please Try Again!")
+               except:
+                    messages.warning(request,f"User with {email} does not exist")
+                    print(f"User with {email} does not exist")
+     else:
+          form = LoginForm()
      context={
-          'form':LoginForm
+          'form':form
      }
      return render(request,"userauth/login.html",context)
 
@@ -71,8 +75,7 @@ def signup_view(request):
                if password != confirm_password:
                     messages.error(request, 'Passwords do not match.')
                     return HttpResponseRedirect(reverse('userauth:signup'))
-               
-               print(profile_image)
+
                profile_image_path = None
                if profile_image:
                # Save file and get path

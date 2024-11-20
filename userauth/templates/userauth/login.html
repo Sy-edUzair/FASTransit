@@ -18,12 +18,19 @@
       </div>
       <form method="POST">
         {% csrf_token %}
+        <div class="mb-3">{{ form.email }}</div>
+        <div class="mb-3">{{ form.password }}</div>
         <div class="mb-3">
-          <input type="text" name="email" class="form-control" placeholder="NU Email" />
+          {{ form.captcha }}
+          {% if form.captcha.errors %}
+            <div class="error">
+              {% for error in form.captcha.errors %}
+                <p>{{ error }}</p>
+              {% endfor %}
+            </div>
+          {% endif %}
         </div>
-        <div class="mb-4">
-          <input type="password" name="password" class="form-control" placeholder="Password" />
-        </div>
+
         {% if messages %}
           <ul class="messages">
             {% for message in messages %}

@@ -27,7 +27,6 @@ body {
     margin-bottom: 30px;
 }
 
-
 .form-control {
     background-color: var(--secondary-bg);
     border: 1px solid #3F4254;
@@ -64,7 +63,7 @@ body {
     text-decoration: none;
 }
 
-messages {
+.messages {
     list-style-type: none;
     padding: 0;
 }
@@ -76,18 +75,18 @@ messages {
 }
 
 .messages li.error {
-    background-color: #343a40;
-    color: #721c24;
+    background-color: #344038;
+    color: #b53e4a;
 }
 
 .messages li.success {
     background-color: #343a40;
-    color: #155724;
+    color: #54e075;
 }
 
 .messages li.warning {
     background-color: #343a40;
-    color: #736d04;
+    color: #c6bd1b;
 }
 
 .messages {
@@ -96,4 +95,56 @@ messages {
 
 .fade-out {
     opacity: 0;
+}
+
+.error {
+    color: red;
+    font-size: 14px;
+    margin-top: -5px;
+    margin-bottom: 10px;
+}
+
+.g-recaptcha {
+    margin: 10px 0;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.recaptcha-container {
+    margin-bottom: 15px;
+    padding: 10px;
+    background-color: #f1f1f1;
+    border-radius: 4px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    display: flex;
+    justify-content: center;
+}
+
+/* Responsiveness */
+@media (max-width: 768px) {
+    .g-recaptcha {
+        width: 100%;
+        max-width: 280px;
+    }
+
+    .g-recaptcha iframe {
+        height: 80px;
+    }
+
+    .auth-container {
+        max-width: 90%;
+        padding: 20px;
+    }
+}
+
+@media (max-width: 480px) {
+    .g-recaptcha {
+        max-width: 100%;
+    }
+
+    .auth-container {
+        margin: 30px auto;
+        padding: 15px;
+    }
 }

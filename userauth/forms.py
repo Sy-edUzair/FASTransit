@@ -1,6 +1,7 @@
 from django import forms
 from django_recaptcha.fields import ReCaptchaField
 from django_recaptcha.widgets import ReCaptchaV2Checkbox
+from django.conf import settings
 from .models import User
 
 class UserForm(forms.ModelForm):
@@ -14,7 +15,7 @@ class UserForm(forms.ModelForm):
             'profile_image', 'department',
         ]
         widgets = {
-            'roll_num': forms.TextInput(attrs={'class': 'form-control', 'placeholder': '22k-4586'}),
+            'roll_num': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Roll Number E.g 22K-4586'}),
             'email': forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'email@nu.edu.pk'}),
             'name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Full Name'}),
             'Address': forms.TextInput(attrs={'class': 'form-control', 'placeholder': '123 Main Street, Karachi'}),
@@ -38,4 +39,7 @@ class UserForm(forms.ModelForm):
 class LoginForm(forms.Form):
     email = forms.CharField(widget=forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'NU Email'}))
     password = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'form-control',"placeholder":"Password"}))
-    captcha = ReCaptchaField(widget=ReCaptchaV2Checkbox())
+    captcha = ReCaptchaField(widget=ReCaptchaV2Checkbox(), 
+    public_key=settings.RECAPTCHA_PUBLIC_KEY,
+    private_key=settings.RECAPTCHA_PRIVATE_KEY,
+    )
