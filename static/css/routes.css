@@ -1,0 +1,52 @@
+.route-list {
+    list-style-type: none;
+    padding: 0;
+}
+
+.route-item {
+    cursor: pointer;
+    padding: 10px 15px;
+    background-color: #f8f9fa; /* Light background for the routes */
+    margin: 5px 0 20px;
+    border-radius: 8px; /* Rounded corners */
+    display: flex;
+    align-items: center;
+    transition: background-color 0.3s;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+}
+
+.route-item:hover {
+    background-color: #e2e6ea; /* Slightly darker shade on hover */
+}
+
+.stop-list {
+    list-style-type: none;
+    margin: 10px 15px;
+    padding: 10px;
+    padding-left: 0px;
+    background-color: #e9ecef; /* Light gray for dropdown stops */
+    border-radius: 6px; /* Rounded corners for dropdown */
+    display: none;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+}
+
+.stop-list li {
+    padding: 5px 10px;
+    border-bottom: 1px solid #dcdcdc; /* Separator between stops */
+}
+
+.stop-list li:last-child {
+    border-bottom: none; /* Remove last item's border */
+}
+
+.dropdown-icon {
+    margin-right: 10px;
+    transform: rotate(0deg);
+    transition: transform 0.2s, color 0.3s;
+    color: #6c757d; /* Neutral icon color */
+}
+
+.dropdown-icon.open {
+    transform: rotate(90deg);
+    color: #495057; /* Darker shade when expanded */
+}
