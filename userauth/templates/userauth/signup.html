@@ -18,9 +18,9 @@
     <div class="login-page-content">
       <div class="login-box">
         <div class="item-logo">
-          <img src="{% static 'img/logo3.png' %}" alt="logo" style="height:8.5rem" />
+          <img src="{% static 'img/logo3.png' %}" alt="logo" style="padding-bottom:0px; height:7rem" />
         </div>
-        <form method="post" enctype="multipart/form-data" class="d-flex flex-column login-form">
+        <form method="post" enctype="multipart/form-data" class="d-flex flex-column login-form" style="width:500px">
           {% csrf_token %}
           <div class="row">
             {% for field in form %}

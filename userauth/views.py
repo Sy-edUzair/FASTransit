@@ -5,6 +5,7 @@ from datetime import datetime
 from django.db import connection
 from django.contrib import messages
 from django.contrib.auth import authenticate,login,logout
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.hashers import make_password
 from django.shortcuts import render
 from django.conf import settings
@@ -15,25 +16,23 @@ from noticeboard.models import *
 import os
 
 # Create your views here.
+
+@login_required(login_url=settings.LOGIN_URL)
 def dashboard(request):
-     if request.user.is_authenticated:
-          raw_query = """
+     raw_query = """
           SELECT * 
           FROM noticeboard_notice
           WHERE is_active = TRUE
           ORDER BY date_posted DESC
           """
-          Notices = Notice.objects.raw(raw_query)
-          raw_query_2= """
+     Notices = Notice.objects.raw(raw_query)
+     raw_query_2= """
           SELECT * 
           FROM transport_transportprovider
           """
-          providers = TransportProvider.objects.raw(raw_query_2)
-          return render(request,'index3.html',{'user':request.user, 'notices':Notices,'providers':providers})
-     else:
-          return HttpResponseRedirect(reverse('userauth:login'))
-     
-@csrf_protect
+     providers = TransportProvider.objects.raw(raw_query_2)
+     return render(request,'index3.html',{'user':request.user, 'notices':Notices,'providers':providers})      
+
 def login_view(request):
      if request.method=="POST":
           form = LoginForm(request.POST)

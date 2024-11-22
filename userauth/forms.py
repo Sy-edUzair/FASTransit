@@ -22,8 +22,8 @@ class UserForm(forms.ModelForm):
             'cnic': forms.TextInput(attrs={'class': 'form-control', 'placeholder': '13-digit CNIC'}),
             'contact': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Phone Number'}),
             'emergency_contact': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Emergency Contact'}),
-            'gender': forms.Select(attrs={'class': 'form-select'}),
-            'profile_image': forms.FileInput(attrs={'class': 'form-control'}),
+            'gender': forms.Select(attrs={'class': 'form-select',}),
+            'profile_image': forms.FileInput(attrs={'class': 'form-control','placeholder': 'Select Profile image'}),
             'department': forms.Select(attrs={'class': 'form-select','placeholder': 'Department'}),
         }
         labels = {

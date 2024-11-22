@@ -164,7 +164,7 @@ RECAPTCHA_PRIVATE_KEY = env('RECAPTCHA_PRIVATE_KEY')
 
 
 AUTH_USER_MODEL = 'userauth.User' 
-LOGIN_URL = '/userauth/login/'
+LOGIN_URL = '/login/'
 
 # Email configuration
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'

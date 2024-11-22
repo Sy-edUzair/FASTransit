@@ -3,12 +3,12 @@ from django.db import connection
 from .models import *
 from django.views.decorators.csrf import csrf_protect
 from django.http import HttpResponseRedirect
-from django.urls import reverse
+from django.urls import reverse,reverse_lazy
 from datetime import datetime
 from django.db import connection
 from django.contrib import messages
 from django.contrib.auth import authenticate,login,logout
-from django.contrib.auth.hashers import make_password
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 from django.conf import settings
 from .forms import *
@@ -16,7 +16,7 @@ from .models import *
 from transport.models import *
 from noticeboard.models import *
 
-
+@login_required(login_url=settings.LOGIN_URL)
 def render_route_page(request):
     # raw_query = """
     #     SELECT *
@@ -63,6 +63,7 @@ def transporter_login(request):
      }
      return render(request, "transport/transporter-login.html", context)
 
+@login_required(login_url=reverse_lazy("transport:transporter_login"))
 def transporter_dashboard(request):
     # raw_query = """
     #     SELECT *
@@ -72,3 +73,9 @@ def transporter_dashboard(request):
     # """
     # notices = Notice.objects.raw(raw_query)
     return render(request, "transport/transport-dashboard.html", {})
+
+@csrf_protect
+def logout_view(request):
+    logout(request)
+    messages.success(request,"You logged out")
+    return HttpResponseRedirect(reverse("transport:transporter_login"))
