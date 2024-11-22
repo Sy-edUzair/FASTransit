@@ -1,0 +1,105 @@
+{% extends 'index3.html' %}
+{% load static %}
+{% block customcss %}
+  <link rel="stylesheet" href="{% static 'css/routes.css' %}" />
+{% endblock %}
+{% block maincontent %}
+  <!-- Breadcrumbs Area Start Here -->
+  <div class="breadcrumbs-area">
+    <h3>Routes</h3>
+    <ul>
+      <li>
+        <a href="{% url 'userauth:dashboard' %}">Home</a>
+      </li>
+      <li>Routes</li>
+    </ul>
+  </div>
+  <!-- Breadcrumbs Area End Here -->
+  <div class="row">
+    <div class="col-12">
+      <div class="card">
+        <div class="card-body">
+          <ul class="route-list">
+            <li>
+              <div class="route-item" onclick="toggleStops('route1-stops')">
+                <span class="dropdown-icon">▶</span> Route 1
+              </div>
+              <ul id="route1-stops" class="stop-list">
+                <li>Stop 1</li>
+                <li>Stop 2</li>
+                <li>Stop 3</li>
+                <li>Stop 4</li>
+                <li>Stop 5</li>
+              </ul>
+            </li>
+            <li>
+              <div class="route-item" onclick="toggleStops('route2-stops')">
+                <span class="dropdown-icon">▶</span> Route 2
+              </div>
+              <ul id="route2-stops" class="stop-list">
+                <li>Stop 1</li>
+                <li>Stop 2</li>
+                <li>Stop 3</li>
+                <li>Stop 4</li>
+                <li>Stop 5</li>
+              </ul>
+            </li>
+            <li>
+              <div class="route-item" onclick="toggleStops('route3-stops')">
+                <span class="dropdown-icon">▶</span> Route 3
+              </div>
+              <ul id="route3-stops" class="stop-list">
+                <li>Stop 1</li>
+                <li>Stop 2</li>
+                <li>Stop 3</li>
+                <li>Stop 4</li>
+                <li>Stop 5</li>
+              </ul>
+            </li>
+            <li>
+              <div class="route-item" onclick="toggleStops('route4-stops')">
+                <span class="dropdown-icon">▶</span> Route 4
+              </div>
+              <ul id="route4-stops" class="stop-list">
+                <li>Stop 1</li>
+                <li>Stop 2</li>
+                <li>Stop 3</li>
+                <li>Stop 4</li>
+                <li>Stop 5</li>
+              </ul>
+            </li>
+            <li>
+              <div class="route-item" onclick="toggleStops('route5-stops')">
+                <span class="dropdown-icon">▶</span> Route 5
+              </div>
+              <ul id="route5-stops" class="stop-list">
+                <li>Stop 1</li>
+                <li>Stop 2</li>
+                <li>Stop 3</li>
+                <li>Stop 4</li>
+                <li>Stop 5</li>
+              </ul>
+            </li>
+            <li>
+              <div class="route-item" onclick="toggleStops('route6-stops')">
+                <span class="dropdown-icon">▶</span> Route 6
+              </div>
+              <ul id="route6-stops" class="stop-list">
+                <li>Stop 1</li>
+                <li>Stop 2</li>
+                <li>Stop 3</li>
+                <li>Stop 4</li>
+                <li>Stop 5</li>
+              </ul>
+            </li>
+            <!-- Add Route n similarly -->
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+
+{% block customjs %}
+  <script src="{% static 'js/routes.js' %}"></script>
+{% endblock %}

@@ -20,10 +20,10 @@
         <div class="item-logo">
           <img src="{% static 'img/logo3.png' %}" alt="logo" style="height:10rem" />
         </div>
-        <form method="POST" class="login-form">
+        <form method="POST" action="{% url 'transport:transport-dashboard' %}" class="login-form">
           {% csrf_token %}
           <div class="form-group">
-            <label>Email</label>
+            <label>Transporter Email</label>
             {{ form.email }}
             <i class="far fa-envelope"></i>
           </div>
@@ -60,11 +60,6 @@
             <button type="submit" class="login-btn">Login</button>
           </div>
         </form>
-
-        <div class="auth-switch">
-          <span>Don't have an account?</span>
-          <a href="{% url 'userauth:signup' %}">Sign Up</a>
-        </div>
       </div>
     </div>
   </div>

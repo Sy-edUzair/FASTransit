@@ -1,13 +1,13 @@
 from django.shortcuts import render
 from django.db import connection
-from .models import Notification
+from .models import *
 
 def notice_board(request):
     raw_query = """
-        SELECT id, title, message, created_at, is_active 
-        FROM noticeboard_notification 
+        SELECT *
+        FROM noticeboard_notice
         WHERE is_active = TRUE 
-        ORDER BY created_at DESC
+        ORDER BY date_posted DESC
     """
-    notifications = Notification.objects.raw(raw_query)
-    return render(request, "noticeboard/notice_board.html", {"notifications": notifications})
+    notices = Notice.objects.raw(raw_query)
+    return render(request, "noticeboard/notice_board.html", {"notices": notices})

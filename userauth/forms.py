@@ -24,7 +24,7 @@ class UserForm(forms.ModelForm):
             'emergency_contact': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Emergency Contact'}),
             'gender': forms.Select(attrs={'class': 'form-select'}),
             'profile_image': forms.FileInput(attrs={'class': 'form-control'}),
-            'department': forms.Select(attrs={'class': 'form-select'}),
+            'department': forms.Select(attrs={'class': 'form-select','placeholder': 'Department'}),
         }
         labels = {
             'roll_num': 'Roll Number',

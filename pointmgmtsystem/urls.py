@@ -23,6 +23,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('',include('userauth.urls')),
     path('',include('noticeboard.urls')),
+    path('', include('transport.urls')),
 ]
 
 if settings.DEBUG:

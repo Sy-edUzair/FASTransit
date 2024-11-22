@@ -8,6 +8,7 @@ class ProviderRepresentative(models.Model):
         message='CNIC must be in the format XXXX-XXXXXXX-X'
     )
     representative_name = models.CharField(max_length=100)
+    email=models.EmailField(unique=True,null=True)
     representative_cnic = models.CharField(
         max_length=15,
         primary_key=True,

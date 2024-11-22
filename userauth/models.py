@@ -62,6 +62,13 @@ class User(AbstractBaseUser,PermissionsMixin):
 
     def __str__(self):
         return self.roll_num
+    @property
+    def imageURL(self):
+        try:
+            URL = self.profile_image.url
+        except:
+            URL= ' '
+        return URL
 
 
 

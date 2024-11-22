@@ -4,6 +4,8 @@ from django.db import connection
 from django.core.mail import send_mail
 from django.utils.timezone import now
 
+default_tz_time = now()
+
 # Create your models here.
 class ComplaintStatus(models.Model):
     status_id = models.AutoField(primary_key=True)
@@ -20,19 +22,18 @@ class Feedback(models.Model):
     responded_at = models.DateTimeField(null=True, blank=True)
     complaint_status = models.ForeignKey(ComplaintStatus, on_delete=models.SET_NULL, null=True)
 
-class Notification(models.Model):
-    title = models.CharField(max_length=100)
+class Notice(models.Model):
+    title = models.CharField(max_length=200)
     message = models.TextField()
-    created_at = models.DateTimeField(default=now)
+    date_posted = models.DateTimeField(auto_now_add=True)
     is_active = models.BooleanField(default=True)
 
-    def save(self, *args, **kwargs):
-        is_new = self.pk is None
-        super().save(*args, **kwargs)  # Save the notification
-
-        if is_new:
-            self.send_email_notification()
-
+    def save(self, *args, **kwargs): 
+            is_new = self.pk is None
+            super().save(*args, **kwargs)
+            if is_new:
+                self.send_email_notification()
+        
     def send_email_notification(self):
         # Raw SQL query 
         with connection.cursor() as cursor:
@@ -48,13 +49,6 @@ class Notification(models.Model):
 
     def __str__(self):
         return self.title
-
-class Notice(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE,related_name ='notices')
-    title = models.CharField(max_length=200)
-    message = models.TextField()
-    date_posted = models.DateTimeField(auto_now_add=True)
-
 
 
 

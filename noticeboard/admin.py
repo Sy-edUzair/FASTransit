@@ -11,13 +11,14 @@ class FeedbackAdmin(admin.ModelAdmin):
     search_fields = ['user__username', 'comments']  
     list_filter = ['rating', 'complaint_status'] 
 
-class NoticeAdmin(admin.ModelAdmin):
-    list_display = ['title', 'is_active', 'created_at']
-    search_fields = ['title', 'message']
-    list_filter = ['created_at', 'is_active']
-    list_editable = ['is_active']
 
+class NoticeAdmin(admin.ModelAdmin):
+    list_display = ['title','is_active', 'date_posted']
+    search_fields = ['title', 'message']
+    list_filter = ['date_posted', 'is_active']
+    readonly_fields = ['date_posted',]
+    fields = ['title', 'message', 'date_posted']
 
 admin.site.register(ComplaintStatus,ComplaintStatusAdmin)
 admin.site.register(Feedback,FeedbackAdmin)
-admin.site.register(Notification,NoticeAdmin)
+admin.site.register(Notice,NoticeAdmin)

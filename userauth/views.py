@@ -9,15 +9,29 @@ from django.contrib.auth.hashers import make_password
 from django.shortcuts import render
 from django.conf import settings
 from .forms import *
-from .models import User
+from .models import *
+from transport.models import *
+from noticeboard.models import *
 import os
 
 # Create your views here.
 def dashboard(request):
      if request.user.is_authenticated:
-          return render(request,'index3.html',{'user':request.user})
+          raw_query = """
+          SELECT * 
+          FROM noticeboard_notice
+          WHERE is_active = TRUE
+          ORDER BY date_posted DESC
+          """
+          Notices = Notice.objects.raw(raw_query)
+          raw_query_2= """
+          SELECT * 
+          FROM transport_transportprovider
+          """
+          providers = TransportProvider.objects.raw(raw_query_2)
+          return render(request,'index3.html',{'user':request.user, 'notices':Notices,'providers':providers})
      else:
-          return render(request,'userauth/login.html')
+          return HttpResponseRedirect(reverse('userauth:login'))
      
 @csrf_protect
 def login_view(request):
@@ -26,7 +40,6 @@ def login_view(request):
           if form.is_valid():
                email = form.cleaned_data['email']
                password = form.cleaned_data['password']
-          
                try:
                     user = User.objects.get(email__iexact=email)# using email since it is a unique field
                     auth_user = authenticate(request,username=email,password=password)

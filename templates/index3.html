@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html class="no-js" lang="">
   <head>
@@ -7,29 +8,32 @@
     <meta name="description" content="" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <!-- Favicon -->
-    <link rel="shortcut icon" type="image/x-icon" href="../static/img/favicon.png" />
+    <link rel="shortcut icon" type="image/x-icon" href="{% static 'img/favicon.png' %}" />
     <!-- Normalize CSS -->
-    <link rel="stylesheet" href="../static/css/normalize.css" />
+    <link rel="stylesheet" href="{% static 'css/normalize.css' %}" />
     <!-- Main CSS -->
-    <link rel="stylesheet" href="../static/css/main.css" />
+    <link rel="stylesheet" href="{% static 'css/main.css' %}" />
     <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="../static/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}" />
     <!-- Fontawesome CSS -->
-    <link rel="stylesheet" href="../static/css/all.min.css" />
+    <link rel="stylesheet" href="{% static 'css/all.min.css' %}" />
     <!-- Flaticon CSS -->
-    <link rel="stylesheet" href="../static/fonts/flaticon.css" />
+    <link rel="stylesheet" href="{% static 'css/flaticon.css' %}" />
     <!-- Full Calender CSS -->
-    <link rel="stylesheet" href="../static/css/fullcalendar.min.css" />
+    <link rel="stylesheet" href="{% static 'fullcalendar.min.css' %}" />
     <!-- Animate CSS -->
-    <link rel="stylesheet" href="../static/css/animate.min.css" />
+    <link rel="stylesheet" href="{% static 'css/animate.min.cs' %}" />
     <!-- Data Table CSS -->
-    <link rel="stylesheet" href="../static/css/jquery.dataTables.min.css" />
+    <link rel="stylesheet" href="{% static 'css/jquery.dataTables.min.css' %}" />
     <!-- Font Awesome Free -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet" />
     <!-- Custom CSS -->
-    <link rel="stylesheet" href="../static/css/style.css" />
+    <link rel="stylesheet" href="{% static 'css/style.css' %}" />
+    {% block customcss %}
+
+    {% endblock %}
     <!-- Modernize js -->
-    <script src="../static/js/modernizr-3.6.0.min.js"></script>
+    <script src="{% static 'js/modernizr-3.6.0.min.js' %}"></script>
   </head>
 
   <body>
@@ -37,488 +41,366 @@
     <div id="preloader"></div>
     <!-- Preloader End Here -->
     <div id="wrapper" class="wrapper bg-ash">
-      <!-- Header Menu Area Start Here -->
-      <div class="navbar navbar-expand-md header-menu-one bg-light">
-        <div class="nav-bar-header-one">
-          <div class="header-logo">
-            <a href="index3.html"><img src="../static/img/FASTransit.jpeg" alt="logo" style="height: 48px; width: 161px; padding-left: 5px;" /></a>
-          </div>
-          <div class="toggle-button sidebar-toggle">
-            <button type="button" class="item-link">
-              <span class="btn-icon-wrap">
-                <span></span>
-                <span></span>
-                <span></span>
-              </span>
-            </button>
-          </div>
-        </div>
-        <div class="d-md-none mobile-nav-bar">
-          <button class="navbar-toggler pulse-animation" type="button" data-toggle="collapse" data-target="#mobile-navbar" aria-expanded="false"><i class="far fa-arrow-alt-circle-down"></i></button>
-          <button type="button" class="navbar-toggler sidebar-toggle-mobile"><i class="fas fa-bars"></i></button>
-        </div>
-        <div class="header-main-menu collapse navbar-collapse" id="mobile-navbar">
-          <ul class="navbar-nav">
-            <!--    SEARCHBAR
-                    <li class="navbar-item header-search-bar">
-                        <div class="input-group stylish-input-group">
-                            <span class="input-group-addon">
-                                <button type="submit">
-                                    <span class="flaticon-search" aria-hidden="true"></span>
-                                </button>
-                            </span>
-                            <input type="text" class="form-control" placeholder="Find Something . . .">
-                        </div>
-                    </li>
-                       -->
-          </ul>
-          <ul class="navbar-nav">
-            <li class="navbar-item dropdown header-admin">
-              <a class="navbar-nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-expanded="false">
-                <div class="admin-title">
-                  <h5 class="item-title">Basil Yaqoob</h5>
+      {% block header %}
+        <div class="navbar navbar-expand-md header-menu-one bg-light">
+          <div class="nav-bar-header-one">
+            <div class="header-logo">
+              <a href="{% url 'userauth:dashboard' %}'}"><img src="{% static 'img/FASTransit.jpeg' %}" alt="logo" style="height: 48px; width: 161px; padding-left: 5px;" /></a>
+            </div>
+            <div class="toggle-button sidebar-toggle">
+              <button type="button" class="item-link">
+                <span class="btn-icon-wrap">
                   <span></span>
+                  <span></span>
+                  <span></span>
+                </span>
+              </button>
+            </div>
+          </div>
+          <div class="d-md-none mobile-nav-bar">
+            <button class="navbar-toggler pulse-animation" type="button" data-toggle="collapse" data-target="#mobile-navbar" aria-expanded="false"><i class="far fa-arrow-alt-circle-down"></i></button>
+            <button type="button" class="navbar-toggler sidebar-toggle-mobile"><i class="fas fa-bars"></i></button>
+          </div>
+          <div class="header-main-menu collapse navbar-collapse" id="mobile-navbar">
+            <ul class="navbar-nav"></ul>
+            <ul class="navbar-nav">
+              <li class="navbar-item dropdown header-admin">
+                <a class="navbar-nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-expanded="false">
+                  <div class="admin-title">
+                    <h5 class="item-title">{{ user.name }}</h5>
+                    <span></span>
+                  </div>
+                  <div class="admin-img">
+                    <img src="{% static 'img/figure/student10.png' %}" alt="Admin" />
+                  </div>
+                </a>
+                <div class="dropdown-menu dropdown-menu-right">
+                  <div class="item-header">
+                    <h6 class="item-title">{{ user.name }}</h6>
+                  </div>
+                  <div class="item-content">
+                    <ul class="settings-list">
+                      <li>
+                        <a href="#"><i class="flaticon-user"></i>My Profile</a>
+                      </li>
+                      <li>
+                        <a href="#"><i class="flaticon-gear-loading"></i>Account Settings</a>
+                      </li>
+                      <li>
+                        <a href="{% url 'userauth:logout' %}"><i class="flaticon-turn-off"></i>Log Out</a>
+                      </li>
+                    </ul>
+                  </div>
                 </div>
-                <div class="admin-img">
-                  <img src="../static/img/figure/student10.png" alt="Admin" />
-                </div>
-              </a>
-              <div class="dropdown-menu dropdown-menu-right">
-                <div class="item-header">
-                  <h6 class="item-title">Basil Yaqoob</h6>
-                </div>
-                <div class="item-content">
-                  <ul class="settings-list">
-                    <li>
-                      <a href="#"><i class="flaticon-user"></i>My Profile</a>
-                    </li>
-                    <li>
-                      <a href="#"><i class="flaticon-list"></i>Task</a>
-                    </li>
-                    <li>
-                      <a href="#"><i class="flaticon-chat-comment-oval-speech-bubble-with-text-lines"></i>Message</a>
-                    </li>
-                    <li>
-                      <a href="#"><i class="flaticon-gear-loading"></i>Account Settings</a>
-                    </li>
-                    <li>
-                      <a href="login.html"><i class="flaticon-turn-off"></i>Log Out</a>
-                    </li>
-                  </ul>
-                </div>
-              </div>
-            </li>
-          </ul>
+              </li>
+            </ul>
+          </div>
         </div>
-      </div>
-      <!-- Header Menu Area End Here -->
+      {% endblock %}
       <!-- Page Area Start Here -->
       <div class="dashboard-page-one">
-        <!-- Sidebar Area Start Here -->
-        <div class="sidebar-main sidebar-menu-one sidebar-expand-md sidebar-color">
-          <div class="mobile-sidebar-header d-md-none">
-            <div class="header-logo">
-              <a href="index3.html"><img src="../static/img/FASTransit.jpeg" alt="logo" style="width: 161px; height: 48px;" /></a>
+        {% block sidebar %}
+          <div class="sidebar-main sidebar-menu-one sidebar-expand-md sidebar-color">
+            <div class="mobile-sidebar-header d-md-none">
+              <div class="header-logo">
+                <a href="{% url 'userauth:dashboard' %}"><img src="{% static 'img/FASTransit.jpeg' %}" alt="logo" style="width: 161px; height: 48px;" /></a>
+              </div>
+            </div>
+            <div class="sidebar-menu-content">
+              <ul class="nav nav-sidebar-menu sidebar-toggle-view">
+                <li class="nav-item sidebar-nav-item">
+                  <a href="#" class="nav-link"><i class="flaticon-dashboard"></i><span>Dashboard</span></a>
+                  <ul class="nav sub-group-menu sub-group-active">
+                    <li class="nav-item">
+                      <a href="index3.html" class="nav-link menu-active"><i class="fas fa-angle-right"></i>Students</a>
+                    </li>
+                  </ul>
+                </li>
+                <li class="nav-item sidebar-nav-item">
+                  <a href="#" class="nav-link"><i class="flaticon-classmates"></i><span>Personal Info</span></a>
+                  <ul class="nav sub-group-menu">
+                    <li class="nav-item">
+                      <a href="std_card.html" class="nav-link"><i class="fas fa-angle-right"></i>Student Card</a>
+                    </li>
+                    <li class="nav-item">
+                      <a href="std_card.html" class="nav-link"><i class="fas fa-angle-right"></i>Your Provider Details</a>
+                    </li>
+                    <li class="nav-item">
+                      <a href="std_card.html" class="nav-link"><i class="fas fa-angle-right"></i>Your Driver Details</a>
+                    </li>
+                  </ul>
+                </li>
+                <li class="nav-item sidebar-nav-item">
+                  <a href="#" class="nav-link"><i class="flaticon-classmates"></i><span>Transport Providers</span></a>
+                  <ul class="nav sub-group-menu">
+                    {% for provider in providers %}
+                      <li class="nav-item">
+                        <a href="provider_details.html" class="nav-link"><i class="fas fa-angle-right"></i>{{ provider.name }}</a>
+                      </li>
+                    {% endfor %}
+                  </ul>
+                </li>
+                <li class="nav-item sidebar-nav-item">
+                  <a href="#" class="nav-link"><i class="flaticon-technological"></i><span>Account</span></a>
+                  <ul class="nav sub-group-menu">
+                    <li class="nav-item">
+                      <a href="all-fees.html" class="nav-link"><i class="fas fa-angle-right"></i>Profile</a>
+                    </li>
+                  </ul>
+                </li>
+                <li class="nav-item sidebar-nav-item">
+                  <a href="#" class="nav-link"><i class="flaticon-maths-class-materials-cross-of-a-pencil-and-a-ruler"></i><span>Payment</span></a>
+                  <ul class="nav sub-group-menu">
+                    <li class="nav-item">
+                      <a href="all-class.html" class="nav-link"><i class="fas fa-angle-right"></i>Fees Voucher</a>
+                    </li>
+                    <li class="nav-item">
+                      <a href="add-class.html" class="nav-link"><i class="fas fa-angle-right"></i>Payment History</a>
+                    </li>
+                  </ul>
+                </li>
+                <li class="nav-item">
+                  <a href="{% url 'transport:render_routes' %}" class="nav-link"><i class="flaticon-bus-side-view"></i><span>Routes</span></a>
+                </li>
+                <li class="nav-item">
+                  <a href="{% url 'noticeboard:noticeboard' %}" class="nav-link"><i class="flaticon-script"></i><span>Noticeboard</span></a>
+                </li>
+                <li class="nav-item">
+                  <a href="notice-board.html" class="nav-link"><i class="flaticon-script"></i><span>Feedback/Complaints</span></a>
+                </li>
+                <li class="nav-item">
+                  <a href="account-settings.html" class="nav-link"><i class="flaticon-settings"></i><span>Tracking</span></a>
+                </li>
+              </ul>
             </div>
           </div>
-          <div class="sidebar-menu-content">
-            <ul class="nav nav-sidebar-menu sidebar-toggle-view">
-              <li class="nav-item sidebar-nav-item">
-                <a href="#" class="nav-link"><i class="flaticon-dashboard"></i><span>Dashboard</span></a>
-                <ul class="nav sub-group-menu sub-group-active">
-                  <li class="nav-item">
-                    <a href="index3.html" class="nav-link menu-active"><i class="fas fa-angle-right"></i>Students</a>
-                  </li>
-                  <li class="nav-item">
-                    <a href="index4.html" class="nav-link"><i class="fas fa-angle-right"></i>Parents</a>
-                  </li>
-                  <li class="nav-item">
-                    <a href="index5.html" class="nav-link"><i class="fas fa-angle-right"></i>Teachers</a>
-                  </li>
-                </ul>
-              </li>
-              <li class="nav-item sidebar-nav-item">
-                <a href="#" class="nav-link"><i class="flaticon-classmates"></i><span>Students</span></a>
-                <ul class="nav sub-group-menu">
-                  <li class="nav-item">
-                    <a href="all-student.html" class="nav-link"><i class="fas fa-angle-right"></i>All Students</a>
-                  </li>
-                  <li class="nav-item">
-                    <a href="std_card.html" class="nav-link"><i class="fas fa-angle-right"></i>Student Card</a>
-                  </li>
-                  <li class="nav-item">
-                    <a href="admit-form.html" class="nav-link"><i class="fas fa-angle-right"></i>Admission Form</a>
-                  </li>
-                  <li class="nav-item">
-                    <a href="student-promotion.html" class="nav-link"><i class="fas fa-angle-right"></i>Student Promotion</a>
-                  </li>
-                </ul>
-              </li>
-              <li class="nav-item sidebar-nav-item">
-                <a href="#" class="nav-link"><i class="flaticon-multiple-users-silhouette"></i><span>Teachers</span></a>
-                <ul class="nav sub-group-menu">
-                  <li class="nav-item">
-                    <a href="all-teacher.html" class="nav-link"><i class="fas fa-angle-right"></i>All Teachers</a>
-                  </li>
-                  <li class="nav-item">
-                    <a href="teacher-details.html" class="nav-link"><i class="fas fa-angle-right"></i>Teacher Details</a>
-                  </li>
-                  <li class="nav-item">
-                    <a href="add-teacher.html" class="nav-link"><i class="fas fa-angle-right"></i>Add Teacher</a>
-                  </li>
-                  <li class="nav-item">
-                    <a href="teacher-payment.html" class="nav-link"><i class="fas fa-angle-right"></i>Payment</a>
-                  </li>
-                </ul>
-              </li>
-              <li class="nav-item sidebar-nav-item">
-                <a href="#" class="nav-link"><i class="flaticon-couple"></i><span>Parents</span></a>
-                <ul class="nav sub-group-menu">
-                  <li class="nav-item">
-                    <a href="all-parents.html" class="nav-link"><i class="fas fa-angle-right"></i>All Parents</a>
-                  </li>
-                  <li class="nav-item">
-                    <a href="parents-details.html" class="nav-link"><i class="fas fa-angle-right"></i>Parents Details</a>
-                  </li>
-                  <li class="nav-item">
-                    <a href="add-parents.html" class="nav-link"><i class="fas fa-angle-right"></i>Add Parent</a>
-                  </li>
-                </ul>
-              </li>
-              <li class="nav-item sidebar-nav-item">
-                <a href="#" class="nav-link"><i class="flaticon-books"></i><span>Library</span></a>
-                <ul class="nav sub-group-menu">
-                  <li class="nav-item">
-                    <a href="all-book.html" class="nav-link"><i class="fas fa-angle-right"></i>All Book</a>
-                  </li>
-                  <li class="nav-item">
-                    <a href="add-book.html" class="nav-link"><i class="fas fa-angle-right"></i>Add New Book</a>
-                  </li>
-                </ul>
-              </li>
-              <li class="nav-item sidebar-nav-item">
-                <a href="#" class="nav-link"><i class="flaticon-technological"></i><span>Acconunt</span></a>
-                <ul class="nav sub-group-menu">
-                  <li class="nav-item">
-                    <a href="all-fees.html" class="nav-link"><i class="fas fa-angle-right"></i>All Fees Collection</a>
-                  </li>
-                  <li class="nav-item">
-                    <a href="all-expense.html" class="nav-link"><i class="fas fa-angle-right"></i>Expenses</a>
-                  </li>
-                  <li class="nav-item">
-                    <a href="add-expense.html" class="nav-link"><i class="fas fa-angle-right"></i>Add Expenses</a>
-                  </li>
-                </ul>
-              </li>
-              <li class="nav-item sidebar-nav-item">
-                <a href="#" class="nav-link"><i class="flaticon-maths-class-materials-cross-of-a-pencil-and-a-ruler"></i><span>Class</span></a>
-                <ul class="nav sub-group-menu">
-                  <li class="nav-item">
-                    <a href="all-class.html" class="nav-link"><i class="fas fa-angle-right"></i>All Classes</a>
-                  </li>
-                  <li class="nav-item">
-                    <a href="add-class.html" class="nav-link"><i class="fas fa-angle-right"></i>Add New Class</a>
-                  </li>
-                </ul>
-              </li>
-              <li class="nav-item">
-                <a href="all-subject.html" class="nav-link"><i class="flaticon-open-book"></i><span>Subject</span></a>
-              </li>
-              <li class="nav-item">
-                <a href="class-routine.html" class="nav-link"><i class="flaticon-calendar"></i><span>Class Routine</span></a>
-              </li>
-              <li class="nav-item">
-                <a href="student-attendence.html" class="nav-link"><i class="flaticon-checklist"></i><span>Attendence</span></a>
-              </li>
-              <li class="nav-item sidebar-nav-item">
-                <a href="#" class="nav-link"><i class="flaticon-shopping-list"></i><span>Exam</span></a>
-                <ul class="nav sub-group-menu">
-                  <li class="nav-item">
-                    <a href="exam-schedule.html" class="nav-link"><i class="fas fa-angle-right"></i>Exam Schedule</a>
-                  </li>
-                  <li class="nav-item">
-                    <a href="exam-grade.html" class="nav-link"><i class="fas fa-angle-right"></i>Exam Grades</a>
-                  </li>
-                </ul>
-              </li>
-              <li class="nav-item">
-                <a href="transport.html" class="nav-link"><i class="flaticon-bus-side-view"></i><span>Transport</span></a>
-              </li>
-              <li class="nav-item">
-                <a href="hostel.html" class="nav-link"><i class="flaticon-bed"></i><span>Hostel</span></a>
-              </li>
-              <li class="nav-item">
-                <a href="notice-board.html" class="nav-link"><i class="flaticon-script"></i><span>Notice</span></a>
-              </li>
-              <li class="nav-item">
-                <a href="messaging.html" class="nav-link"><i class="flaticon-chat"></i><span>Messeage</span></a>
-              </li>
-              <li class="nav-item sidebar-nav-item">
-                <a href="#" class="nav-link"><i class="flaticon-menu-1"></i><span>UI Elements</span></a>
-                <ul class="nav sub-group-menu">
-                  <li class="nav-item">
-                    <a href="notification-alart.html" class="nav-link"><i class="fas fa-angle-right"></i>Alart</a>
-                  </li>
-                  <li class="nav-item">
-                    <a href="button.html" class="nav-link"><i class="fas fa-angle-right"></i>Button</a>
-                  </li>
-                  <li class="nav-item">
-                    <a href="grid.html" class="nav-link"><i class="fas fa-angle-right"></i>Grid</a>
-                  </li>
-                  <li class="nav-item">
-                    <a href="modal.html" class="nav-link"><i class="fas fa-angle-right"></i>Modal</a>
-                  </li>
-                  <li class="nav-item">
-                    <a href="progress-bar.html" class="nav-link"><i class="fas fa-angle-right"></i>Progress Bar</a>
-                  </li>
-                  <li class="nav-item">
-                    <a href="ui-tab.html" class="nav-link"><i class="fas fa-angle-right"></i>Tab</a>
-                  </li>
-                  <li class="nav-item">
-                    <a href="ui-widget.html" class="nav-link"><i class="fas fa-angle-right"></i>Widget</a>
-                  </li>
-                </ul>
-              </li>
-              <li class="nav-item">
-                <a href="map.html" class="nav-link"><i class="flaticon-planet-earth"></i><span>Map</span></a>
-              </li>
-              <li class="nav-item">
-                <a href="account-settings.html" class="nav-link"><i class="flaticon-settings"></i><span>Account</span></a>
-              </li>
-            </ul>
-          </div>
-        </div>
-        <!-- Sidebar Area End Here -->
+        {% endblock %}
         <div class="dashboard-content-one">
-          <!-- Breadcubs Area Start Here -->
-          <div class="breadcrumbs-area">
-            <h3>User Dashboard</h3>
-            <ul>
-              <li>
-                <a href="index3.html">Home</a>
-              </li>
-              <li>User</li>
-            </ul>
-          </div>
-          <div class="row">
-            <!-- Summery Area Start Here -->
-            <div class="col-lg-4">
-              <div class="dashboard-summery-one">
-                <div class="row">
-                  <div class="col-6">
-                    <div class="item-icon bg-light-magenta" style="padding-top: 10px;">
-                      <i class="fa-solid fa-hashtag"></i>
-                    </div>
-                  </div>
-                  <div class="col-6">
-                    <div class="item-content">
-                      <div class="item-title">Point Number</div>
-                      <div class="item-number">
-                        <span class="counter" data-num="12">10</span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
+          {% block maincontent %}
+            <div class="breadcrumbs-area">
+              <h3>User Dashboard</h3>
+              <ul>
+                <li>
+                  <a href="{% url 'userauth:dashboard' %}">Home</a>
+                </li>
+                <li>User</li>
+              </ul>
             </div>
-            <div class="col-lg-4">
-              <div class="dashboard-summery-one">
-                <div class="row">
-                  <div class="col-6">
-                    <div class="item-icon bg-light-blue" style="padding-top: 10px;">
-                      <i class="fa-solid fa-location-crosshairs"></i>
-                    </div>
-                  </div>
-                  <div class="col-6">
-                    <div class="item-content">
-                      <div class="item-title">Pick-Up Spot</div>
-                      <div class="item-number">Usman Masjid</div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="col-lg-4">
-              <div class="dashboard-summery-one">
-                <div class="row">
-                  <div class="col-6">
-                    <div class="item-icon bg-light-yellow" style="padding: 10px;">
-                      <i class="fa-solid fa-user-tie"></i>
-                    </div>
-                  </div>
-                  <div class="col-6">
-                    <div class="item-content">
-                      <div class="item-title">Transporter</div>
-                      <div class="item-number">Jadoon</div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <!-- Breadcubs Area End Here -->
             <div class="row">
-              <!-- Student Info Area Start Here -->
-              <div class="col-4-xxxl col-12" style="width: 600px;">
-                <div class="card dashboard-card-ten" style="padding-left: 15px;">
-                  <div class="card-body">
-                    <div class="heading-layout1">
-                      <div class="item-title">
-                        <h3>About Me</h3>
-                      </div>
-                      <div class="dropdown">
-                        <a class="dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-expanded="false">...</a>
-
-                        <div class="dropdown-menu dropdown-menu-right">
-                          <a class="dropdown-item" href="#"><i class="fas fa-times text-orange-red"></i>Close</a>
-                          <a class="dropdown-item" href="#"><i class="fas fa-cogs text-dark-pastel-green"></i>Edit</a>
-                          <a class="dropdown-item" href="#"><i class="fas fa-redo-alt text-orange-peel"></i>Refresh</a>
-                        </div>
+              <!-- Summery Area Start Here -->
+              <div class="col-lg-4">
+                <div class="dashboard-summery-one">
+                  <div class="row">
+                    <div class="col-6">
+                      <div class="item-icon bg-light-magenta" style="padding-top: 10px;">
+                        <i class="fa-solid fa-hashtag"></i>
                       </div>
                     </div>
-                    <div class="student-info">
-                      <div class="media media-none--xs" style="padding-left: 120px; padding-bottom: 15px;">
-                        <div class="item-img">
-                          <img src="../static/img/figure/student1.png" class="media-img-auto" alt="student" />
+                    <div class="col-6">
+                      <div class="item-content">
+                        <div class="item-title">Point Number</div>
+                        <div class="item-number">
+                          {% if user.assigned_route.route_num %}
+                            <span class="counter" data-num="{{ user.assigned_route.route_num }}"></span>
+                          {% else %}
+                            <span>None</span>
+                          {% endif %}
                         </div>
-                      </div>
-                      <div class="table-responsive info-table">
-                        <table class="table text-nowrap">
-                          <tbody>
-                            <tr>
-                              <td>Name:</td>
-                              <td class="font-medium text-dark-medium">Basil Yaqoob</td>
-                            </tr>
-                            <tr>
-                              <td>Father Name:</td>
-                              <td class="font-medium text-dark-medium">Yaqoob Ali</td>
-                            </tr>
-
-                            <tr>
-                              <td>Section:</td>
-                              <td class="font-medium text-dark-medium">5-J</td>
-                            </tr>
-                            <tr>
-                              <td>Roll:</td>
-                              <td class="font-medium text-dark-medium">22K-4634</td>
-                            </tr>
-                            <tr>
-                              <td>Email:</td>
-                              <td class="font-medium text-dark-medium">k224634@nu.edu.pk</td>
-                            </tr>
-                          </tbody>
-                        </table>
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
-              <!-- Student Info Area End Here -->
-              <div class="col-8-xxxl col-12">
-                <div class="row">
-                  <div class="col-40-xxxl col-12" style="padding-left: 35px; padding-top: 0px; padding-right: 30px;">
-                    <div class="card dashboard-card-six">
-                      <div class="card-body" style="height: 500px; ">
-                        <div class="heading-layout1 mg-b-17">
-                          <div class="item-title">
-                            <h3>Notifications</h3>
-                          </div>
-                          <div class="dropdown">
-                            <a class="dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-expanded="false">...</a>
+              <div class="col-lg-4">
+                <div class="dashboard-summery-one">
+                  <div class="row">
+                    <div class="col-6">
+                      <div class="item-icon bg-light-blue" style="padding-top: 10px;">
+                        <i class="fa-solid fa-location-crosshairs"></i>
+                      </div>
+                    </div>
+                    <div class="col-6">
+                      <div class="item-content">
+                        <div class="item-title">Pick-Up Spot</div>
+                        {% if user.assigned_route.start_stop.name %}
+                          <div class="item-number">{{ user.assigned_route.start_stop.name }}</div>
+                        {% else %}
+                          <div class="item-number">None</div>
+                        {% endif %}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-lg-4">
+                <div class="dashboard-summery-one">
+                  <div class="row">
+                    <div class="col-6">
+                      <div class="item-icon bg-light-yellow" style="padding: 10px;">
+                        <i class="fa-solid fa-user-tie"></i>
+                      </div>
+                    </div>
+                    <div class="col-6">
+                      <div class="item-content">
+                        <div class="item-title">Transporter</div>
+                        {% if user.assigned_route.appointed_provider.name %}
+                          <div class="item-number">{{ user.assigned_route.appointed_provider.name }}</div>
+                        {% else %}
+                          <div class="item-number">None</div>
+                        {% endif %}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- Breadcubs Area End Here -->
+              <div class="row">
+                <!-- Student Info Area Start Here -->
+                <div class="col-4-xxxl col-12" style="width: 600px;">
+                  <div class="card dashboard-card" style="padding-left: 15px;">
+                    <div class="card-body">
+                      <div class="heading-layout1">
+                        <div class="item-title">
+                          <h3>About Me</h3>
+                        </div>
+                        <div class="dropdown">
+                          <a class="dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-expanded="false">...</a>
 
-                            <div class="dropdown-menu dropdown-menu-right">
-                              <a class="dropdown-item" href="#"><i class="fas fa-times text-orange-red"></i>Close</a>
-                              <a class="dropdown-item" href="#"><i class="fas fa-cogs text-dark-pastel-green"></i>Edit</a>
-                              <a class="dropdown-item" href="#"><i class="fas fa-redo-alt text-orange-peel"></i>Refresh</a>
-                            </div>
+                          <div class="dropdown-menu dropdown-menu-right">
+                            <a class="dropdown-item" href="#"><i class="fas fa-times text-orange-red"></i>Close</a>
+                            <a class="dropdown-item" href="#"><i class="fas fa-cogs text-dark-pastel-green"></i>Edit</a>
+                            <a class="dropdown-item" href="#"><i class="fas fa-redo-alt text-orange-peel"></i>Refresh</a>
                           </div>
                         </div>
-                        <div class="notice-box-wrap" style="height:100%">
-                          <div class="notice-list">
-                            <div class="post-date bg-skyblue">16 June, 2019</div>
-                            <h6 class="notice-title"><a href="#">Great School manag mene esom tus eleifend lectus sed maximus mi faucibusnting.</a></h6>
-                            <div class="entry-meta">
-                              Jennyfar Lopez / <span>5 min ago</span>
+                      </div>
+                      <div class="student-info">
+                        <div class="media media-none--xs" style="padding-left: 120px; padding-bottom: 15px;">
+                          <div class="item-img">
+                            <img src="{{ user.imageURL }}" class="media-img-auto" alt="student" />
+                          </div>
+                        </div>
+                        <div class="table-responsive info-table">
+                          <table class="table text-nowrap">
+                            <tbody>
+                              <tr>
+                                <td>Name:</td>
+                                <td class="font-medium text-dark-medium">{{ user.name }}</td>
+                              </tr>
+                              <tr>
+                                <td>Address</td>
+                                <td class="font-medium text-dark-medium">{{ user.Address }}</td>
+                              </tr>
+
+                              <tr>
+                                <td>Cnic:</td>
+                                <td class="font-medium text-dark-medium">{{ user.cnic }}</td>
+                              </tr>
+                              <tr>
+                                <td>Roll:</td>
+                                <td class="font-medium text-dark-medium">{{ user.roll_num }}</td>
+                              </tr>
+                              <tr>
+                                <td>Email:</td>
+                                <td class="font-medium text-dark-medium">{{ user.email }}</td>
+                              </tr>
+                              <tr>
+                                <td>Gender:</td>
+                                <td class="font-medium text-dark-medium">{{ user.gender }}</td>
+                              </tr>
+                              <tr>
+                                <td>Contact:</td>
+                                <td class="font-medium text-dark-medium">{{ user.contact }}</td>
+                              </tr>
+                              <tr>
+                                <td>Emergency Contact:</td>
+                                <td class="font-medium text-dark-medium">{{ user.emergency_contact }}</td>
+                              </tr>
+                            </tbody>
+                          </table>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <!-- Student Info Area End Here -->
+                <div class="col-8-xxxl col-12">
+                  <div class="row">
+                    <div class="col-40-xxxl col-12" style="padding-left: 35px; padding-top: 0px; padding-right: 30px;">
+                      <div class="card dashboard-card-six">
+                        <div class="card-body" style="height: 500px; ">
+                          <div class="heading-layout1 mg-b-17">
+                            <div class="item-title">
+                              <h3>Notifications</h3>
+                            </div>
+                            <div class="dropdown">
+                              <a class="dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-expanded="false">...</a>
+
+                              <div class="dropdown-menu dropdown-menu-right">
+                                <a class="dropdown-item" href="#"><i class="fas fa-times text-orange-red"></i>Close</a>
+                                <a class="dropdown-item" href="#"><i class="fas fa-cogs text-dark-pastel-green"></i>Edit</a>
+                                <a class="dropdown-item" href="#"><i class="fas fa-redo-alt text-orange-peel"></i>Refresh</a>
+                              </div>
                             </div>
                           </div>
-                          <div class="notice-list">
-                            <div class="post-date bg-yellow">16 June, 2019</div>
-                            <h6 class="notice-title"><a href="#">Great School manag printing.</a></h6>
-                            <div class="entry-meta">
-                              Jennyfar Lopez / <span>5 min ago</span>
-                            </div>
-                          </div>
-                          <div class="notice-list">
-                            <div class="post-date bg-pink">16 June, 2019</div>
-                            <h6 class="notice-title"><a href="#">Great School manag Nulla rhoncus eleifensed mim us mi faucibus id. Mauris vestibulum non purus lobortismenearea</a></h6>
-                            <div class="entry-meta">
-                              Jennyfar Lopez / <span>5 min ago</span>
-                            </div>
-                          </div>
-                          <div class="notice-list">
-                            <div class="post-date bg-skyblue">16 June, 2019</div>
-                            <h6 class="notice-title"><a href="#">Great School manag mene esom text of the printing.</a></h6>
-                            <div class="entry-meta">
-                              Jennyfar Lopez / <span>5 min ago</span>
-                            </div>
-                          </div>
-                          <div class="notice-list">
-                            <div class="post-date bg-yellow">16 June, 2019</div>
-                            <h6 class="notice-title"><a href="#">Great School manag printing.</a></h6>
-                            <div class="entry-meta">
-                              Jennyfar Lopez / <span>5 min ago</span>
-                            </div>
-                          </div>
-                          <div class="notice-list">
-                            <div class="post-date bg-pink">16 June, 2019</div>
-                            <h6 class="notice-title"><a href="#">Great School manag meneesom.</a></h6>
-                            <div class="entry-meta">
-                              Jennyfar Lopez / <span>5 min ago</span>
+                          <div class="notice-box-wrap" style="height:100%">
+                            <div class="notice-list">
+                              {% if notices %}
+                                {% for notice in notices %}
+                                  <div class="post-date bg-skyblue">{{ notice.date_posted }}</div>
+                                  <h6 class="notice-title"><a href="#">{{ notice.message }}</a></h6>
+                                  <div class="entry-meta">By Admin</div>
+                                {% endfor %}
+                              {% else %}
+                                <h6 class="notice-title">No New Notifications yet!</h6>
+                              {% endif %}
                             </div>
                           </div>
                         </div>
                       </div>
                     </div>
                   </div>
+                  <!-- Summery Area End Here -->
                 </div>
-                <!-- Summery Area End Here -->
               </div>
             </div>
-          </div>
-
-          <!-- Footer Area Start Here -->
-          <footer class="footer-wrap-layout1">
-            <div class="copyright">
-              © Copyrights <a href="#">FASTransit</a> 2024. All rights reserved.
-            </div>
-          </footer>
-          <!-- Footer Area End Here -->
+          {% endblock %}
+          {% block footer %}
+            <footer class="footer-wrap-layout1">
+              <div class="copyright">
+                © Copyrights <a href="#">FASTransit</a> 2024. All rights reserved.
+              </div>
+            </footer>
+          {% endblock %}
         </div>
       </div>
       <!-- Page Area End Here -->
     </div>
     <!-- jquery -->
-    <script src="../static/js/jquery-3.3.1.min.js"></script>
+    <script src="{% static 'js/jquery-3.3.1.min.js' %}"></script>
     <!-- Plugins js -->
-    <script src="../static/js/plugins.js"></script>
+    <script src="{% static 'js/plugins.js' %}"></script>
     <!-- Popper js -->
-    <script src="../static/js/popper.min.js"></script>
+    <script src="{% static 'js/popper.min.js' %}"></script>
     <!-- Bootstrap js -->
-    <script src="../static/js/bootstrap.min.js"></script>
+    <script src="{% static 'js/bootstrap.min.js' %}"></script>
     <!-- Counterup Js -->
-    <script src="../static/js/jquery.counterup.min.js"></script>
+    <script src="{% static 'js/jquery.counterup.min.js' %}"></script>
     <!-- Moment Js -->
-    <script src="../static/js/moment.min.js"></script>
+    <script src="{% static 'js/moment.min.js' %}"></script>
     <!-- Waypoints Js -->
-    <script src="../static/js/jquery.waypoints.min.js"></script>
+    <script src="{% static 'js/jquery.waypoints.min.js' %}"></script>
     <!-- Scroll Up Js -->
-    <script src="../static/js/jquery.scrollUp.min.js"></script>
+    <script src="{% static 'js/jquery.scrollUp.min.js' %}"></script>
     <!-- Full Calender Js -->
-    <script src="../static/js/fullcalendar.min.js"></script>
+    <script src="{% static 'js/fullcalendar.min.js' %}"></script>
     <!-- Chart Js -->
-    <script src="../static/js/Chart.min.js"></script>
+    <script src="{% static 'js/Chart.min.js' %}"></script>
     <!-- Data Table Js -->
-    <script src="../static/js/jquery.dataTables.min.js"></script>
+    <script src="{% static 'js/jquery.dataTables.min.js' %}"></script>
     <!-- Custom Js -->
-    <script src="../static/js/main.js"></script>
+    <script src="{% static 'js/main.js' %}"></script>
+    {% block customjs %}
+
+    {% endblock %}
   </body>
 </html>
