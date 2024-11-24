@@ -1,0 +1,87 @@
+{% extends 'index3.html' %}
+{% load static %}
+{% block customcss %}
+  <link rel="stylesheet" href="{% static 'css/routes.css' %}" />
+{% endblock %}
+
+{% block maincontent %}
+  <!-- Breadcrumbs Area Start Here -->
+  <div class="breadcrumbs-area">
+    <h3>Transport</h3>
+    <ul>
+        <li>
+            <a href="index.html">Home</a>
+        </li>
+        <li>Add New Route</li>
+    </ul>
+</div>
+<!-- Breadcrumbs Area End Here -->
+<!-- Add New Route Area Start Here -->
+<div class="card height-auto">
+    <div class="card-body">
+        <div class="heading-layout1">
+            <div class="item-title">
+                <h3>Add New Route</h3>
+            </div>
+            <div class="dropdown">
+                <a class="dropdown-toggle" href="#" role="button" 
+                data-toggle="dropdown" aria-expanded="false">...</a>
+
+                <div class="dropdown-menu dropdown-menu-right">
+                    <a class="dropdown-item" href="#"><i class="fas fa-times text-orange-red"></i>Close</a>
+                    <a class="dropdown-item" href="#"><i class="fas fa-cogs text-dark-pastel-green"></i>Edit</a>
+                    <a class="dropdown-item" href="#"><i class="fas fa-redo-alt text-orange-peel"></i>Refresh</a>
+                </div>
+            </div>
+        </div>
+        <form class="new-added-form">
+            <div class="row">
+                <div class="col-xl-3 col-lg-6 col-12 form-group">
+                    <label>Route Number *</label>
+                    <input type="text" placeholder="Enter Route Number" class="form-control">
+                </div>
+                <div class="col-xl-3 col-lg-6 col-12 form-group">
+                    <label>Number of Stops *</label>
+                    <input 
+                        type="number" 
+                        id="numStops" 
+                        placeholder="Enter Number of Stops" 
+                        class="form-control"
+                        oninput="generateStopFields()"
+                    >
+                </div>
+            </div>
+            <div id="stopsContainer" class="row"></div>
+            <div class="row">
+                <div class="col-12 form-group mg-t-8">
+                    <button type="submit" class="btn-fill-lg btn-gradient-yellow btn-hover-bluedark">Save</button>
+                    <button type="reset" class="btn-fill-lg bg-blue-dark btn-hover-yellow">Reset</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block customjs %}
+<script>
+function generateStopFields() {
+    const numStops = document.getElementById("numStops").value;
+    const stopsContainer = document.getElementById("stopsContainer");
+
+    // Clear previous fields
+    stopsContainer.innerHTML = "";
+
+    // Generate input fields for each stop
+    for (let i = 1; i <= numStops; i++) {
+        const div = document.createElement("div");
+        div.className = "col-xl-3 col-lg-6 col-12 form-group";
+        div.innerHTML = `
+            <label>Stop ${i}*</label>
+            <input type="text" placeholder="Enter Stop ${i} Name" class="form-control">
+        `;
+        stopsContainer.appendChild(div);
+    }
+}
+</script>
+{% endblock %}
