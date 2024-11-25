@@ -144,3 +144,10 @@ def signup_view(request):
 
      return render(request, 'userauth/signup.html',{'form':form})
 
+def point_card_view(request):
+     raw_query= """
+          SELECT * 
+          FROM transport_transportprovider
+          """
+     providers = TransportProvider.objects.raw(raw_query)
+     return render(request, "userauth/point_card.html",{"providers":providers})

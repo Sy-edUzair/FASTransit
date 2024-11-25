@@ -175,3 +175,7 @@ EMAIL_USE_SSL = False
 EMAIL_HOST_USER = 'tahatahir09@gmail.com'
 EMAIL_HOST_PASSWORD = 'vqhjavlxftavevum'  
 DEFAULT_FROM_EMAIL = 'tahatahir09@gmail.com'
+
+STRIPE_PUBLIC_KEY =""
+STRIPE_SECRET_KEY=""
+STRIPE_WEBHOOK_SECRET=""

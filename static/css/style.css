@@ -1968,8 +1968,8 @@ ul {
 
 .header-main-menu .navbar-nav .header-language .navbar-nav-link:after {
   content: "\f107";
-  font-family: Font Awesome\ 5 Free;
-  font-weight: 600;
+  font-family: "Font Awesome 5 Free";
+  font-weight: 900;
   font-size: 14px;
   border: none;
   position: absolute;

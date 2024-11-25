@@ -18,14 +18,15 @@ from noticeboard.models import *
 
 @login_required(login_url=settings.LOGIN_URL)
 def render_route_page(request):
-    # raw_query = """
-    #     SELECT *
-    #     FROM noticeboard_notice
-    #     WHERE is_active = TRUE 
-    #     ORDER BY date_posted DESC
-    # """
-    # notices = Notice.objects.raw(raw_query)
-    return render(request, "transport/routes.html")
+     raw_query= """
+          SELECT * 
+          FROM transport_transportprovider
+          """
+     providers = TransportProvider.objects.raw(raw_query)
+     #raw_query = """SELECT * FROM transport_route"""
+     #raw_query2 = """SELECT """
+     #routes = Route.objects.raw(raw_query)
+     return render(request, "transport/routes.html",{"providers":providers})
 
 @csrf_protect
 def transporter_login(request):
@@ -79,3 +80,27 @@ def logout_view(request):
     logout(request)
     messages.success(request,"You logged out")
     return HttpResponseRedirect(reverse("transport:transporter_login"))
+
+def transport_driver_view(request):
+     raw_query= """
+          SELECT * 
+          FROM transport_transportprovider
+          """
+     providers = TransportProvider.objects.raw(raw_query)
+     return render(request, "transport/driver.html",{"providers":providers})
+
+def transport_fee_view(request):
+     raw_query= """
+          SELECT * 
+          FROM transport_transportprovider
+          """
+     providers = TransportProvider.objects.raw(raw_query)
+     return render(request, "transport/fee-collection.html",{"providers":providers})
+
+def add_route_view(request):
+     raw_query= """
+          SELECT * 
+          FROM transport_transportprovider
+          """
+     providers = TransportProvider.objects.raw(raw_query)
+     return render(request, "add-route.html",{"providers":providers})

@@ -1,0 +1,102 @@
+{% extends 'index3.html' %}
+{% load static %}
+{% block customcss %}
+  <style>
+    .row {
+      align-items: center;
+      justify-content: center;
+    }
+  </style>
+{% endblock %}
+
+{% block maincontent %}
+  <!-- Breadcrumbs Area Start Here -->
+  <div class="breadcrumbs-area">
+    <h3>Point Card</h3>
+    <ul>
+      <li>
+        <a href="index3.html">Home</a>
+      </li>
+      <li>Point Card</li>
+    </ul>
+  </div>
+  <!-- Breadcrumbs Area End Here -->
+
+  <!-- Dashboard Content Start Here -->
+  <div class="row">
+    <div class="col-12 col-md-8 col-lg-6">
+      <div class="card dashboard-card-twelve">
+        <div class="card-body">
+          <div class="heading-layout1">
+            <div class="item-title">
+              <h3>Point Card</h3>
+            </div>
+            <div class="dropdown">
+              <a class="dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-expanded="false">...</a>
+              <div class="dropdown-menu dropdown-menu-right">
+                <a class="dropdown-item" href="#"><i class="fas fa-times text-orange-red"></i>Close</a>
+                <a class="dropdown-item" href="#"><i class="fas fa-cogs text-dark-pastel-green"></i>Edit</a>
+                <a class="dropdown-item" href="#"><i class="fas fa-redo-alt text-orange-peel"></i>Refresh</a>
+              </div>
+            </div>
+          </div>
+          <div class="kids-details-wrap">
+            <div class="kids-details-box">
+              <div class="item-img">
+                <img src="img/figure/student.png" alt="student" />
+              </div>
+              <div class="item-content table-responsive">
+                <table class="table text-nowrap">
+                  <tbody>
+                    <tr>
+                      <td>Name:</td>
+                      <td>Jessia Rose</td>
+                    </tr>
+                    <tr>
+                      <td>Gender:</td>
+                      <td>Female</td>
+                    </tr>
+                    <tr>
+                      <td>Class:</td>
+                      <td>2</td>
+                    </tr>
+                    <tr>
+                      <td>Roll:</td>
+                      <td>#2225</td>
+                    </tr>
+                    <tr>
+                      <td>Section:</td>
+                      <td>A</td>
+                    </tr>
+                    <tr>
+                      <td>Admission Id:</td>
+                      <td>#0021</td>
+                    </tr>
+                    <tr>
+                      <td>Admission Date:</td>
+                      <td>07.08.2017</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <!-- QR Code Section -->
+            <div class="qr-code-section text-center mt-4">
+              <h4>Scan QR Code</h4>
+              <img id="qrCodeImage" src="{% static 'path/to/qr-code-image.png' %}" alt="QR Code" />
+              <p>Your Point Card QR Code</p>
+            </div>
+            <!-- Download Button -->
+            <div class="text-center mt-3">
+              <a href="download_point_card.html" class="btn btn-primary">Download Point Card</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+
+{% block customjs %}
+
+{% endblock %}
