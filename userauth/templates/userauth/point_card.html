@@ -12,12 +12,12 @@
 {% block maincontent %}
   <!-- Breadcrumbs Area Start Here -->
   <div class="breadcrumbs-area">
-    <h3>Point Card</h3>
+    <h3>Transport Card</h3>
     <ul>
       <li>
-        <a href="index3.html">Home</a>
+        <a href="{% url 'userauth:dashboard' %}">Home</a>
       </li>
-      <li>Point Card</li>
+      <li>Transport Card</li>
     </ul>
   </div>
   <!-- Breadcrumbs Area End Here -->
@@ -29,52 +29,41 @@
         <div class="card-body">
           <div class="heading-layout1">
             <div class="item-title">
-              <h3>Point Card</h3>
+              <h3>Transport Identity Card</h3>
             </div>
-            <div class="dropdown">
-              <a class="dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-expanded="false">...</a>
-              <div class="dropdown-menu dropdown-menu-right">
-                <a class="dropdown-item" href="#"><i class="fas fa-times text-orange-red"></i>Close</a>
-                <a class="dropdown-item" href="#"><i class="fas fa-cogs text-dark-pastel-green"></i>Edit</a>
-                <a class="dropdown-item" href="#"><i class="fas fa-redo-alt text-orange-peel"></i>Refresh</a>
-              </div>
-            </div>
+            <div class="dropdown"></div>
           </div>
           <div class="kids-details-wrap">
             <div class="kids-details-box">
               <div class="item-img">
-                <img src="img/figure/student.png" alt="student" />
+                <img src="{{ user.imageURL }}" alt="student" />
               </div>
               <div class="item-content table-responsive">
                 <table class="table text-nowrap">
                   <tbody>
                     <tr>
                       <td>Name:</td>
-                      <td>Jessia Rose</td>
+                      <td>{{ user.name }}</td>
+                    </tr>
+                    <tr>
+                      <td>Roll Number:</td>
+                      <td>{{ user.roll_num }}</td>
                     </tr>
                     <tr>
                       <td>Gender:</td>
-                      <td>Female</td>
+                      <td>{{ user.gender }}</td>
                     </tr>
                     <tr>
-                      <td>Class:</td>
-                      <td>2</td>
+                      <td>Department</td>
+                      <td>{{ user.department }}</td>
                     </tr>
                     <tr>
-                      <td>Roll:</td>
-                      <td>#2225</td>
+                      <td>Pick and drop stop:</td>
+                      <td>{{ user.assigned_route.start_stop.name }}</td>
                     </tr>
                     <tr>
-                      <td>Section:</td>
-                      <td>A</td>
-                    </tr>
-                    <tr>
-                      <td>Admission Id:</td>
-                      <td>#0021</td>
-                    </tr>
-                    <tr>
-                      <td>Admission Date:</td>
-                      <td>07.08.2017</td>
+                      <td>Route#:</td>
+                      <td>{{ user.assigned_route.route_num }}</td>
                     </tr>
                   </tbody>
                 </table>

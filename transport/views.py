@@ -23,10 +23,27 @@ def render_route_page(request):
           FROM transport_transportprovider
           """
      providers = TransportProvider.objects.raw(raw_query)
-     #raw_query = """SELECT * FROM transport_route"""
-     #raw_query2 = """SELECT """
-     #routes = Route.objects.raw(raw_query)
-     return render(request, "transport/routes.html",{"providers":providers})
+     raw_query_2= """
+        SELECT r.route_num AS route_num, s.id AS stop_id, s.name AS stop_name FROM transport_route AS r JOIN transport_routestop AS rs ON r.route_num = rs.route_id JOIN transport_stop AS s ON rs.stop_id = s.id ORDER BY r.route_num, rs.stop_order;
+     """
+    
+    # Execute the raw query
+     with connection.cursor() as cursor:
+        cursor.execute(raw_query_2)
+        results = cursor.fetchall()
+
+    # Organize results into a structure suitable for the template
+     routes = {}
+     for route_num, stop_id, stop_name in results:
+          if route_num not in routes:
+               idx=0
+               routes[route_num] = {"stops": []}
+          if stop_id:
+               idx+=1
+               routes[route_num]["stops"].append({"idx":idx,"id": stop_id, "name": stop_name})
+
+     print(routes)
+     return render(request, "transport/routes.html",{"providers":providers,"routes": routes})
 
 @csrf_protect
 def transporter_login(request):

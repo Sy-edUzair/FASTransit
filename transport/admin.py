@@ -29,9 +29,16 @@ class LandmarkAdmin(admin.ModelAdmin):
 class StopAdmin(admin.ModelAdmin):
     list_display=['name','nearest_landmark']
 
+
+class RouteStopInline(admin.TabularInline):
+    model = RouteStop
+    extra = 1  # Number of extra blank rows to display
+    fields = ('stop', 'stop_order')
+    ordering = ['stop_order']
+
 class RouteAdmin(admin.ModelAdmin):
    list_display = ['route_num', 'start_stop', 'end_stop', 'appointed_provider']
-   filter_horizontal = ['stops']  # Makes it easier to manage many-to-many relationship
+   inlines = [RouteStopInline]  
 
 class VehicleAdmin(admin.ModelAdmin):
     list_display = ['license_plate', 'allotted_seats', 'tracking_id', 'Last_maintenance_date', 'status', 'transport_provider', 'route_no']

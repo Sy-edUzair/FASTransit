@@ -51,90 +51,25 @@
     <div class="col-12">
       <div class="card">
         <div class="card-body">
-          <ul class="route-list">
-            <li>
-              <div class="route-item" onclick="toggleStops('route1-stops')">
-                <span class="dropdown-icon">▶</span> Route 1
-              </div>
-              <ul id="route1-stops" class="stop-list">
-                <li>Stop 1</li>
-                <li>Stop 2</li>
-                <li>Stop 3</li>
-                <li>Stop 4</li>
-                <li>Stop 5</li>
-              </ul>
-            </li>
-            <li>
-              <div class="route-item" onclick="toggleStops('route2-stops')">
-                <span class="dropdown-icon">▶</span> Route 2
-              </div>
-              <ul id="route2-stops" class="stop-list">
-                <li>Stop 1</li>
-                <li>Stop 2</li>
-                <li>Stop 3</li>
-                <li>Stop 4</li>
-                <li>Stop 5</li>
-              </ul>
-            </li>
-            <li>
-              <div class="route-item" onclick="toggleStops('route3-stops')">
-                <span class="dropdown-icon">▶</span> Route 3
-              </div>
-              <ul id="route3-stops" class="stop-list">
-                <li>Stop 1</li>
-                <li>Stop 2</li>
-                <li>Stop 3</li>
-                <li>Stop 4</li>
-                <li>Stop 5</li>
-              </ul>
-            </li>
-            <li>
-              <div class="route-item" onclick="toggleStops('route4-stops')">
-                <span class="dropdown-icon">▶</span> Route 4
-              </div>
-              <ul id="route4-stops" class="stop-list">
-                <li>Stop 1</li>
-                <li>Stop 2</li>
-                <li>Stop 3</li>
-                <li>Stop 4</li>
-                <li>Stop 5</li>
-              </ul>
-            </li>
-            <li>
-              <div class="route-item" onclick="toggleStops('route5-stops')">
-                <span class="dropdown-icon">▶</span> Route 5
-              </div>
-              <ul id="route5-stops" class="stop-list">
-                <li>Stop 1</li>
-                <li>Stop 2</li>
-                <li>Stop 3</li>
-                <li>Stop 4</li>
-                <li>Stop 5</li>
-              </ul>
-            </li>
-            <li>
-              <div class="route-item" onclick="toggleStops('route6-stops')">
-                <span class="dropdown-icon">▶</span> Route 6
-              </div>
-              <ul id="route6-stops" class="stop-list">
-                <li>Stop 1</li>
-                <li>Stop 2</li>
-                <li>Stop 3</li>
-                <li>Stop 4</li>
-                <li>Stop 5</li>
-              </ul>
-            </li>
-          </ul>
-          
+          {% for route_num, route_data in routes.items %}
+            <ul class="route-list">
+              <li>
+                <div class="route-item" onclick="toggleStops('{{ route_num }}')">
+                  <span class="dropdown-icon">▶</span> Route {{ route_num }}
+                </div>
+                <ul id="{{ route_num }}" class="stop-list">
+                  {% for stop in route_data.stops %}
+                    <li>Stop {{ stop.idx }} : {{ stop.name }}</li>
+                  {% endfor %}
+                </ul>
+              </li>
+            </ul>
+          {% endfor %}
+
           <!-- Route Selection Section -->
           <div class="route-select-area">
-            <label for="routeInput">Select a Route:  </label>
-            <input
-              type="text"
-              id="routeInput"
-              class="route-select-input"
-              placeholder="Enter Route Number (e.g., Route 1)"
-            />
+            <label for="routeInput">Select a Route:</label>
+            <input type="text" id="routeInput" class="route-select-input" placeholder="Enter Route Number (e.g., Route 1)" />
             <button class="route-submit-button" onclick="submitRoute()">Submit</button>
           </div>
         </div>
@@ -146,24 +81,24 @@
 {% block customjs %}
   <script>
     function toggleStops(routeId) {
-      const stops = document.getElementById(routeId);
-      const icon = stops.previousElementSibling.querySelector(".dropdown-icon");
-      if (stops.style.display === "none" || !stops.style.display) {
-        stops.style.display = "block";
-        icon.textContent = "▼";
+      const stops = document.getElementById(routeId)
+      const icon = stops.previousElementSibling.querySelector('.dropdown-icon')
+      if (stops.style.display === 'none' || !stops.style.display) {
+        stops.style.display = 'block'
+        icon.textContent = '▼'
       } else {
-        stops.style.display = "none";
-        icon.textContent = "▶";
+        stops.style.display = 'none'
+        icon.textContent = '▶'
       }
     }
-
+    
     function submitRoute() {
-      const routeInput = document.getElementById("routeInput").value;
+      const routeInput = document.getElementById('routeInput').value
       if (routeInput) {
-        alert(`You have selected: ${routeInput}`);
+        alert(`You have selected: ${routeInput}`)
         // Add further processing as needed
       } else {
-        alert("Please enter a route number.");
+        alert('Please enter a route number.')
       }
     }
   </script>

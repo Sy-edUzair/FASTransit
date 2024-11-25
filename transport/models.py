@@ -57,11 +57,22 @@ class Route(models.Model):
     start_stop = models.ForeignKey(Stop, related_name='start_stop', on_delete=models.CASCADE)
     end_stop = models.ForeignKey(Stop, related_name='end_stop', on_delete=models.CASCADE)
     appointed_provider = models.ForeignKey(TransportProvider, on_delete=models.CASCADE, related_name = 'routes')
-    stops = models.ManyToManyField(Stop,related_name='stops')
+    stops = models.ManyToManyField(Stop,through='RouteStop',related_name='stops')
 
     def __str__(self):
         return f"Route {self.route_num}"
     
+class RouteStop(models.Model):
+    route = models.ForeignKey(Route,related_name='route_stops',on_delete=models.CASCADE)
+    stop = models.ForeignKey(Stop, on_delete=models.CASCADE)
+    stop_order = models.PositiveIntegerField()
+
+    class Meta:
+        unique_together = ('route', 'stop_order')  
+        ordering = ['stop_order']  
+
+    def __str__(self):
+        return f"Route {self.route.route_num} - Stop {self.stop.name} (Order {self.stop_order})"
 
 class Vehicle(models.Model):
     license_plate= models.CharField(max_length=50,primary_key=True,validators=[
