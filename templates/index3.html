@@ -173,13 +173,6 @@
         <div class="dashboard-content-one">
           {% block maincontent %}
             <div class="breadcrumbs-area">
-              {% if messages %}
-                <ul class="messages">
-                  {% for message in messages %}
-                    <li class="{{ message.tags }}">{{ message }}</li>
-                  {% endfor %}
-                </ul>
-              {% endif %}
               <h3>User Dashboard</h3>
               <ul>
                 <li>
@@ -188,6 +181,13 @@
                 <li>User</li>
               </ul>
             </div>
+            {% if messages %}
+              <ul class="messages">
+                {% for message in messages %}
+                  <li class="{{ message.tags }}">{{ message }}</li>
+                {% endfor %}
+              </ul>
+            {% endif %}
             <div class="row">
               <!-- Summery Area Start Here -->
               <div class="col-lg-4">

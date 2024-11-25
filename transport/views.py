@@ -24,15 +24,15 @@ def render_route_page(request):
           """
      providers = TransportProvider.objects.raw(raw_query)
      raw_query_2= """
-        SELECT r.route_num AS route_num, s.id AS stop_id, s.name AS stop_name FROM transport_route AS r JOIN transport_routestop AS rs ON r.route_num = rs.route_id JOIN transport_stop AS s ON rs.stop_id = s.id ORDER BY r.route_num, rs.stop_order;
+          SELECT r.route_num AS route_num, s.id AS stop_id, s.name AS stop_name FROM transport_route AS r JOIN transport_routestop AS rs ON r.route_num = rs.route_id JOIN transport_stop AS s ON rs.stop_id = s.id ORDER BY r.route_num, rs.stop_order;
      """
-    
-    # Execute the raw query
-     with connection.cursor() as cursor:
-        cursor.execute(raw_query_2)
-        results = cursor.fetchall()
 
-    # Organize results into a structure suitable for the template
+     # Execute the raw query
+     with connection.cursor() as cursor:
+          cursor.execute(raw_query_2)
+          results = cursor.fetchall()
+
+     # Organize results into a structure suitable for the template
      routes = {}
      for route_num, stop_id, stop_name in results:
           if route_num not in routes:
@@ -42,8 +42,29 @@ def render_route_page(request):
                idx+=1
                routes[route_num]["stops"].append({"idx":idx,"id": stop_id, "name": stop_name})
 
-     print(routes)
-     return render(request, "transport/routes.html",{"providers":providers,"routes": routes})
+     if request.method == 'POST':
+          form = RouteForm(request.POST)
+          if form.is_valid():
+               route_number = form.cleaned_data['route_number']
+               print(route_number)
+               with connection.cursor() as cursor:
+               # Fetch the specific route
+                    cursor.execute("SELECT route_num FROM transport_route WHERE route_num = %s", [route_number])
+                    route = cursor.fetchone()
+                    if route:
+                         route_id = route[0]
+
+                         # Assign the route to the user
+                         cursor.execute(
+                              "UPDATE userauth_user SET assigned_route_id = %s WHERE roll_num = %s",
+                              [route_id, request.user.roll_num]
+                              )
+                         messages.success(request,f"Route {route_number} assigned to user {request.user.roll_num}.")
+                    else:
+                         messages.error(request,f"Route {route_number} not found.")
+     else:
+          form = RouteForm()
+     return render(request, "transport/routes.html",{"providers":providers,"routes": routes,"form":form})
 
 @csrf_protect
 def transporter_login(request):
@@ -90,13 +111,13 @@ def transporter_dashboard(request):
     #     ORDER BY date_posted DESC
     # """
     # notices = Notice.objects.raw(raw_query)
-    return render(request, "transport/transport-dashboard.html", {})
+     return render(request, "transport/transport-dashboard.html", {})
 
 @csrf_protect
 def logout_view(request):
-    logout(request)
-    messages.success(request,"You logged out")
-    return HttpResponseRedirect(reverse("transport:transporter_login"))
+     logout(request)
+     messages.success(request,"You logged out")
+     return HttpResponseRedirect(reverse("transport:transporter_login"))
 
 def transport_driver_view(request):
      raw_query= """

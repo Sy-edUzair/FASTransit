@@ -46,6 +46,13 @@
       <li>Routes</li>
     </ul>
   </div>
+  {% if messages %}
+    <ul class="messages">
+      {% for message in messages %}
+        <li class="{{ message.tags }}">{{ message }}</li>
+      {% endfor %}
+    </ul>
+  {% endif %}
   <!-- Breadcrumbs Area End Here -->
   <div class="row">
     <div class="col-12">
@@ -69,8 +76,12 @@
           <!-- Route Selection Section -->
           <div class="route-select-area">
             <label for="routeInput">Select a Route:</label>
-            <input type="text" id="routeInput" class="route-select-input" placeholder="Enter Route Number (e.g., Route 1)" />
-            <button class="route-submit-button" onclick="submitRoute()">Submit</button>
+            <form method="POST">
+              {% csrf_token %}
+              {{ form.as_p }}
+              <!-- <input type="text" id="routeInput" class="route-select-input" placeholder="Enter Route Number (e.g., Route 1)" /> -->
+              <button class="route-submit-button" onclick="submitRoute()">Submit</button>
+            </form>
           </div>
         </div>
       </div>
