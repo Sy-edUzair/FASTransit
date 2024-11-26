@@ -15,6 +15,10 @@ from .forms import *
 from .models import *
 from transport.models import *
 from noticeboard.models import *
+from django.shortcuts import render
+from django.http import HttpResponse
+from django.db import connection
+from .forms import RouteForm
 
 @login_required(login_url=settings.LOGIN_URL)
 def render_route_page(request):
@@ -135,6 +139,8 @@ def transport_fee_view(request):
      providers = TransportProvider.objects.raw(raw_query)
      return render(request, "transport/fee-collection.html",{"providers":providers})
 
+
+
 def add_route_view(request):
      raw_query= """
           SELECT * 
@@ -142,10 +148,3 @@ def add_route_view(request):
           """
      providers = TransportProvider.objects.raw(raw_query)
      return render(request, "add-route.html",{"providers":providers})
-def driver_detail_view(request):
-     raw_query= """
-          SELECT * 
-          FROM transport_transportprovider
-          """
-     providers = TransportProvider.objects.raw(raw_query)
-     return render(request, "driver-detail.html",{"providers":providers})
