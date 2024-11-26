@@ -11,3 +11,11 @@ def voucher_view(request):
           """
      providers = TransportProvider.objects.raw(raw_query)
      return render(request, "payment/voucher.html",{"providers":providers})
+
+def payment_history_view(request):
+     raw_query= """
+          SELECT * 
+          FROM transport_transportprovider
+          """
+     providers = TransportProvider.objects.raw(raw_query)
+     return render(request, "payment/payment-history.html",{"providers":providers})
