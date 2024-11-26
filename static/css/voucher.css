@@ -1,0 +1,45 @@
+
+  .action-buttons{
+    margin-top:300px;
+  }
+  .action-buttons .btn {
+    display: inline-block;
+    width: auto;
+    font-size: 20px;
+    background-color: #f8f9fa; 
+    color: #36486b;
+    border: 2px solid #36486b;
+    padding: 10px 20px;
+    margin-bottom: 15px;
+    border-radius: 25px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: all 0.3s ease;
+  }
+
+  .action-buttons .btn:hover {
+    background-color: #36486b;
+    color: white;
+  }
+
+
+  .action-buttons #upload-section {
+    display: none; 
+    margin-top: 15px;
+  }
+
+
+  .action-buttons input[type="file"] {
+    display: block;
+    margin: 10px auto;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 10px;
+    width: 100%;
+    cursor: pointer;
+  }
+  .nu-logo img {
+    max-height: 80px; 
+    height: auto;     
+    margin: 0 auto;   
+  }
