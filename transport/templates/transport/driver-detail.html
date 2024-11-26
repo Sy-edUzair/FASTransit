@@ -1,0 +1,175 @@
+{% extends 'index3.html' %}
+{% load static %}
+{% block customcss %}
+  <link rel="stylesheet" href="{% static 'css/routes.css' %}" />
+{% endblock %}
+
+{% block maincontent %}
+  <!-- Breadcrumbs Area Start Here -->
+  <div class="breadcrumbs-area">
+    <h3>Transport</h3>
+    <ul>
+        <li>
+            <a href="{% url 'transport:transport-dashboard'%}">Home</a>
+        </li>
+        <li>Transporter Dashboard</li>
+    </ul>
+</div>
+<!-- Breadcrumbs Area End Here -->
+ <div class="row">
+    <div class="col-lg-4">
+        <div class="dashboard-summery-one">
+          <div class="row">
+            <div class="col-6">
+              <div class="item-icon bg-light-magenta" style="padding-top: 10px;">
+                <i class="fa-solid fa-hashtag"></i>
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="item-content">
+                <div class="item-title">Point Number</div>
+                <div class="item-number">
+                  {% if user.assigned_route.route_num %}
+                    <span class="counter" data-num="{{ user.assigned_route.route_num }}"></span>
+                  {% else %}
+                    <span>None</span>
+                  {% endif %}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-4">
+        <div class="dashboard-summery-one">
+          <div class="row">
+            <div class="col-6">
+              <div class="item-icon bg-light-blue" style="padding-top: 10px;">
+                <i class="fa-solid fa-location-crosshairs"></i>
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="item-content">
+                <div class="item-title">Pick-Up Spot</div>
+                {% if user.assigned_route.start_stop.name %}
+                  <div class="item-number">{{ user.assigned_route.start_stop.name }}</div>
+                {% else %}
+                  <div class="item-number">None</div>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-4">
+        <div class="dashboard-summery-one">
+          <div class="row">
+            <div class="col-6">
+              <div class="item-icon bg-light-yellow" style="padding: 10px;">
+                <i class="fa-solid fa-user-tie"></i>
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="item-content">
+                <div class="item-title">Transporter</div>
+                {% if user.assigned_route.appointed_provider.name %}
+                  <div class="item-number">{{ user.assigned_route.appointed_provider.name }}</div>
+                {% else %}
+                  <div class="item-number">None</div>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div><div class="col-lg-4">
+        <div class="dashboard-summery-one">
+          <div class="row">
+            <div class="col-6">
+              <div class="item-icon bg-light-magenta" style="padding-top: 10px;">
+                <i class="fa-solid fa-hashtag"></i>
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="item-content">
+                <div class="item-title">Point Number</div>
+                <div class="item-number">
+                  {% if user.assigned_route.route_num %}
+                    <span class="counter" data-num="{{ user.assigned_route.route_num }}"></span>
+                  {% else %}
+                    <span>None</span>
+                  {% endif %}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-4">
+        <div class="dashboard-summery-one">
+          <div class="row">
+            <div class="col-6">
+              <div class="item-icon bg-light-blue" style="padding-top: 10px;">
+                <i class="fa-solid fa-location-crosshairs"></i>
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="item-content">
+                <div class="item-title">Pick-Up Spot</div>
+                {% if user.assigned_route.start_stop.name %}
+                  <div class="item-number">{{ user.assigned_route.start_stop.name }}</div>
+                {% else %}
+                  <div class="item-number">None</div>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-4">
+        <div class="dashboard-summery-one">
+          <div class="row">
+            <div class="col-6">
+              <div class="item-icon bg-light-yellow" style="padding: 10px;">
+                <i class="fa-solid fa-user-tie"></i>
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="item-content">
+                <div class="item-title">Transporter</div>
+                {% if user.assigned_route.appointed_provider.name %}
+                  <div class="item-number">{{ user.assigned_route.appointed_provider.name }}</div>
+                {% else %}
+                  <div class="item-number">None</div>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-4">
+        <div class="dashboard-summery-one">
+          <div class="row">
+            <div class="col-6">
+              <div class="item-icon bg-light-yellow" style="padding: 10px;">
+                <i class="fa-solid fa-user-tie"></i>
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="item-content">
+                <div class="item-title">Transporter</div>
+                {% if user.assigned_route.appointed_provider.name %}
+                  <div class="item-number">{{ user.assigned_route.appointed_provider.name }}</div>
+                {% else %}
+                  <div class="item-number">None</div>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+ </div>
+{% endblock %}
+
+{% block customjs %}
+
+{% endblock %}
