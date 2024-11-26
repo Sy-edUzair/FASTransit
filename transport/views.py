@@ -148,3 +148,12 @@ def add_route_view(request):
           """
      providers = TransportProvider.objects.raw(raw_query)
      return render(request, "add-route.html",{"providers":providers})
+
+
+def driver_detail_view(request):
+     raw_query= """
+          SELECT * 
+          FROM transport_transportprovider
+          """
+     providers = TransportProvider.objects.raw(raw_query)
+     return render(request, "driver-detail.html",{"providers":providers})

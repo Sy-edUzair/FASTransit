@@ -10,6 +10,6 @@ urlpatterns=[
     path("transport-drivers",views.transport_driver_view,name='transport-drivers'),
     path("transport-fees",views.transport_fee_view,name='transport-fees'),
     path("add-route",views.add_route_view,name='add-route'),
-    #path("driver-detail",views.driver_detail_view,name='driver-detail'),
+    path("driver-detail",views.driver_detail_view,name='driver-detail'),
     # path("userauth/logout",views.logout_view,name="logout"),  
 ]
