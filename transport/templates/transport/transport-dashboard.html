@@ -22,12 +22,12 @@
           <div class="row">
             <div class="col-6">
               <div class="item-icon bg-light-magenta" style="padding-top: 10px;">
-                <i class="fa-solid fa-hashtag"></i>
+                <i class="fa-solid fa-van-shuttle"></i>
               </div>
             </div>
             <div class="col-6">
               <div class="item-content">
-                <div class="item-title">Point Number</div>
+                <div class="item-title">Total Vehicle</div>
                 <div class="item-number">
                   {% if user.assigned_route.route_num %}
                     <span class="counter" data-num="{{ user.assigned_route.route_num }}"></span>
@@ -45,12 +45,12 @@
           <div class="row">
             <div class="col-6">
               <div class="item-icon bg-light-blue" style="padding-top: 10px;">
-                <i class="fa-solid fa-location-crosshairs"></i>
+                <i class="fa-solid fa-route"></i>
               </div>
             </div>
             <div class="col-6">
               <div class="item-content">
-                <div class="item-title">Pick-Up Spot</div>
+                <div class="item-title">Total Route</div>
                 {% if user.assigned_route.start_stop.name %}
                   <div class="item-number">{{ user.assigned_route.start_stop.name }}</div>
                 {% else %}
@@ -66,12 +66,12 @@
           <div class="row">
             <div class="col-6">
               <div class="item-icon bg-light-yellow" style="padding: 10px;">
-                <i class="fa-solid fa-user-tie"></i>
+                <i class="fa-solid fa-users-line"></i>
               </div>
             </div>
             <div class="col-6">
               <div class="item-content">
-                <div class="item-title">Transporter</div>
+                <div class="item-title">Assigned Student/Staff</div>
                 {% if user.assigned_route.appointed_provider.name %}
                   <div class="item-number">{{ user.assigned_route.appointed_provider.name }}</div>
                 {% else %}
@@ -82,7 +82,256 @@
           </div>
         </div>
       </div>
+      
  </div>
+
+
+ <div class="row">
+  <!-- All Transport List Area Start Here -->
+  <div class="col-12">
+      <div class="card height-auto">
+          <div class="card-body">
+              <div class="heading-layout1">
+                  <div class="item-title">
+                      <h3>All Driver Lists</h3>
+                  </div>
+                  
+              </div>
+
+              <form class="mg-b-20">
+                  <div class="row gutters-8">
+                      <div class="col-lg-4 col-12 form-group">
+                          <input type="text" placeholder="Search by Route ..." class="form-control">
+                      </div>
+                      <div class="col-lg-3 col-12 form-group">
+                          <input type="text" placeholder="Search by Car Number ..."
+                              class="form-control">
+                      </div>
+                      <div class="col-lg-3 col-12 form-group">
+                          <input type="text" placeholder="Search by Phone ..." class="form-control">
+                      </div>
+                      <div class="col-lg-2 col-12 form-group">
+                          <button type="submit"
+                              class="fw-btn-fill btn-gradient-yellow">SEARCH</button>
+                      </div>
+                  </div>
+              </form>
+
+              <div class="table-responsive">
+                  <table class="table display data-table text-nowrap">
+                      <thead>
+                          <tr>
+                              <th>Route No</th>
+                              <th>Vehicle No</th>
+                              <th>Driver Name</th>
+                              <th>Driver License</th>
+                              <th>Contact Number</th>
+                              <th>Status</th>
+                              <th>Capacity</th>
+                              <th>Alloted Seats</th>
+                              <th>Last Maintenance</th>
+                          </tr>
+                      </thead>
+                      <tbody>
+                          <tr>
+                              <td>1</td>
+                              <td>MT988800</td>
+                              <td>Johnathan John</td>
+                              <td>DLNC025936</td>
+                              <td>+889562365846</td>
+                              <td>available</td>
+                              <td>50</td>
+                              <td>40</td>
+                              <td>10-dec-23</td>
+                          </tr>
+                          <tr>
+                              <td>1</td>
+                              <td>MT988800</td>
+                              <td>Johnathan John</td>
+                              <td>DLNC025936</td>
+                              <td>+889562365846</td>
+                              <td>available</td>
+                              <td>50</td>
+                              <td>40</td>
+                              <td>10-dec-23</td>
+                              
+                          </tr>
+                          <tr>
+                              <td>1</td>
+                              <td>MT988800</td>
+                              <td>Johnathan John</td>
+                              <td>DLNC025936</td>
+                              <td>+889562365846</td>
+                              <td>available</td>
+                              <td>50</td>
+                              <td>40</td>
+                              <td>10-dec-23</td>
+                              
+                          </tr>
+                          <tr>
+                              <td>1</td>
+                              <td>MT988800</td>
+                              <td>Johnathan John</td>
+                              <td>DLNC025936</td>
+                              <td>+889562365846</td>
+                              <td>available</td>
+                              <td>50</td>
+                              <td>40</td>
+                              <td>10-dec-23</td>
+                              
+                          </tr>
+                          <tr>
+                              <td>1</td>
+                              <td>MT988800</td>
+                              <td>Johnathan John</td>
+                              <td>DLNC025936</td>
+                              <td>+889562365846</td>
+                              <td>available</td>
+                              <td>50</td>
+                              <td>40</td>
+                              <td>10-dec-23</td>
+                              
+                          </tr>
+                          <tr>
+                              <td>1</td>
+                              <td>MT988800</td>
+                              <td>Johnathan John</td>
+                              <td>DLNC025936</td>
+                              <td>+889562365846</td>
+                              <td>available</td>
+                              <td>50</td>
+                              <td>40</td>
+                              <td>10-dec-23</td>
+                              
+                          </tr>
+                          <tr>
+                              <td>1</td>
+                              <td>MT988800</td>
+                              <td>Johnathan John</td>
+                              <td>DLNC025936</td>
+                              <td>+889562365846</td>
+                              <td>available</td>
+                              <td>50</td>
+                              <td>40</td>
+                              <td>10-dec-23</td>
+                              
+                          </tr>
+                          <tr>
+                              <td>1</td>
+                              <td>MT988800</td>
+                              <td>Johnathan John</td>
+                              <td>DLNC025936</td>
+                              <td>+889562365846</td>
+                              <td>available</td>
+                              <td>50</td>
+                              <td>40</td>
+                              <td>10-dec-23</td>
+                              
+                          </tr>
+                          <tr>
+                              <td>1</td>
+                              <td>MT988800</td>
+                              <td>Johnathan John</td>
+                              <td>DLNC025936</td>
+                              <td>+889562365846</td>
+                              <td>available</td>
+                              <td>50</td>
+                              <td>40</td>
+                              <td>10-dec-23</td>
+                              
+                          </tr>
+                          <tr>
+                              <td>1</td>
+                              <td>MT988800</td>
+                              <td>Johnathan John</td>
+                              <td>DLNC025936</td>
+                              <td>+889562365846</td>
+                              <td>available</td>
+                              <td>50</td>
+                              <td>40</td>
+                              <td>10-dec-23</td>
+                              
+                          </tr>
+                          <tr>
+                              <td>1</td>
+                              <td>MT988800</td>
+                              <td>Johnathan John</td>
+                              <td>DLNC025936</td>
+                              <td>+889562365846</td>
+                              <td>available</td>
+                              <td>50</td>
+                              <td>40</td>
+                              <td>10-dec-23</td>
+                              
+                          </tr>
+                          <tr>
+                              <td>1</td>
+                              <td>MT988800</td>
+                              <td>Johnathan John</td>
+                              <td>DLNC025936</td>
+                              <td>+889562365846</td>
+                              <td>available</td>
+                              <td>50</td>
+                              <td>40</td>
+                              <td>10-dec-23</td>
+                              
+                          </tr>
+                          <tr>
+                              <td>1</td>
+                              <td>MT988800</td>
+                              <td>Johnathan John</td>
+                              <td>DLNC025936</td>
+                              <td>+889562365846</td>
+                              <td>available</td>
+                              <td>50</td>
+                              <td>40</td>
+                              <td>10-dec-23</td>
+                              
+                          </tr>
+                          <tr>
+                              <td>1</td>
+                              <td>MT988800</td>
+                              <td>Johnathan John</td>
+                              <td>DLNC025936</td>
+                              <td>+889562365846</td>
+                              <td>available</td>
+                              <td>50</td>
+                              <td>40</td>
+                              <td>10-dec-23</td>
+                              
+                          </tr>
+                          <tr>
+                              <td>1</td>
+                              <td>MT988800</td>
+                              <td>Johnathan John</td>
+                              <td>DLNC025936</td>
+                              <td>+889562365846</td>
+                              <td>available</td>
+                              <td>50</td>
+                              <td>40</td>
+                              <td>10-dec-23</td>
+                              
+                          </tr>
+                          <tr>
+                              <td>1</td>
+                              <td>MT988800</td>
+                              <td>Johnathan John</td>
+                              <td>DLNC025936</td>
+                              <td>+889562365846</td>
+                              <td>available</td>
+                              <td>50</td>
+                              <td>40</td>
+                              <td>10-dec-23</td>
+                              
+                          </tr>
+                      </tbody>
+                  </table>
+              </div>
+          </div>
+      </div>
+  </div>
+  <!-- All Transport List Area End Here -->
+</div>
 {% endblock %}
 
 {% block customjs %}
