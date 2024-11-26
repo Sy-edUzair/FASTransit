@@ -24,6 +24,7 @@ urlpatterns = [
     path('',include('userauth.urls')),
     path('',include('noticeboard.urls')),
     path('', include('transport.urls')),
+    path('', include('payment.urls')),
 ]
 
 if settings.DEBUG:

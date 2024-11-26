@@ -1,0 +1,126 @@
+{% extends 'index3.html' %}
+{% load static %}
+{% block customcss %}
+
+{% endblock %}
+
+{% block maincontent %}
+  <div class="breadcrumbs-area">
+    <h3>Payment</h3>
+    <ul>
+      <li>
+        <a href="index3.html">Home</a>
+      </li>
+      <li>Fee Voucher</li>
+    </ul>
+  </div>
+  <!-- Breadcrumb Area End Here -->
+  <div class="row d-flex justify-content-center">
+    <!-- All Voucher Area Start Here -->
+    <div class="col-8">
+      <div class="card" style="border: 1px solid black; padding: 20px;">
+        <div class="card-body">
+          <div class="voucher">
+            <!-- Logo Section (Already Added) -->
+            <div class="nu-logo text-center">
+              <img src="{% static 'img/NU-logo.jpg' %}" alt="NU-LOGO" class="img-fluid" style="max-height: 60px;" />
+            </div>
+            <h3 class="text-center" style="margin-top: 10px; font-weight: bold;">BANK CHALLAN</h3>
+
+            <div class="row mt-4">
+              <!-- Left Column -->
+              <div class="col-6" style="border-right: 1px solid black;">
+                <p>
+                  <strong>Challan No:</strong> 31114
+                </p>
+                <p>
+                  <strong>Br Code:</strong> BCCI-FAST / NUCES
+                </p>
+                <p>
+                  Please receive and credit to A/c No: <strong>0010003027230048</strong>
+                </p>
+                <p>
+                  Title: <strong>BCCI – FAST / NUCES COLLECTION</strong>
+                </p>
+                <p>
+                  <strong>Transportation No:</strong> 224212
+                </p>
+                <p>
+                  <strong>Semester:</strong> Fall 2024
+                </p>
+                <p>
+                  <strong>Roll No:</strong> 22K-4212
+                </p>
+                <p>
+                  <strong>Student Name:</strong> Syed Uzair Hussain
+                </p>
+                <p>
+                  <strong>Fee Category:</strong> Transportation Fee
+                </p>
+                <p>
+                  <strong>Transporter Name:</strong> Others
+                </p>
+                <p>
+                  <strong>Cash/Cheque/PO/DD:</strong> _____________________
+                </p>
+                <p>
+                  <strong>Bank:</strong> _____ <strong>Br:</strong> _____ <strong>Cheque:</strong> _____
+                </p>
+              </div>
+
+              <!-- Right Column -->
+              <div class="col-6">
+                <table style="width: 100%; border: 1px solid black; border-collapse: collapse; margin-bottom: 10px;">
+                  <thead>
+                    <tr>
+                      <th style="border: 1px solid black; padding: 5px;">Date</th>
+                      <th style="border: 1px solid black; padding: 5px;">Amount Rs.</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td style="border: 1px solid black; padding: 5px;">Payment Till 9-Aug-2024</td>
+                      <td style="border: 1px solid black; padding: 5px;">39,000</td>
+                    </tr>
+                    <tr>
+                      <td style="border: 1px solid black; padding: 5px;">Payment 10th Aug 24 - 15th Aug 2024</td>
+                      <td style="border: 1px solid black; padding: 5px;">40,000</td>
+                    </tr>
+                    <tr>
+                      <td style="border: 1px solid black; padding: 5px;">Payment After 15-Aug-2024</td>
+                      <td style="border: 1px solid black; padding: 5px;">42,000</td>
+                    </tr>
+                  </tbody>
+                </table>
+                <p>
+                  <strong>Amount in words:</strong> _____________________
+                </p>
+                <p style="margin-top: 30px;">
+                  <strong>Authorize Sig:</strong> _____________________
+                  <strong>Authorize Sig:</strong> _____________________
+                </p>
+                <p class="text-center" style="font-weight: bold; margin-top: 20px;">BCCI-FAST / NUCES COPY</p>
+              </div>
+            </div>
+
+            <!-- Footer Section -->
+            <p>
+              <strong>Depositor Name:</strong> _____________________ <strong>CNIC:</strong> _____________________
+            </p>
+            <p>
+              <strong>Mobile:</strong> _____________________ <strong>Depositor Signature:</strong> _____________________
+            </p>
+            <p>
+              <strong>Terms and Conditions:</strong>
+            </p>
+            <p style="font-size: 12px;">“Cash/Cheque should always be deposited at the respective counter and electronic computer-generated receipt printed through flatbed printer on deposit slip/challan should be obtained before leaving the counter, please be sure to check the receipt and satisfy that complete details including account number and amount deposited are correctly printed failing which the bank will not be responsible”.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+
+{% block customjs %}
+
+{% endblock %}
