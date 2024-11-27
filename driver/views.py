@@ -27,4 +27,4 @@ def driver_detail_view(request):
           FROM transport_transportprovider
           """
      providers = TransportProvider.objects.raw(raw_query)
-     return render(request, "driver-detail.html",{"providers":providers})
+     return render(request, "driver/driver-detail.html",{"providers":providers})
