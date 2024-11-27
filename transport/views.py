@@ -142,12 +142,52 @@ def transport_fee_view(request):
 
 
 def add_route_view(request):
-     raw_query= """
-          SELECT * 
-          FROM transport_transportprovider
-          """
-     providers = TransportProvider.objects.raw(raw_query)
-     return render(request, "add-route.html",{"providers":providers})
+     if request.method == 'POST':
+          form = AddRouteForm(request.POST)
+          if form.is_valid():
+               route_number = form.cleaned_data['route_number']
+               num_stops = form.cleaned_data['num_stops']
+               stop_names = form.cleaned_data['stops']  # List of stop names
+
+               # Check if the route already exists in the database
+               with connection.cursor() as cursor:
+                    cursor.execute("SELECT * FROM transport_route WHERE route_num = %s", [route_number])
+                    existing_route = cursor.fetchone()
+
+                    if existing_route:
+                         return HttpResponse("This route number already exists.", status=400)
+
+                    # Insert new route into the database
+               try:
+                    with connection.cursor() as cursor:
+                         cursor.execute("INSERT INTO transport_route (route_num) VALUES (%s)", [route_number])
+
+                    # Fetch the new route ID (You can also get it with Django ORM if needed)
+                    with connection.cursor() as cursor:
+                         cursor.execute("SELECT id FROM transport_route WHERE route_num = %s", [route_number])
+                         route_id = cursor.fetchone()[0]
+                    
+                         # Add stops to the route
+                         for stop_name in stop_names:
+                              stop, created = Stop.objects.get_or_create(name=stop_name)
+                              cursor.execute(
+                              "INSERT INTO transport_routestop (route_id, stop_id) VALUES (%s, %s)",
+                              [route_id, stop.id]
+                         )
+
+                    return HttpResponse(f"Route {route_number} has been successfully added.")
+
+               except Exception as e:
+                    return HttpResponse(f"Error: {str(e)}", status=400)
+
+          else:
+               return HttpResponse("Invalid form submission. Please check the data.", status=400)
+
+     else:
+          form = AddRouteForm()
+
+     return render(request, 'transport/add-route.html', {'form': form})
+
 
 
 def driver_detail_view(request):

@@ -25,6 +25,7 @@ urlpatterns = [
     path('',include('noticeboard.urls')),
     path('', include('transport.urls')),
     path('', include('payment.urls')),
+    path('', include('driver.urls')),
 ]
 
 if settings.DEBUG:

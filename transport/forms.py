@@ -9,7 +9,19 @@ class transportLoginForm(forms.Form):
     password=forms.CharField(widget=forms.PasswordInput(attrs={'class': 'form-control',"placeholder":"Password"}))
     captcha=ReCaptchaField(widget=ReCaptchaV2Checkbox(), public_key=settings.RECAPTCHA_PUBLIC_KEY,private_key=settings.RECAPTCHA_PRIVATE_KEY,)
 
+
 class RouteForm(forms.Form):
+    route_number = forms.CharField(
+        label="",
+        max_length=100,
+        widget=forms.TextInput(attrs={
+            'id': 'routeInput',
+            'class': 'route-select-input',
+            'placeholder': 'Enter Route Number (e.g., Route 1)'
+        })
+    )
+    
+class AddRouteForm(forms.Form):
     route_number = forms.CharField(
         label="Route Number",
         max_length=100,
@@ -18,7 +30,6 @@ class RouteForm(forms.Form):
             'placeholder': 'Enter Route Number'
         })
     )
-    
     num_stops = forms.IntegerField(
         label="Number of Stops",
         min_value=1,
@@ -29,7 +40,6 @@ class RouteForm(forms.Form):
             'oninput': 'generateStopFields()'
         })
     )
-    
     # Dynamically generated fields will be added as stop fields in the view.
     # This will be populated with the actual stop names.
     stops = forms.CharField(
