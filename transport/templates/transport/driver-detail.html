@@ -1,12 +1,12 @@
 {% extends 'index3.html' %}
 {% load static %}
+
 {% block customcss %}
   <link rel="stylesheet" href="{% static 'css/routes.css' %}" />
 {% endblock %}
 
 {% block maincontent %}
-  <!-- Breadcrumbs Area Start Here -->
-  <div class="breadcrumbs-area">
+<div class="breadcrumbs-area">
     <h3>Transport</h3>
     <ul>
         <li>
@@ -16,158 +16,62 @@
     </ul>
 </div>
 <!-- Breadcrumbs Area End Here -->
- <div class="row">
-    <div class="col-lg-4">
-        <div class="dashboard-summery-one">
-          <div class="row">
-            <div class="col-6">
-              <div class="item-icon bg-light-magenta" style="padding-top: 10px;">
-                <i class="fa-solid fa-hashtag"></i>
-              </div>
-            </div>
-            <div class="col-6">
-              <div class="item-content">
-                <div class="item-title">Point Number</div>
-                <div class="item-number">
-                  {% if user.assigned_route.route_num %}
-                    <span class="counter" data-num="{{ user.assigned_route.route_num }}"></span>
-                  {% else %}
-                    <span>None</span>
-                  {% endif %}
-                </div>
-              </div>
-            </div>
-          </div>
+
+<!-- Search and Driver List Area Start -->
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <form method="GET" action="{% url 'transport:transport-drivers' %}" class="form-inline mb-4">
+                <input type="text" name="search_route" class="form-control mr-2" placeholder="Search by Route ..." value="{{ request.GET.search_route }}">
+                <input type="text" name="search_vehicle" class="form-control mr-2" placeholder="Search by Car Number ..." value="{{ request.GET.search_vehicle }}">
+                <input type="text" name="search_phone" class="form-control mr-2" placeholder="Search by Phone ..." value="{{ request.GET.search_phone }}">
+                <button type="submit" class="btn btn-primary">Search</button>
+            </form>
         </div>
-      </div>
-      <div class="col-lg-4">
-        <div class="dashboard-summery-one">
-          <div class="row">
-            <div class="col-6">
-              <div class="item-icon bg-light-blue" style="padding-top: 10px;">
-                <i class="fa-solid fa-location-crosshairs"></i>
-              </div>
-            </div>
-            <div class="col-6">
-              <div class="item-content">
-                <div class="item-title">Pick-Up Spot</div>
-                {% if user.assigned_route.start_stop.name %}
-                  <div class="item-number">{{ user.assigned_route.start_stop.name }}</div>
-                {% else %}
-                  <div class="item-number">None</div>
-                {% endif %}
-              </div>
-            </div>
-          </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12">
+            <h4 class="mb-3">All Driver Lists</h4>
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Route Name</th>
+                        <th>Vehicle No.</th>
+                        <th>Driver Name</th>
+                        <th>Driver License</th>
+                        <th>Contact Number</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% if providers %}
+                        {% for provider in providers %}
+                            <tr>
+                                <td>{{ provider.route_name }}</td>
+                                <td>{{ provider.vehicle_no }}</td>
+                                <td>{{ provider.provider_name }}</td>
+                                <td>{{ provider.driver_license }}</td>
+                                <td>{{ provider.contact_number }}</td>
+                                <td>
+                                    <a href="{% url 'edit_driver' provider.provider_id %}" class="btn btn-sm btn-warning">Edit</a>
+                                    <a href="{% url 'delete_driver' provider.provider_id %}" 
+                                      class="btn btn-sm btn-danger"
+                                      onclick="return confirm('Are you sure you want to delete this driver?')">Delete</a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    {% else %}
+                        <tr>
+                            <td colspan="6" class="text-center">No results found.</td>
+                        </tr>
+                    {% endif %}
+                </tbody>
+            </table>
         </div>
-      </div>
-      <div class="col-lg-4">
-        <div class="dashboard-summery-one">
-          <div class="row">
-            <div class="col-6">
-              <div class="item-icon bg-light-yellow" style="padding: 10px;">
-                <i class="fa-solid fa-user-tie"></i>
-              </div>
-            </div>
-            <div class="col-6">
-              <div class="item-content">
-                <div class="item-title">Transporter</div>
-                {% if user.assigned_route.appointed_provider.name %}
-                  <div class="item-number">{{ user.assigned_route.appointed_provider.name }}</div>
-                {% else %}
-                  <div class="item-number">None</div>
-                {% endif %}
-              </div>
-            </div>
-          </div>
-        </div>
-      </div><div class="col-lg-4">
-        <div class="dashboard-summery-one">
-          <div class="row">
-            <div class="col-6">
-              <div class="item-icon bg-light-magenta" style="padding-top: 10px;">
-                <i class="fa-solid fa-hashtag"></i>
-              </div>
-            </div>
-            <div class="col-6">
-              <div class="item-content">
-                <div class="item-title">Point Number</div>
-                <div class="item-number">
-                  {% if user.assigned_route.route_num %}
-                    <span class="counter" data-num="{{ user.assigned_route.route_num }}"></span>
-                  {% else %}
-                    <span>None</span>
-                  {% endif %}
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="col-lg-4">
-        <div class="dashboard-summery-one">
-          <div class="row">
-            <div class="col-6">
-              <div class="item-icon bg-light-blue" style="padding-top: 10px;">
-                <i class="fa-solid fa-location-crosshairs"></i>
-              </div>
-            </div>
-            <div class="col-6">
-              <div class="item-content">
-                <div class="item-title">Pick-Up Spot</div>
-                {% if user.assigned_route.start_stop.name %}
-                  <div class="item-number">{{ user.assigned_route.start_stop.name }}</div>
-                {% else %}
-                  <div class="item-number">None</div>
-                {% endif %}
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="col-lg-4">
-        <div class="dashboard-summery-one">
-          <div class="row">
-            <div class="col-6">
-              <div class="item-icon bg-light-yellow" style="padding: 10px;">
-                <i class="fa-solid fa-user-tie"></i>
-              </div>
-            </div>
-            <div class="col-6">
-              <div class="item-content">
-                <div class="item-title">Transporter</div>
-                {% if user.assigned_route.appointed_provider.name %}
-                  <div class="item-number">{{ user.assigned_route.appointed_provider.name }}</div>
-                {% else %}
-                  <div class="item-number">None</div>
-                {% endif %}
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="col-lg-4">
-        <div class="dashboard-summery-one">
-          <div class="row">
-            <div class="col-6">
-              <div class="item-icon bg-light-yellow" style="padding: 10px;">
-                <i class="fa-solid fa-user-tie"></i>
-              </div>
-            </div>
-            <div class="col-6">
-              <div class="item-content">
-                <div class="item-title">Transporter</div>
-                {% if user.assigned_route.appointed_provider.name %}
-                  <div class="item-number">{{ user.assigned_route.appointed_provider.name }}</div>
-                {% else %}
-                  <div class="item-number">None</div>
-                {% endif %}
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
- </div>
+    </div>
+</div>
+
 {% endblock %}
 
 {% block customjs %}

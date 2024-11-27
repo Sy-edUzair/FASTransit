@@ -19,9 +19,19 @@ class ProviderRepresentative(models.Model):
     def __str__(self):
         return self.representative_name
 
-class TransportProvider(models.Model): #id is auto in django
+class TransportProvider(models.Model):
     name = models.CharField(max_length=100)
-    representative = models.OneToOneField(ProviderRepresentative, on_delete=models.CASCADE)
+    representative = models.OneToOneField(
+        'ProviderRepresentative', 
+        on_delete=models.CASCADE
+    )
+    driver_license_number = models.CharField(max_length=20, unique=True)
+    driver_contact_number = models.CharField(max_length=15, default='0000000000')
+    vehicle_assigned = models.ForeignKey(
+        'Vehicle', 
+        on_delete=models.CASCADE, 
+        related_name='assigned_providers'
+    )
 
     def __str__(self):
         return self.name
