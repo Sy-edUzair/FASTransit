@@ -29,6 +29,11 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet" />
     <!-- Custom CSS -->
     <link rel="stylesheet" href="{% static 'css/style.css' %}" />
+    <style>
+      .li{
+        padding-bottom:20px;
+      }
+    </style>
     {% block customcss %}
 
     {% endblock %}
@@ -106,7 +111,7 @@
                 <a href="{% url 'userauth:dashboard' %}"><img src="{% static 'img/FASTransit.jpeg' %}" alt="logo" style="width: 161px; height: 48px;" /></a>
               </div>
             </div>
-            <div class="sidebar-menu-content">
+            <div class="sidebar-menu-content" style="margin-top:50px;">
               <ul class="nav nav-sidebar-menu sidebar-toggle-view">
                 <li class="nav-item">
                   <a href="{% url 'userauth:dashboard' %}" class="nav-link"><i class="fa-solid fa-house"></i><span>Dashboard</span></a>
@@ -256,10 +261,13 @@
                 </div>
               </div>
               <!-- Breadcubs Area End Here -->
-              <div class="row">
-                <!-- Student Info Area Start Here -->
-                <div class="col-4-xxxl col-12" style="width: 600px;">
-                  <div class="card dashboard-card" style="padding-left: 15px;">
+            </div>
+            <div class="row">
+              <!-- About Me and Notifications Row -->
+              <div class="col-12 d-flex flex-wrap">
+                <!-- About Me Section -->
+                <div class="col-12 col-lg-4 mb-3 mb-lg-0">
+                  <div class="card dashboard-card h-100">
                     <div class="card-body">
                       <div class="heading-layout1">
                         <div class="item-title">
@@ -267,10 +275,8 @@
                         </div>
                         <div class="dropdown">
                           <a class="dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-expanded="false">...</a>
-
                           <div class="dropdown-menu dropdown-menu-right">
-                            <a class="dropdown-item" href="#"><i class="fas fa-times text-orange-red"></i>Close</a>
-                            <a class="dropdown-item" href="#"><i class="fas fa-cogs text-dark-pastel-green"></i>Edit</a>
+                            
                             <a class="dropdown-item" href="#"><i class="fas fa-redo-alt text-orange-peel"></i>Refresh</a>
                           </div>
                         </div>
@@ -289,10 +295,9 @@
                                 <td class="font-medium text-dark-medium">{{ user.name }}</td>
                               </tr>
                               <tr>
-                                <td>Address</td>
+                                <td>Address:</td>
                                 <td class="font-medium text-dark-medium">{{ user.Address }}</td>
                               </tr>
-
                               <tr>
                                 <td>Cnic:</td>
                                 <td class="font-medium text-dark-medium">{{ user.cnic }}</td>
@@ -324,47 +329,41 @@
                     </div>
                   </div>
                 </div>
-                <!-- Student Info Area End Here -->
-                <div class="col-8-xxxl col-12">
-                  <div class="row">
-                    <div class="col-40-xxxl col-12" style="padding-left: 35px; padding-top: 0px; padding-right: 30px;">
-                      <div class="card dashboard-card-six">
-                        <div class="card-body" style="height: 500px; ">
-                          <div class="heading-layout1 mg-b-17">
-                            <div class="item-title">
-                              <h3>Notifications</h3>
-                            </div>
-                            <div class="dropdown">
-                              <a class="dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-expanded="false">...</a>
-
-                              <div class="dropdown-menu dropdown-menu-right">
-                                <a class="dropdown-item" href="#"><i class="fas fa-times text-orange-red"></i>Close</a>
-                                <a class="dropdown-item" href="#"><i class="fas fa-cogs text-dark-pastel-green"></i>Edit</a>
-                                <a class="dropdown-item" href="#"><i class="fas fa-redo-alt text-orange-peel"></i>Refresh</a>
-                              </div>
-                            </div>
+            
+                <!-- Notifications Section -->
+                <div class="col-12 col-lg-8">
+                  <div class="card dashboard-card-six h-100">
+                    <div class="card-body">
+                      <div class="heading-layout1 mg-b-17">
+                        <div class="item-title">
+                          <h3>Notifications</h3>
+                        </div>
+                        <div class="dropdown">
+                          <a class="dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-expanded="false">...</a>
+                          <div class="dropdown-menu dropdown-menu-right">
+                            <a class="dropdown-item" href="#"><i class="fas fa-redo-alt text-orange-peel"></i>Refresh</a>
                           </div>
-                          <div class="notice-box-wrap" style="height:100%">
-                            <div class="notice-list">
-                              {% if notices %}
-                                {% for notice in notices %}
-                                  <div class="post-date bg-skyblue">{{ notice.date_posted }}</div>
-                                  <h6 class="notice-title"><a href="#">{{ notice.message }}</a></h6>
-                                  <div class="entry-meta">By Admin</div>
-                                {% endfor %}
-                              {% else %}
-                                <h6 class="notice-title">No New Notifications yet!</h6>
-                              {% endif %}
-                            </div>
-                          </div>
+                        </div>
+                      </div>
+                      <div class="notice-box-wrap">
+                        <div class="notice-list">
+                          {% if notices %}
+                          {% for notice in notices %}
+                          <div class="post-date bg-skyblue">{{ notice.date_posted }}</div>
+                          <h6 class="notice-title"><a href="#">{{ notice.message }}</a></h6>
+                          <div class="entry-meta">By Admin</div>
+                          {% endfor %}
+                          {% else %}
+                          <h6 class="notice-title">No New Notifications yet!</h6>
+                          {% endif %}
                         </div>
                       </div>
                     </div>
                   </div>
-                  <!-- Summery Area End Here -->
                 </div>
               </div>
             </div>
+            
           {% endblock %}
           {% block footer %}
             <footer class="footer-wrap-layout1">

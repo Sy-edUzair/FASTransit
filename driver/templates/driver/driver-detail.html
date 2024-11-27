@@ -12,12 +12,12 @@
         <li>
             <a href="{% url 'transport:transport-dashboard'%}">Home</a>
         </li>
-        <li>Transporter Dashboard</li>
+        <li>Driver Details</li>
     </ul>
 </div>
 <!-- Breadcrumbs Area End Here -->
  <div class="row">
-    <div class="col-lg-4">
+    <div class="col-lg-6">
         <div class="dashboard-summery-one">
           <div class="row">
             <div class="col-6">
@@ -40,17 +40,17 @@
           </div>
         </div>
       </div>
-      <div class="col-lg-4">
+      <div class="col-lg-6">
         <div class="dashboard-summery-one">
           <div class="row">
             <div class="col-6">
               <div class="item-icon bg-light-blue" style="padding-top: 10px;">
-                <i class="fa-solid fa-location-crosshairs"></i>
+                <i class="fa-solid fa-person"></i>
               </div>
             </div>
             <div class="col-6">
               <div class="item-content">
-                <div class="item-title">Pick-Up Spot</div>
+                <div class="item-title">Driver Name</div>
                 {% if user.assigned_route.start_stop.name %}
                   <div class="item-number">{{ user.assigned_route.start_stop.name }}</div>
                 {% else %}
@@ -61,7 +61,7 @@
           </div>
         </div>
       </div>
-      <div class="col-lg-4">
+      <div class="col-lg-6">
         <div class="dashboard-summery-one">
           <div class="row">
             <div class="col-6">
@@ -81,17 +81,17 @@
             </div>
           </div>
         </div>
-      </div><div class="col-lg-4">
+      </div><div class="col-lg-6">
         <div class="dashboard-summery-one">
           <div class="row">
             <div class="col-6">
               <div class="item-icon bg-light-magenta" style="padding-top: 10px;">
-                <i class="fa-solid fa-hashtag"></i>
+                <i class="fa-solid fa-phone"></i>
               </div>
             </div>
             <div class="col-6">
               <div class="item-content">
-                <div class="item-title">Point Number</div>
+                <div class="item-title">Contact Number</div>
                 <div class="item-number">
                   {% if user.assigned_route.route_num %}
                     <span class="counter" data-num="{{ user.assigned_route.route_num }}"></span>
@@ -104,17 +104,17 @@
           </div>
         </div>
       </div>
-      <div class="col-lg-4">
+      <div class="col-lg-6">
         <div class="dashboard-summery-one">
           <div class="row">
             <div class="col-6">
               <div class="item-icon bg-light-blue" style="padding-top: 10px;">
-                <i class="fa-solid fa-location-crosshairs"></i>
+                <i class="fa-solid fa-id-badge"></i>
               </div>
             </div>
             <div class="col-6">
               <div class="item-content">
-                <div class="item-title">Pick-Up Spot</div>
+                <div class="item-title">License Number</div>
                 {% if user.assigned_route.start_stop.name %}
                   <div class="item-number">{{ user.assigned_route.start_stop.name }}</div>
                 {% else %}
@@ -125,17 +125,17 @@
           </div>
         </div>
       </div>
-      <div class="col-lg-4">
+      <div class="col-lg-6">
         <div class="dashboard-summery-one">
           <div class="row">
             <div class="col-6">
               <div class="item-icon bg-light-yellow" style="padding: 10px;">
-                <i class="fa-solid fa-user-tie"></i>
+                <i class="fa-solid fa-bus-simple"></i>
               </div>
             </div>
             <div class="col-6">
               <div class="item-content">
-                <div class="item-title">Transporter</div>
+                <div class="item-title">Vechicle</div>
                 {% if user.assigned_route.appointed_provider.name %}
                   <div class="item-number">{{ user.assigned_route.appointed_provider.name }}</div>
                 {% else %}
@@ -146,17 +146,38 @@
           </div>
         </div>
       </div>
-      <div class="col-lg-4">
+      <div class="col-lg-6">
         <div class="dashboard-summery-one">
           <div class="row">
             <div class="col-6">
               <div class="item-icon bg-light-yellow" style="padding: 10px;">
-                <i class="fa-solid fa-user-tie"></i>
+                <i class="fa-solid fa-file-contract"></i>
               </div>
             </div>
             <div class="col-6">
               <div class="item-content">
-                <div class="item-title">Transporter</div>
+                <div class="item-title">Vehicle Number</div>
+                {% if user.assigned_route.appointed_provider.name %}
+                  <div class="item-number">{{ user.assigned_route.appointed_provider.name }}</div>
+                {% else %}
+                  <div class="item-number">None</div>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-6">
+        <div class="dashboard-summery-one">
+          <div class="row">
+            <div class="col-6">
+              <div class="item-icon bg-light-yellow" style="padding: 10px;">
+                <i class="fa-regular fa-id-card"></i>
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="item-content">
+                <div class="item-title">CNIC</div>
                 {% if user.assigned_route.appointed_provider.name %}
                   <div class="item-number">{{ user.assigned_route.appointed_provider.name }}</div>
                 {% else %}
