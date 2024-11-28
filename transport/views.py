@@ -191,42 +191,45 @@ def add_route_view(request):
 
 
 def transport_driver_view(request):
-     search_route = request.GET.get('search_route', '')
-     search_vehicle = request.GET.get('search_vehicle', '')
-     search_phone = request.GET.get('search_phone', '')
+     # search_route = request.GET.get('search_route', '')
+     # search_vehicle = request.GET.get('search_vehicle', '')
+     # search_phone = request.GET.get('search_phone', '')
 
-     raw_query = """
-     SELECT 
-     tp.id AS provider_id,                          -- TransportProvider ID
-     tp.name AS provider_name,                     -- TransportProvider name
-     tp.driver_license_number AS driver_license,   -- Driver license number
-     tp.driver_contact_number AS contact_number,   -- Driver contact number
-     v.license_plate AS vehicle_license_plate,     -- Vehicle license plate
-     r.route_num AS route_number                   -- Route number
-     FROM transport_transportprovider tp
-     INNER JOIN transport_vehicle v ON tp.vehicle_assigned_id = v.license_plate
-     INNER JOIN transport_route r ON r.appointed_provider_id = tp.id
-     WHERE 1=1;
+     # raw_query = """
+     # SELECT 
+     # tp.id AS provider_id,                         -- TransportProvider ID
+     # tp.name AS provider_name,                     -- TransportProvider name
+     # v.license_plate AS vehicle_license_plate,     -- Vehicle license plate
+     # r.route_num AS route_number                   -- Route number
+     # FROM transport_transportprovider tp
+     # INNER JOIN transport_vehicle v ON tp.vehicle_assigned_id = v.license_plate
+     # INNER JOIN transport_route r ON r.appointed_provider_id = tp.id
+     # WHERE 1=1;
 
-     """
+     # """
 
-     # Append filters only if search parameters are provided
-     if search_route or search_vehicle or search_phone:
-          if search_route:
-               raw_query += f" AND r.route_num LIKE '%{search_route}%'"
-          if search_vehicle:
-               raw_query += f" AND v.registration_number LIKE '%{search_vehicle}%'"
-          if search_phone:
-               raw_query += f" AND tp.driver_contact_number LIKE '%{search_phone}%'"
-     else:
-          raw_query += " LIMIT 50"
+     # # Append filters only if search parameters are provided
+     # if search_route or search_vehicle or search_phone:
+     #      if search_route:
+     #           raw_query += f" AND r.route_num LIKE '%{search_route}%'"
+     #      if search_vehicle:
+     #           raw_query += f" AND v.registration_number LIKE '%{search_vehicle}%'"
+     #      if search_phone:
+     #           raw_query += f" AND tp.driver_contact_number LIKE '%{search_phone}%'"
+     # else:
+     #      raw_query += " LIMIT 50"
 
-     with connection.cursor() as cursor:
-          cursor.execute(raw_query)
-          rows = cursor.fetchall()
+     # with connection.cursor() as cursor:
+     #      cursor.execute(raw_query)
+     #      rows = cursor.fetchall()
 
      
-     columns = ['provider_id', 'provider_name', 'driver_license', 'contact_number', 'vehicle_no', 'route_name']
-     providers = [dict(zip(columns, row)) for row in rows]
+     # columns = ['provider_id', 'provider_name', 'driver_license', 'contact_number', 'vehicle_no', 'route_name']
+     # providers = [dict(zip(columns, row)) for row in rows]
 
-     return render(request, "transport/driver-detail.html", {"providers": providers})
+     raw_query= """
+          SELECT * 
+          FROM transport_transportprovider
+          """
+     providers = TransportProvider.objects.raw(raw_query)
+     return render(request, "transport/driver.html", {"providers": providers})
