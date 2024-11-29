@@ -76,7 +76,7 @@
                     <span></span>
                   </div>
                   <div class="admin-img">
-                    <img src="{% static 'img/figure/student10.png' %}" alt="Admin" />
+                    <img src="{{ user.imageURL }}" class="media-img-auto" alt="student" style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover;" />
                   </div>
                 </a>
                 <div class="dropdown-menu dropdown-menu-right">
@@ -282,9 +282,9 @@
                         </div>
                       </div>
                       <div class="student-info">
-                        <div class="media media-none--xs clas" style="padding-left: 120px; padding-bottom: 15px;">
+                        <div class="media media-none--xs clas" style="justify-content:center; align-items:center;">
                           <div class="item-img">
-                            <img src="{{ user.imageURL }}" class="media-img-auto" alt="student" />
+                            <img src="{{ user.imageURL }}" class="media-img-auto" alt="student" style="width: 150px; height: 150px; border-radius: 50%; object-fit: cover; margin-bottom:20px;" />
                           </div>
                         </div>
                         <div class="table-responsive info-table">
@@ -326,6 +326,7 @@
                           </table>
                         </div>
                       </div>
+                      
                     </div>
                   </div>
                 </div>
