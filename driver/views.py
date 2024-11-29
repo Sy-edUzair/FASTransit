@@ -28,3 +28,11 @@ def driver_detail_view(request):
           """
      providers = TransportProvider.objects.raw(raw_query)
      return render(request, "driver/driver-detail.html",{"providers":providers})
+
+def modify_driver_detail_view(request):
+     raw_query= """
+          SELECT * 
+          FROM transport_transportprovider
+          """
+     providers = TransportProvider.objects.raw(raw_query)
+     return render(request, "driver/modify-driver.html",{"providers":providers})

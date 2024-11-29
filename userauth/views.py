@@ -152,3 +152,25 @@ def point_card_view(request):
           """
      providers = TransportProvider.objects.raw(raw_query)
      return render(request, "userauth/point_card.html",{"providers":providers,'user':request.user,})
+
+def user_profile_view(request):
+     raw_query= """
+          SELECT * 
+          FROM transport_transportprovider
+          """
+     providers = TransportProvider.objects.raw(raw_query)
+     return render(request, "userauth/user-profile.html",{"providers":providers,'user':request.user,})
+def landing_page_view(request):
+     raw_query= """
+          SELECT * 
+          FROM transport_transportprovider
+          """
+     providers = TransportProvider.objects.raw(raw_query)
+     return render(request, "userauth/landing-page.html",{"providers":providers,'user':request.user,})
+def landing_page2_view(request):
+     raw_query= """
+          SELECT * 
+          FROM transport_transportprovider
+          """
+     providers = TransportProvider.objects.raw(raw_query)
+     return render(request, "userauth/landing-page2.html",{"providers":providers,'user':request.user,})

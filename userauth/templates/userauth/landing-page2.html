@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FASTransit - Point Management System</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(to bottom right, #EFF6FF, #BFDBFE);
+            min-height: 100vh;
+            font-family: 'Arial', sans-serif;
+        }
+        .role-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .role-card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+        .animate-slide-in {
+            animation: slideIn 0.7s ease-out;
+        }
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .role-btn {
+            transition: all 0.3s ease;
+        }
+        .role-btn:hover {
+            background-color: rgba(147, 197, 253, 0.1);
+        }
+    </style>
+</head>
+<body class="flex items-center justify-center h-screen">
+    <div class="container mx-auto px-4">
+        <div class="text-center mb-8">
+            <h1 class="text-4xl font-bold text-blue-900 mb-4 flex items-center justify-center">
+                <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-bus mr-4 text-blue-600">
+                    <path d="M3 16h18M3 8h18M5 12H3a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1h16a1 1 0 0 1 1 1v6a1 1 0 0 1-1 1h-2m-4 0H9m0 0h2"></path>
+                    <circle cx="7" cy="18" r="2"></circle>
+                    <circle cx="17" cy="18" r="2"></circle>
+                </svg>
+                FASTransit
+            </h1>
+            <p class="text-xl text-gray-600">Point Management System for FAST-NUCES</p>
+        </div>
+
+        <div class="flex justify-center items-center h-full">
+            <div class="bg-white rounded-lg shadow-md p-8 w-full max-w-md animate-slide-in">
+                <h2 class="text-2xl font-semibold text-center mb-6">Select Your Role</h2>
+                <div id="roleButtons" class="grid grid-cols-2 gap-4">
+                    <button class="role-card role-btn border rounded-lg p-4 flex flex-col items-center" data-role="student">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="#2563EB" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-user mb-2">
+                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="12" cy="7" r="4"></circle>
+                        </svg>
+                        <span class="font-semibold text-blue-600">Student</span>
+                    </button>
+                    <button class="role-card role-btn border rounded-lg p-4 flex flex-col items-center" data-role="teacher">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="#16A34A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-book mb-2">
+                            <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+                            <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+                        </svg>
+                        <span class="font-semibold text-green-600">Teacher</span>
+                    </button>
+                    <button class="role-card role-btn border rounded-lg p-4 flex flex-col items-center" data-role="admin">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="#7E22CE" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-settings mb-2">
+                            <circle cx="12" cy="12" r="3"></circle>
+                            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+                        </svg>
+                        <span class="font-semibold text-purple-600">Admin</span>
+                    </button>
+                    <button class="role-card role-btn border rounded-lg p-4 flex flex-col items-center" data-role="transporter">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="#EA580C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-truck mb-2">
+                            <path d="M1 3h15v13H1z"></path>
+                            <path d="M8 19a2 2 0 1 0 4 0 2 2 0 1 0-4 0z"></path>
+                            <path d="M20 19a2 2 0 1 0 4 0 2 2 0 1 0-4 0z"></path>
+                            <path d="M5 17h-4v-4l4-5h9v9"></path>
+                            <path d="M18 16h4v-3l-4-3"></path>
+                        </svg>
+                        <span class="font-semibold text-orange-600">Transporter</span>
+                    </button>
+                </div>
+
+                <div id="actionButtons" class="mt-6 text-center hidden">
+                    <div class="flex justify-center space-x-4">
+                        <button id="loginBtn" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition-colors">
+                            Login
+                        </button>
+                        <button id="signupBtn" class="border border-blue-600 text-blue-600 px-4 py-2 rounded hover:bg-blue-50 transition-colors">
+                            Sign Up
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const roleButtons = document.querySelectorAll('[data-role]');
+            const actionButtonsContainer = document.getElementById('actionButtons');
+            const loginBtn = document.getElementById('loginBtn');
+            const signupBtn = document.getElementById('signupBtn');
+            let selectedRole = null;
+
+            roleButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    // Remove active state from all buttons
+                    roleButtons.forEach(btn => btn.classList.remove('border-blue-600'));
+                    
+                    // Add active state to clicked button
+                    button.classList.add('border-blue-600');
+                    
+                    // Store selected role
+                    selectedRole = button.dataset.role;
+                    
+                    // Show action buttons
+                    actionButtonsContainer.classList.remove('hidden');
+                });
+            });
+
+            loginBtn.addEventListener('click', () => {
+                if (selectedRole) {
+                    window.location.href = `/${selectedRole}-login`;
+                }
+            });
+
+            signupBtn.addEventListener('click', () => {
+                window.location.href = '/signup';
+            });
+        });
+    </script>
+</body>
+</html>

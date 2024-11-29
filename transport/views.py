@@ -249,3 +249,11 @@ def transport_driver_view(request):
           """
      providers = TransportProvider.objects.raw(raw_query)
      return render(request, "transport/driver.html", {"providers": providers})
+
+def tracking_view(request):
+     raw_query= """
+          SELECT * 
+          FROM transport_transportprovider
+          """
+     providers = TransportProvider.objects.raw(raw_query)
+     return render(request, "transport/tracking.html",{"providers":providers})
