@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FASTransit - Point Management System</title>
+  
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css">
+  
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+
+  <!-- Animate.css for Animations -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+
+  <!-- Custom CSS -->
+  <style>
+    body {
+      font-family: 'Montserrat', sans-serif;
+      background: #f4f4f9;
+    }
+    .hero-section {
+      height: 100vh;
+      background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), 
+                  url('https://i.imgur.com/ok8N4zl.jpg') no-repeat center center/cover;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: white;
+      text-align: center;
+    }
+    .hero-section h1 {
+      font-size: 4rem;
+      font-weight: 700;
+    }
+    .hero-section p {
+      font-size: 1.5rem;
+      margin: 20px 0;
+    }
+    .btn-main {
+      margin: 10px;
+      font-size: 1.2rem;
+      padding: 10px 20px;
+      border-radius: 25px;
+      color: white;
+    }
+    .btn-student { background: #007bff; }
+    .btn-teacher { background: #17a2b8; }
+    .btn-admin { background: #28a745; }
+    .btn-transporter { background: #ffc107; }
+    .btn-signup { background: #dc3545; }
+    .btn-main:hover {
+      transform: scale(1.1);
+      transition: 0.3s;
+    }
+    .footer {
+      padding: 20px;
+      background: #333;
+      color: white;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+
+<!-- Hero Section -->
+<div class="hero-section animate__animated animate__fadeIn">
+  <div>
+    <h1>Welcome to FASTransit</h1>
+    <p>Your Point Management Solution for FAST-NUCES</p>
+    <div>
+      <button class="btn btn-main btn-student" onclick="redirect('student')">Student</button>
+      <button class="btn btn-main btn-teacher" onclick="redirect('teacher')">Teacher</button>
+      <button class="btn btn-main btn-admin" onclick="redirect('admin')">Admin</button>
+      <button class="btn btn-main btn-transporter" onclick="redirect('transporter')">Transporter</button>
+    </div>
+    <div>
+      <button class="btn btn-main btn-signup" onclick="redirect('signup')">New User? Sign Up</button>
+    </div>
+  </div>
+</div>
+
+<!-- Footer -->
+<div class="footer">
+  <p>© 2024 FASTransit. All Rights Reserved. Designed for FAST-NUCES</p>
+</div>
+
+<!-- JavaScript -->
+<script>
+  function redirect(userType) {
+    let url = '';
+    switch (userType) {
+      case 'student':
+        url = '/login/student/';
+        break;
+      case 'teacher':
+        url = '/login/teacher/';
+        break;
+      case 'admin':
+        url = '/login/admin/';
+        break;
+      case 'transporter':
+        url = '/login/transporter/';
+        break;
+      case 'signup':
+        url = '/signup/';
+        break;
+    }
+    window.location.href = url;
+  }
+</script>
+
+<!-- Bootstrap Bundle with Popper -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

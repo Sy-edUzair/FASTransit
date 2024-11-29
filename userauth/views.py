@@ -166,4 +166,4 @@ def point_card_view(request):
           FROM transport_transportprovider
           """
      providers = TransportProvider.objects.raw(raw_query)
-     return render(request, "userauth/point_card.html",{"providers":providers,'user':request.user})
+     return render(request, "userauth/point_card.html",{"providers":providers,'user':request.user,})

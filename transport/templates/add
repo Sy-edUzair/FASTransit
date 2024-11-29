@@ -1,0 +1,172 @@
+{% extends 'index.html' %}
+{% load static %}
+
+{% block customcss %}
+  <link rel="stylesheet" href="{% static 'css/routes.css' %}" />
+{% endblock %}
+
+{% block maincontent %}
+  <div class="breadcrumbs-area">
+    <h3>Transport</h3>
+    <ul>
+      <li>
+        <a href="{% url 'transport:transport-dashboard' %}">Home</a>
+      </li>
+      <li>All Driver Lists</li>
+    </ul>
+  </div>
+  <!-- Breadcrumbs Area End Here -->
+
+  <div class="row">
+    <div class="col-12">
+      <div class="card">
+        <div class="card-body">
+          <form method="GET" action="{% url 'transport:transport-drivers' %}" class="mg-b-20">
+            <div class="row gutters-8">
+              <div class="col-lg-3 col-12 form-group">
+                <input type="text" name="search_route" class="form-control" placeholder="Search by Route ..." value="{{ request.GET.search_route }}" />
+              </div>
+              <div class="col-lg-3 col-12 form-group">
+                <input type="text" name="search_vehicle" class="form-control" placeholder="Search by Car Number ..." value="{{ request.GET.search_vehicle }}" />
+              </div>
+              <div class="col-lg-3 col-12 form-group">
+                <input type="text" name="search_phone" class="form-control" placeholder="Search by Phone ..." value="{{ request.GET.search_phone }}" />
+              </div>
+              <div class="col-lg-3 col-12 form-group">
+                <button type="submit" class="fw-btn-fill btn-gradient-yellow">Search</button>
+              </div>
+            </div>
+          </form>
+
+          <div class="table-responsive">
+            <table class="table display data-table text-nowrap">
+              <thead>
+                <tr>
+                  <th>Route Name</th>
+                  <th>Vehicle No.</th>
+                  <th>Driver Name</th>
+                  <th>Driver License</th>
+                  <th>Contact Number</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% if providers %}
+                  {% for provider in providers %}
+                    <tr id="row-{{ provider.provider_id }}">
+                      <td>
+                        <span id="route-name-{{ provider.provider_id }}">{{ provider.route_name }}</span>
+                        <input type="text" id="edit-route-name-{{ provider.provider_id }}" value="{{ provider.route_name }}" class="form-control d-none">
+                      </td>
+                      <td>
+                        <span id="vehicle-no-{{ provider.provider_id }}">{{ provider.vehicle_no }}</span>
+                        <input type="text" id="edit-vehicle-no-{{ provider.provider_id }}" value="{{ provider.vehicle_no }}" class="form-control d-none">
+                      </td>
+                      <td>
+                        <span id="driver-name-{{ provider.provider_id }}">{{ provider.provider_name }}</span>
+                        <input type="text" id="edit-driver-name-{{ provider.provider_id }}" value="{{ provider.provider_name }}" class="form-control d-none">
+                      </td>
+                      <td>
+                        <span id="driver-license-{{ provider.provider_id }}">{{ provider.driver_license }}</span>
+                        <input type="text" id="edit-driver-license-{{ provider.provider_id }}" value="{{ provider.driver_license }}" class="form-control d-none">
+                      </td>
+                      <td>
+                        <span id="contact-number-{{ provider.provider_id }}">{{ provider.contact_number }}</span>
+                        <input type="text" id="edit-contact-number-{{ provider.provider_id }}" value="{{ provider.contact_number }}" class="form-control d-none">
+                      </td>
+                      <td>
+                        <button class="btn btn-sm btn-warning" id="edit-btn-{{ provider.provider_id }}" onclick="enableEdit({{ provider.provider_id }})">Edit</button>
+                        <button class="btn btn-sm btn-success d-none" id="save-btn-{{ provider.provider_id }}" onclick="saveChanges({{ provider.provider_id }})">Save</button>
+                        <button class="btn btn-sm btn-danger" onclick="return confirm('Are you sure you want to delete this driver?')" href="{% url 'delete_driver' provider.provider_id %}">Delete</button>
+                      </td>
+                    </tr>
+                  {% endfor %}
+                {% else %}
+                  <tr>
+                    <td colspan="6" class="text-center">No results found.</td>
+                  </tr>
+                {% endif %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+
+{% block customjs %}
+<script>
+  function enableEdit(driverId) {
+    // Hide spans and show input fields for editing
+    document.getElementById(`edit-route-name-${driverId}`).classList.remove('d-none');
+    document.getElementById(`edit-vehicle-no-${driverId}`).classList.remove('d-none');
+    document.getElementById(`edit-driver-name-${driverId}`).classList.remove('d-none');
+    document.getElementById(`edit-driver-license-${driverId}`).classList.remove('d-none');
+    document.getElementById(`edit-contact-number-${driverId}`).classList.remove('d-none');
+    document.getElementById(`save-btn-${driverId}`).classList.remove('d-none');
+
+    document.getElementById(`route-name-${driverId}`).style.display = 'none';
+    document.getElementById(`vehicle-no-${driverId}`).style.display = 'none';
+    document.getElementById(`driver-name-${driverId}`).style.display = 'none';
+    document.getElementById(`driver-license-${driverId}`).style.display = 'none';
+    document.getElementById(`contact-number-${driverId}`).style.display = 'none';
+    document.getElementById(`edit-btn-${driverId}`).style.display = 'none';
+  }
+
+  function saveChanges(driverId) {
+    // Fetch updated values
+    const updatedData = {
+      route_name: document.getElementById(`edit-route-name-${driverId}`).value,
+      vehicle_no: document.getElementById(`edit-vehicle-no-${driverId}`).value,
+      driver_name: document.getElementById(`edit-driver-name-${driverId}`).value,
+      driver_license: document.getElementById(`edit-driver-license-${driverId}`).value,
+      contact_number: document.getElementById(`edit-contact-number-${driverId}`).value,
+    };
+
+    // Send an AJAX request to save the updated data
+    fetch(`/save-driver/${driverId}/`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRFToken': '{{ csrf_token }}',
+      },
+      body: JSON.stringify(updatedData),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.success) {
+          // Update the visible text to reflect changes
+          document.getElementById(`route-name-${driverId}`).innerText = updatedData.route_name;
+          document.getElementById(`vehicle-no-${driverId}`).innerText = updatedData.vehicle_no;
+          document.getElementById(`driver-name-${driverId}`).innerText = updatedData.driver_name;
+          document.getElementById(`driver-license-${driverId}`).innerText = updatedData.driver_license;
+          document.getElementById(`contact-number-${driverId}`).innerText = updatedData.contact_number;
+
+          // Hide input fields and display updated spans
+          cancelEdit(driverId);
+        } else {
+          alert('Failed to save changes');
+        }
+      })
+      .catch((error) => console.error('Error:', error));
+  }
+
+  function cancelEdit(driverId) {
+    // Hide input fields and show spans
+    document.getElementById(`edit-route-name-${driverId}`).classList.add('d-none');
+    document.getElementById(`edit-vehicle-no-${driverId}`).classList.add('d-none');
+    document.getElementById(`edit-driver-name-${driverId}`).classList.add('d-none');
+    document.getElementById(`edit-driver-license-${driverId}`).classList.add('d-none');
+    document.getElementById(`edit-contact-number-${driverId}`).classList.add('d-none');
+    document.getElementById(`save-btn-${driverId}`).classList.add('d-none');
+
+    document.getElementById(`route-name-${driverId}`).style.display = 'inline';
+    document.getElementById(`vehicle-no-${driverId}`).style.display = 'inline';
+    document.getElementById(`driver-name-${driverId}`).style.display = 'inline';
+    document.getElementById(`driver-license-${driverId}`).style.display = 'inline';
+    document.getElementById(`contact-number-${driverId}`).style.display = 'inline';
+    document.getElementById(`edit-btn-${driverId}`).style.display = 'inline';
+  }
+</script>
+{% endblock %}

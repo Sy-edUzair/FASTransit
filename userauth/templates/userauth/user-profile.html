@@ -1,0 +1,119 @@
+{% extends 'index3.html' %}
+{% load static %}
+{% block customcss %}
+<link rel="stylesheet" href="{% static 'css/routes.css' %}" />
+<link rel="stylesheet" href="{% static 'css/user-profile.css' %}" />
+
+{% endblock %}
+
+{% block maincontent %}
+<div class="breadcrumbs-area">
+  <h3>User</h3>
+  <ul>
+    <li><a href="{% url 'userauth:user-profile' %}">Home</a></li>
+    <li>User Profile</li>
+  </ul>
+</div>
+
+<div class="card height-auto">
+  <div class="card-body">
+    <div class="heading-layout1">
+      <div class="item-title">
+        <h3>User Profile</h3>
+      </div>
+    </div>
+
+    <div class="item-img">
+      <img src="{{ user.imageURL }}" alt="User Profile">
+      <br>
+      <button class="update-btn" id="profile_image-update-btn" onclick="showUpdateField('profile_image')">Update Profile Picture</button>
+      <input type="file" id="profile_image-input">
+      <button class="save-btn" id="profile_image-save-btn" onclick="confirmUpdate('profile_image')">Save</button>
+    </div>
+
+    <div class="profile-container">
+      <!-- Left Column -->
+      <ul class="profile-column">
+        <li><b>Roll Number:</b> {{ user.roll_num }}</li>
+        <li>
+          <b>Email:</b> {{ user.email }}
+          <button class="update-btn" id="email-update-btn" onclick="showUpdateField('email')">Update</button>
+          <input type="text" id="email-input" value="{{ user.email }}">
+          <button class="save-btn" id="email-save-btn" onclick="confirmUpdate('email')">Save</button>
+        </li>
+        <li>
+          <b>Name:</b> {{ user.name }}
+          <button class="update-btn" id="name-update-btn" onclick="showUpdateField('name')">Update</button>
+          <input type="text" id="name-input" value="{{ user.name }}">
+          <button class="save-btn" id="name-save-btn" onclick="confirmUpdate('name')">Save</button>
+        </li>
+        <li>
+          <b>Address:</b> {{ user.Address }}
+          <button class="update-btn" id="Address-update-btn" onclick="showUpdateField('Address')">Update</button>
+          <input type="text" id="Address-input" value="{{ user.Address }}">
+          <button class="save-btn" id="Address-save-btn" onclick="confirmUpdate('Address')">Save</button>
+        </li>
+      </ul>
+
+      <!-- Right Column -->
+      <ul class="profile-column">
+        <li>
+          <b>Contact:</b> {{ user.contact }}
+          <button class="update-btn" id="contact-update-btn" onclick="showUpdateField('contact')">Update</button>
+          <input type="text" id="contact-input" value="{{ user.contact }}">
+          <button class="save-btn" id="contact-save-btn" onclick="confirmUpdate('contact')">Save</button>
+        </li>
+        <li>
+          <b>Emergency Contact:</b> {{ user.emergency_contact }}
+          <button class="update-btn" id="emergency_contact-update-btn" onclick="showUpdateField('emergency_contact')">Update</button>
+          <input type="text" id="emergency_contact-input" value="{{ user.emergency_contact }}">
+          <button class="save-btn" id="emergency_contact-save-btn" onclick="confirmUpdate('emergency_contact')">Save</button>
+        </li>
+        <li><b>CNIC:</b> {{ user.cnic }}</li>
+        <li><b>Gender:</b> {{ user.gender }}</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div class="overlay" id="overlay"></div>
+<div class="confirmation-popup" id="confirmation-popup">
+  <p>Are you sure you want to update this information?</p>
+  <div class="pop_button" style="justify-content:center; align-item:center;">
+    <button onclick="finalizeUpdate(true)" >Yes</button>
+    <button onclick="finalizeUpdate(false)">No</button>
+</div>
+  
+</div>
+{% endblock %}
+
+
+
+{% block customjs %}
+<script>
+  function showUpdateField(field) {
+    document.getElementById(`${field}-input`).style.display = 'inline-block';
+    document.getElementById(`${field}-save-btn`).style.display = 'inline-block';
+    document.getElementById(`${field}-update-btn`).style.display = 'none';
+  }
+
+  function confirmUpdate(field) {
+    window.currentField = field;
+    document.getElementById('overlay').style.display = 'block';
+    document.getElementById('confirmation-popup').style.display = 'block';
+  }
+
+  function finalizeUpdate(confirm) {
+    document.getElementById('overlay').style.display = 'none';
+    document.getElementById('confirmation-popup').style.display = 'none';
+
+    if (confirm) {
+      alert(`${window.currentField} updated successfully!`);
+    } else {
+      document.getElementById(`${window.currentField}-update-btn`).style.display = 'inline-block';
+      document.getElementById(`${window.currentField}-input`).style.display = 'none';
+      document.getElementById(`${window.currentField}-save-btn`).style.display = 'none';
+    }
+  }
+</script>
+{% endblock %}

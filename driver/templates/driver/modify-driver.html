@@ -1,0 +1,205 @@
+{% extends 'index3.html' %}
+{% load static %}
+{% block customcss %}
+  <link rel="stylesheet" href="{% static 'css/routes.css' %}" />
+  <style>
+    .form-container {
+      margin: 20px 0;
+      text-align: center;
+    }
+    .form-input {
+      width: 50%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      font-size: 16px;
+    }
+    .driver-info {
+      margin-top: 20px;
+      text-align: center;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      padding: 15px;
+      background-color: #f9f9f9;
+    }
+    .action-buttons {
+      margin-top: 20px;
+    }
+    .action-buttons button {
+      margin: 0 10px;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 25px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    .update-btn {
+      background-color: #007bff;
+      color: white;
+    }
+    .delete-btn {
+      background-color: #dc3545;
+      color: white;
+    }
+    .update-container {
+      margin-top: 20px;
+      text-align: center;
+    }
+    .update-input {
+      width: 25%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 15px;
+      font-size: 16px;
+    }
+  </style>
+{% endblock %}
+
+{% block maincontent %}
+<div class="breadcrumbs-area">
+  <h3>Transport</h3>
+  <ul>
+    <li><a href="{% url 'transport:transport-dashboard' %}">Home</a></li>
+    <li>Driver Details</li>
+  </ul>
+</div>
+
+<div class="row">
+  <div class="card">
+    <div class="card-body">
+      <div class="form-container">
+        <h4>Enter Driver CNIC</h4>
+        <input
+          type="text"
+          id="driver-cnic"
+          class="form-input"
+          placeholder="Enter CNIC (e.g., 12345-1234567-1)"
+        />
+        <button id="fetch-driver" class="update-btn">Fetch Details</button>
+      </div>
+
+      <div id="driver-info" class="driver-info" style="display: none;">
+        <h5>Driver Details</h5>
+        <p><strong>Name:</strong> <span id="driver-name"></span></p>
+        <p><strong>Contact:</strong> <span id="driver-contact"></span></p>
+        <p><strong>License:</strong> <span id="driver-license"></span></p>
+        <p><strong>Provider:</strong> <span id="driver-provider"></span></p>
+        <p><strong>Vehicle:</strong> <span id="driver-vehicle"></span></p>
+
+        <div class="action-buttons">
+          <button id="update-driver" class="update-btn">Update</button>
+          <button id="delete-driver" class="delete-btn">Delete</button>
+        </div>
+      </div>
+
+      <div id="update-container" class="update-container" style="display: none;">
+        <h5>Modify Driver Details</h5>
+        <input
+          type="text"
+          id="update-driver-name"
+          class="update-input"
+          placeholder="New Driver Name"
+        />
+        <button id="save-driver" class="update-btn">Save</button>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block customjs %}
+<script>
+  document.getElementById('fetch-driver').addEventListener('click', function () {
+    const cnic = document.getElementById('driver-cnic').value;
+
+    if (!cnic) {
+      alert('Please enter a CNIC.');
+      return;
+    }
+
+    // Fetch driver details from backend
+    fetch(`/api/drivers/${cnic}/`)
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error('Driver not found.');
+        }
+        return response.json();
+      })
+      .then((data) => {
+        // Populate driver details
+        document.getElementById('driver-name').textContent = data.name;
+        document.getElementById('driver-contact').textContent = data.contact;
+        document.getElementById('driver-license').textContent =
+          data.license_number;
+        document.getElementById('driver-provider').textContent =
+          data.appointed_provider;
+        document.getElementById('driver-vehicle').textContent =
+          data.appointed_vehicle;
+
+        // Show driver info section
+        document.getElementById('driver-info').style.display = 'block';
+      })
+      .catch((error) => {
+        alert(error.message);
+        document.getElementById('driver-info').style.display = 'none';
+      });
+  });
+
+  document.getElementById('update-driver').addEventListener('click', function () {
+    document.getElementById('update-container').style.display = 'block';
+  });
+
+  document.getElementById('save-driver').addEventListener('click', function () {
+    const newName = document.getElementById('update-driver-name').value;
+
+    if (!newName) {
+      alert('Please enter the modified details.');
+      return;
+    }
+
+    // Save updated details
+    const cnic = document.getElementById('driver-cnic').value;
+
+    fetch(`/api/drivers/${cnic}/update/`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        name: newName,
+      }),
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error('Failed to update driver details.');
+        }
+        alert('Driver details updated successfully.');
+        document.getElementById('update-container').style.display = 'none';
+      })
+      .catch((error) => {
+        alert(error.message);
+      });
+  });
+
+  document.getElementById('delete-driver').addEventListener('click', function () {
+    if (confirm('Are you sure you want to delete this driver?')) {
+      const cnic = document.getElementById('driver-cnic').value;
+
+      // Delete driver
+      fetch(`/api/drivers/${cnic}/delete/`, {
+        method: 'DELETE',
+      })
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error('Failed to delete driver.');
+          }
+          alert('Driver successfully deleted.');
+          document.getElementById('driver-info').style.display = 'none';
+        })
+        .catch((error) => {
+          alert(error.message);
+        });
+    }
+  });
+</script>
+{% endblock %}
