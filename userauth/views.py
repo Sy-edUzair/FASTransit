@@ -31,7 +31,7 @@ def dashboard(request):
           FROM transport_transportprovider
           """
      providers = TransportProvider.objects.raw(raw_query_2)
-     return render(request,'index3.html',{'user':request.user, 'notices':Notices,'providers':providers})      
+     return render(request,'index3.html',{'user':request.user,'notices':Notices,'providers':providers})      
 
 @csrf_protect
 def login_view(request):
@@ -41,19 +41,30 @@ def login_view(request):
                email = form.cleaned_data['email']
                password = form.cleaned_data['password']
                try:
-                    user = User.objects.get(email__iexact=email)# using email since it is a unique field
+                    user = CustomUser.objects.get(email__iexact=email)# using email since it is a unique field
                     auth_user = authenticate(request,username=email,password=password)
                     print(auth_user)
                     if auth_user is not None:
-                         login(request,auth_user)
-                         messages.success(request,"You are logged in")
-                         return HttpResponseRedirect(reverse('userauth:dashboard'))
+                         if user.is_user:
+                              try:
+                                   appuser_instance = user.appuser
+                                   login(request,auth_user)
+                                   messages.success(request,"You are logged in")
+                                   return HttpResponseRedirect(reverse('userauth:dashboard'))
+                              except:
+                                   messages.warning(request,f"User with {email} does not exist")
+                         elif user.is_transporter:
+                              try:
+                                   rep_instance = user.providerrepresentative
+                                   login(request,auth_user)
+                                   messages.success(request,"You are logged in")
+                                   return HttpResponseRedirect(reverse('transport:transport-dashboard'))
+                              except:
+                                   messages.warning(request,f"Provider Rep with {email} does not exist")
                     else:
-                         messages.warning(request,"Incorrect Password, Please Try Again!")
-                         print("Incorrect Password, Please Try Again!")
+                         messages.warning(request,"Incorrect Credentials, Please Try Again!")
                except:
                     messages.warning(request,f"User with {email} does not exist")
-                    print(f"User with {email} does not exist")
      else:
           form = LoginForm()
      context={
@@ -65,30 +76,26 @@ def login_view(request):
 def logout_view(request):
     logout(request)
     messages.success(request,"You logged out")
-    return HttpResponseRedirect(reverse("userauth:signup"))
+    return HttpResponseRedirect(reverse("userauth:login"))
 
 @csrf_protect
 def signup_view(request):
      if request.method == "POST":
-          form = UserForm(request.POST)
-          if form.is_valid():
-               roll_num = form.cleaned_data.get('roll_num')
-               name = form.cleaned_data.get('name')
-               email = request.POST.get('email')
-               address = form.cleaned_data.get('Address')
-               cnic = form.cleaned_data.get('cnic')
-               contact = form.cleaned_data.get('contact')
-               emergency_contact = form.cleaned_data.get('emergency_contact')
-               gender = form.cleaned_data.get('gender')
-               department = form.cleaned_data.get('department')  
-               profile_image = request.FILES.get('profile_image')  
-               password = form.cleaned_data.get('password')
-               confirm_password = form.cleaned_data.get('password2')
+          user_form = CustomUserForm(request.POST, request.FILES)
+          app_user_form = AppUserForm(request.POST)
+          if user_form.is_valid() and app_user_form.is_valid():
+               email = user_form.cleaned_data.get('email')
+               name = user_form.cleaned_data.get('name')
+               contact = user_form.cleaned_data.get('contact')
+               gender = user_form.cleaned_data.get('gender')
+               profile_image = user_form.cleaned_data.get('profile_image')
+               password = user_form.cleaned_data.get('password')
+               confirm_password = user_form.cleaned_data.get('password2')
 
                if password != confirm_password:
                     messages.error(request, 'Passwords do not match.')
                     return HttpResponseRedirect(reverse('userauth:signup'))
-
+               
                profile_image_path = None
                if profile_image:
                # Save file and get path
@@ -99,40 +106,48 @@ def signup_view(request):
                          for chunk in profile_image.chunks():
                               destination.write(chunk)
                     profile_image_path = f'profiles/{file_name}'
-                    print(f"Uploaded file name: {profile_image_path}")
-
-
+                   
                with connection.cursor() as cursor:
                     cursor.execute(
-                         """SELECT COUNT(*) FROM userauth_user WHERE roll_num = %s""", [roll_num])
-                    if cursor.fetchone()[0] > 0:
-                         messages.error(request, 'Roll number already exists.')
-                         return HttpResponseRedirect(reverse('userauth:signup'))
-               
-                    cursor.execute(
-                         """SELECT COUNT(*) FROM userauth_user WHERE email = %s """,[email]
+                         """SELECT COUNT(*) FROM userauth_customuser WHERE email = %s""",[email]
                     )
                     if cursor.fetchone()[0] > 0:
                          messages.error(request,'Email Already exists.')
                          return HttpResponseRedirect(reverse('userauth:signup'))
+                    
+                    cursor.execute("""INSERT INTO userauth_customuser (email, name, contact, gender, profile_image, password, is_user) VALUES (%s, %s, %s, %s, %s, %s, %s)""", [email, name, contact, gender, profile_image_path, make_password(password), True])
+                     
+                    cursor.execute("SELECT LAST_INSERT_ID()")
+                    user_id = cursor.fetchone()[0]
+           
+                    roll_num = app_user_form.cleaned_data.get('roll_num')
+                    address = app_user_form.cleaned_data.get('Address')
+                    cnic = app_user_form.cleaned_data.get('cnic')
+                    emergency_contact = app_user_form.cleaned_data.get('emergency_contact')
+                    department = app_user_form.cleaned_data.get('department')  
+
+                    cursor.execute(
+                         """SELECT COUNT(*) FROM userauth_appuser WHERE roll_num = %s""", [roll_num])
+                    if cursor.fetchone()[0] > 0:
+                         messages.error(request, 'Roll number already exists.')
+                         return HttpResponseRedirect(reverse('userauth:signup'))
+                    
                     try:
                          cursor.execute("BEGIN")
-                         cursor.execute("""
-                              INSERT INTO userauth_user(password,roll_num,email,name,address,cnic,contact,emergency_contact,gender,profile_image,is_staff,is_superuser) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,FALSE,FALSE) RETURNING roll_num
-                         """,[make_password(password),roll_num,email,name, address, cnic, contact,emergency_contact, gender, profile_image_path]
-                         )
+                         cursor.execute("""INSERT INTO userauth_appuser (roll_num, Address, cnic, emergency_contact,base_user_id)VALUES (%s, %s, %s, %s, %s) RETURNING roll_num""", [roll_num, address, cnic, emergency_contact,user_id])
 
                          user_roll_num = cursor.fetchone()[0]
+                         print(user_roll_num)
 
                          # Update department if provided
                          if department:
                               cursor.execute("""SELECT id FROM userauth_department WHERE name = %s""",[department])
                               dept_id = cursor.fetchone()[0]
-                              cursor.execute("""UPDATE userauth_user SET department_id = %s WHERE roll_num = %s""", [dept_id, user_roll_num])
+                              cursor.execute("""UPDATE userauth_appuser SET department_id = %s WHERE roll_num = %s""", [dept_id, user_roll_num])
 
-                         # Commit transaction
+                              # Commit transaction
                          cursor.execute("COMMIT")
-                    
+                         
                          messages.success(request, 'User created successfully.')
                          return HttpResponseRedirect(reverse('userauth:login'))
                     except Exception as e:
@@ -141,9 +156,9 @@ def signup_view(request):
                          messages.error(request, f'Error creating user: {str(e)}')
                          return HttpResponseRedirect(reverse('userauth:signup'))
      else:
-          form=UserForm()
-
-     return render(request, 'userauth/signup.html',{'form':form})
+          user_form = CustomUserForm()
+          app_user_form = AppUserForm()
+     return render(request, 'userauth/signup.html',{'user_form': user_form,'app_user_form': app_user_form})
 
 def point_card_view(request):
      raw_query= """
@@ -151,4 +166,4 @@ def point_card_view(request):
           FROM transport_transportprovider
           """
      providers = TransportProvider.objects.raw(raw_query)
-     return render(request, "userauth/point_card.html",{"providers":providers,'user':request.user,})
+     return render(request, "userauth/point_card.html",{"providers":providers,'user':request.user})

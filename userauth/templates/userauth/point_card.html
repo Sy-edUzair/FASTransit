@@ -36,7 +36,7 @@
           <div class="kids-details-wrap">
             <div class="kids-details-box">
               <div class="item-img">
-                <img src="{{ user.imageURL }}" alt="student" />
+                <img src="{{ app_user.imageURL }}" alt="student" />
               </div>
               <div class="item-content table-responsive">
                 <table class="table text-nowrap">
@@ -47,23 +47,23 @@
                     </tr>
                     <tr>
                       <td>Roll Number:</td>
-                      <td>{{ user.roll_num }}</td>
+                      <td>{{ user.appuser.roll_num }}</td>
                     </tr>
                     <tr>
                       <td>Gender:</td>
                       <td>{{ user.gender }}</td>
                     </tr>
                     <tr>
-                      <td>Department</td>
-                      <td>{{ user.department }}</td>
+                      <td>Department:</td>
+                      <td>{{ user.appuser.department }}</td>
                     </tr>
                     <tr>
                       <td>Pick and drop stop:</td>
-                      <td>{{ user.assigned_route.start_stop.name }}</td>
+                      <td>{{ user.appuser.assigned_route.start_stop.name }}</td>
                     </tr>
                     <tr>
                       <td>Route#:</td>
-                      <td>{{ user.assigned_route.route_num }}</td>
+                      <td>{{ user.appuser.assigned_route.route_num }}</td>
                     </tr>
                   </tbody>
                 </table>

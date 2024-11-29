@@ -1,5 +1,5 @@
 from django.db import models
-from userauth.models import User
+from userauth.models import AppUser
 from django.db import connection
 from django.core.mail import send_mail
 from django.utils.timezone import now
@@ -15,7 +15,7 @@ class ComplaintStatus(models.Model):
         return self.status_name
 
 class Feedback(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE,related_name='feedbacks')
+    user = models.ForeignKey(AppUser, on_delete=models.CASCADE,related_name='feedbacks')
     comments = models.TextField()
     rating = models.IntegerField()
     submitted_at = models.DateTimeField(auto_now_add=True)
@@ -37,7 +37,7 @@ class Notice(models.Model):
     def send_email_notification(self):
         # Raw SQL query 
         with connection.cursor() as cursor:
-            cursor.execute("SELECT email FROM userauth_user WHERE email IS NOT NULL AND EMAIL <> %s",['admin@gmail.com'])
+            cursor.execute("SELECT email FROM userauth_appuser WHERE email IS NOT NULL AND EMAIL <> %s",['admin@gmail.com'])
             recipient_emails = [row[0] for row in cursor.fetchall()] 
 
         send_mail(

@@ -102,6 +102,10 @@ DATABASES = {
     }
 }
 
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
+]
+
 
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
@@ -151,11 +155,11 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 
 JAZZMIN_SETTINGS={
-    "site_title": "FastTransit Admin",
-    'site_header':'PFastTransit',
-    'site_brand':'FastTransit',
-    #'site_logo':'images/cart.png',
-    'copyright':'FastTransiteam-software.com',
+    "site_title": "FASTransit Admin",
+    'site_header':'FASTransit',
+    'site_brand':'FASTransit',
+    'site_logo':'img/favicon.png',
+    'copyright':'FASTransiteam-software.com',
 }
 RECAPTCHA_PUBLIC_KEY = '6LcTVYIqAAAAAJGJPG6ICGxqxWFyvJQU-dP7xaTr'
 RECAPTCHA_PRIVATE_KEY = env('RECAPTCHA_PRIVATE_KEY')
@@ -163,7 +167,7 @@ RECAPTCHA_PRIVATE_KEY = env('RECAPTCHA_PRIVATE_KEY')
 # Enable reCAPTCHA in production only
 
 
-AUTH_USER_MODEL = 'userauth.User' 
+AUTH_USER_MODEL = 'userauth.CustomUser' 
 LOGIN_URL = '/login/'
 
 # Email configuration

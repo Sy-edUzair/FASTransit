@@ -23,7 +23,17 @@
         <form method="post" enctype="multipart/form-data" class="d-flex flex-column login-form" style="width:500px">
           {% csrf_token %}
           <div class="row">
-            {% for field in form %}
+            {% for field in app_user_form %}
+              <div class="form-group col-md-6">{{ field }}</div>
+              {% if field.errors %}
+                <ul class="errorlist">
+                  {% for error in field.errors %}
+                    <li>{{ error }}</li>
+                  {% endfor %}
+                </ul>
+              {% endif %}
+            {% endfor %}
+            {% for field in user_form %}
               <div class="form-group col-md-6">{{ field }}</div>
               {% if field.errors %}
                 <ul class="errorlist">
@@ -38,6 +48,13 @@
             <button type="submit" class="login-btn">Sign Up</button>
           </div>
         </form>
+        {% if messages %}
+          <ul class="messages">
+            {% for message in messages %}
+              <li class="{{ message.tags }}">{{ message }}</li>
+            {% endfor %}
+          </ul>
+        {% endif %}
         <div class="auth-switch">
           <span>Already have an account?</span>
           <a href="{% url 'userauth:login' %}">Login</a>

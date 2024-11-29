@@ -1,5 +1,5 @@
 from django.db import models
-from userauth.models import User
+from userauth.models import AppUser
 
 # Create your models here.
 
@@ -26,7 +26,7 @@ class PaymentStatus(models.Model):
 
 class Payment(models.Model):
     payment_id = models.AutoField(primary_key=True)
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="payments")
+    user = models.ForeignKey(AppUser, on_delete=models.CASCADE, related_name="payments")
     receipt = models.OneToOneField(Receipt, on_delete=models.CASCADE, related_name="payment")
     method = models.OneToOneField(PaymentMethod, on_delete=models.SET_NULL, null=True, related_name="payments")
     status = models.OneToOneField(PaymentStatus, on_delete=models.SET_NULL, null=True)

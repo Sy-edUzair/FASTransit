@@ -60,53 +60,15 @@ def render_route_page(request):
 
                          # Assign the route to the user
                          cursor.execute(
-                              "UPDATE userauth_user SET assigned_route_id = %s WHERE roll_num = %s",
-                              [route_id, request.user.roll_num]
+                              "UPDATE userauth_appuser SET assigned_route_id = %s WHERE roll_num = %s",
+                              [route_id, request.user.appuser.roll_num]
                               )
-                         messages.success(request,f"Route {route_number} assigned to user {request.user.roll_num}.")
+                         messages.success(request,f"Route {route_number} assigned to user {request.user.appuser.roll_num}.")
                     else:
                          messages.error(request,f"Route {route_number} not found.")
      else:
           form = RouteForm()
      return render(request, "transport/routes.html",{"providers":providers,"routes": routes,"form":form})
-
-@csrf_protect
-def transporter_login(request):
-    # raw_query = """
-    #     SELECT *
-    #     FROM noticeboard_notice
-    #     WHERE is_active = TRUE 
-    #     ORDER BY date_posted DESC
-    # """
-    # notices = Notice.objects.raw(raw_query)
-     if request.method=="POST":
-          form = transportLoginForm(request.POST)
-          if form.is_valid():
-               email = form.cleaned_data['email']
-               password = form.cleaned_data['password']
-               print(email)
-               print(password)
-     
-               try:
-                    provider_rep = ProviderRepresentative.objects.get(email__iexact=email)# using email since it is a unique field
-                    print(provider_rep)
-                    #auth_user = authenticate(request,username=email,password=password)
-                    if provider_rep.check_password(password):
-                         login(request,provider_rep,backend=None)
-                         messages.success(request,"You are logged in")
-                         return HttpResponseRedirect(reverse('transport:transport-dashboard'))
-                    else:
-                         messages.warning(request,"Incorrect Password, Please Try Again!")
-                         print("Incorrect Password, Please Try Again!")
-               except:
-                    messages.warning(request,f"Provider Rep with {email} does not exist")
-                    print(f"Provider Rep with {email} does not exist")
-     else:
-          form = transportLoginForm()
-     context={
-          'form':form
-     }
-     return render(request, "transport/transporter-login.html", context)
 
 #@login_required(login_url=reverse_lazy("transport:transporter_login"))
 def transporter_dashboard(request):

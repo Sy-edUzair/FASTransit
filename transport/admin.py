@@ -4,10 +4,6 @@ from .models import *
 
 # Register your models here.
 
-class ProviderRepAdmin(admin.ModelAdmin):
-    list_display =['representative_name' , 'representative_cnic', 'representative_contact']
-    search_fields = ['representative_name', 'representative_cnic']
-    list_per_page = 20
 
 class TransportProviderAdmin(admin.ModelAdmin):
     list_display=['name','representative']
@@ -37,7 +33,7 @@ class RouteStopInline(admin.TabularInline):
     ordering = ['stop_order']
 
 class RouteAdmin(admin.ModelAdmin):
-   list_display = ['route_num', 'start_stop', 'end_stop', 'appointed_provider']
+   list_display = ['route_num', 'start_stop','appointed_provider']
    inlines = [RouteStopInline]  
 
 class VehicleAdmin(admin.ModelAdmin):
@@ -47,7 +43,7 @@ class VehicleAdmin(admin.ModelAdmin):
     date_hierarchy = 'Last_maintenance_date'
 
 
-admin.site.register(ProviderRepresentative,ProviderRepAdmin)
+
 admin.site.register(TransportProvider,TransportProviderAdmin)
 admin.site.register(VehicleStatus,StatusAdmin)
 admin.site.register(CapacityType,CapacityTypeAdmin)

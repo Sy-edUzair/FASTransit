@@ -3,37 +3,10 @@ from django.core.validators import RegexValidator,MaxValueValidator
 from django.contrib.auth.hashers import make_password
 # Create your models here.
 
-class ProviderRepresentative(models.Model):
-    cnic_validator = RegexValidator(
-        regex=r'^\d{5}-\d{7}-\d{1}$', 
-        message='CNIC must be in the format XXXX-XXXXXXXX-X'
-    )
-    representative_name = models.CharField(max_length=100)
-    email=models.EmailField(unique=True,null=True)
-    representative_cnic = models.CharField(
-        max_length=15,
-        primary_key=True,
-        validators = [cnic_validator]
-        )
-    representative_contact = models.CharField(max_length=20)
-    password = models.CharField(max_length=128)  
-    
-    USERNAME_FIELD = "email" 
-
-    def save(self,*args, **kwargs):
-        print(self.password)
-        passw = make_password(self.password) 
-        self.password = passw
-        super().save(*args, **kwargs)
-    
-    def __str__(self):
-        return self.representative_name
-
 class TransportProvider(models.Model):
     name = models.CharField(max_length=100)
-    representative = models.OneToOneField(
-        'ProviderRepresentative', 
-        on_delete=models.CASCADE
+    representative = models.OneToOneField('userauth.ProviderRepresentative', 
+        on_delete=models.CASCADE,related_name='transport_providers'
     )
 
     def __str__(self):
@@ -60,7 +33,7 @@ class NearestLandmark(models.Model):
 
 class Stop(models.Model):
     name = models.CharField(max_length=100)
-    nearest_landmark = models.OneToOneField(NearestLandmark,on_delete=models.CASCADE)
+    nearest_landmark = models.ForeignKey(NearestLandmark,on_delete=models.CASCADE)
 
     def __str__(self):
         return self.name
@@ -68,7 +41,6 @@ class Stop(models.Model):
 class Route(models.Model):
     route_num = models.IntegerField(primary_key=True)
     start_stop = models.ForeignKey(Stop, related_name='start_stop', on_delete=models.CASCADE)
-    end_stop = models.ForeignKey(Stop, related_name='end_stop', on_delete=models.CASCADE)
     appointed_provider = models.ForeignKey(TransportProvider, on_delete=models.CASCADE, related_name = 'routes')
     stops = models.ManyToManyField(Stop,through='RouteStop',related_name='stops')
 
@@ -98,8 +70,8 @@ class Vehicle(models.Model):
     allotted_seats = models.IntegerField()
     tracking_id = models.IntegerField()
     Last_maintenance_date = models.DateField()
-    status = models.OneToOneField(VehicleStatus, on_delete=models.SET_NULL, null=True)
-    capacity_type = models.OneToOneField(CapacityType, on_delete=models.SET_NULL, null=True)
+    status = models.ForeignKey(VehicleStatus, on_delete=models.SET_NULL, null=True)
+    capacity_type = models.ForeignKey(CapacityType, on_delete=models.SET_NULL, null=True)
     transport_provider = models.ForeignKey(TransportProvider, on_delete=models.CASCADE,related_name='vehicles')
     route_no = models.OneToOneField(Route, on_delete=models.CASCADE)
 

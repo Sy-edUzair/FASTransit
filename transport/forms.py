@@ -2,7 +2,7 @@ from django import forms
 from django_recaptcha.fields import ReCaptchaField
 from django_recaptcha.widgets import ReCaptchaV2Checkbox
 from django.conf import settings
-from .models import ProviderRepresentative
+from userauth.models import ProviderRepresentative
 
 class transportLoginForm(forms.Form):
     email=forms.CharField(widget=forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'Provider Email'}))
