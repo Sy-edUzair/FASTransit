@@ -11,5 +11,5 @@ urlpatterns=[
     path("transport-fees/",views.transport_fee_view,name='transport-fees'),
     path("add-route/",views.add_route_view,name='add-route'),
     path("transport-logout/",views.logout_view,name="logout"),
-     path("tracking/",views.tracking_view,name="logout"),
+    path("tracking/",views.tracking_view,name="tracking"),
 ]
