@@ -1,11 +1,12 @@
 from django.db import models
 from django.core.validators import RegexValidator,MaxValueValidator
+from django.contrib.auth.hashers import make_password
 # Create your models here.
 
 class ProviderRepresentative(models.Model):
     cnic_validator = RegexValidator(
         regex=r'^\d{5}-\d{7}-\d{1}$', 
-        message='CNIC must be in the format XXXX-XXXXXXX-X'
+        message='CNIC must be in the format XXXX-XXXXXXXX-X'
     )
     representative_name = models.CharField(max_length=100)
     email=models.EmailField(unique=True,null=True)
@@ -15,7 +16,16 @@ class ProviderRepresentative(models.Model):
         validators = [cnic_validator]
         )
     representative_contact = models.CharField(max_length=20)
+    password = models.CharField(max_length=128)  
+    
+    USERNAME_FIELD = "email" 
 
+    def save(self,*args, **kwargs):
+        print(self.password)
+        passw = make_password(self.password) 
+        self.password = passw
+        super().save(*args, **kwargs)
+    
     def __str__(self):
         return self.representative_name
 

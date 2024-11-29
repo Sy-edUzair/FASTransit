@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import AbstractBaseUser,BaseUserManager,PermissionsMixin
 from django.core.validators import RegexValidator
 from transport.models import Route
+from django.contrib.auth.hashers import make_password
 
 Gender=(
     ("Male","Male"),
@@ -69,6 +70,9 @@ class User(AbstractBaseUser,PermissionsMixin):
         except:
             URL= ' '
         return URL
-
-
-
+    def save(self,*args, **kwargs):
+        print(self.password)
+        passw = make_password(self.password) 
+        self.password = passw
+        super().save(*args, **kwargs)
+    

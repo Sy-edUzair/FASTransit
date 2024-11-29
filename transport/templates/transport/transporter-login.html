@@ -20,7 +20,7 @@
         <div class="item-logo">
           <img src="{% static 'img/logo3.png' %}" alt="logo" style="height:10rem" />
         </div>
-        <form method="POST" action="{% url 'transport:transport-dashboard' %}" class="login-form">
+        <form method="POST" class="login-form">
           {% csrf_token %}
           <div class="form-group">
             <label>Transporter Email</label>

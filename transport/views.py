@@ -84,21 +84,23 @@ def transporter_login(request):
           if form.is_valid():
                email = form.cleaned_data['email']
                password = form.cleaned_data['password']
-          
+               print(email)
+               print(password)
+     
                try:
                     provider_rep = ProviderRepresentative.objects.get(email__iexact=email)# using email since it is a unique field
-                    auth_user = authenticate(request,username=email,password=password)
-          
-                    if auth_user is not None:
-                         login(request,auth_user)
+                    print(provider_rep)
+                    #auth_user = authenticate(request,username=email,password=password)
+                    if provider_rep.check_password(password):
+                         login(request,provider_rep,backend=None)
                          messages.success(request,"You are logged in")
-                         return HttpResponseRedirect(reverse('userauth:dashboard'))
+                         return HttpResponseRedirect(reverse('transport:transport-dashboard'))
                     else:
                          messages.warning(request,"Incorrect Password, Please Try Again!")
                          print("Incorrect Password, Please Try Again!")
                except:
-                    messages.warning(request,f"User with {email} does not exist")
-                    print(f"User with {email} does not exist")
+                    messages.warning(request,f"Provider Rep with {email} does not exist")
+                    print(f"Provider Rep with {email} does not exist")
      else:
           form = transportLoginForm()
      context={
@@ -106,16 +108,32 @@ def transporter_login(request):
      }
      return render(request, "transport/transporter-login.html", context)
 
-@login_required(login_url=reverse_lazy("transport:transporter_login"))
+#@login_required(login_url=reverse_lazy("transport:transporter_login"))
 def transporter_dashboard(request):
-    # raw_query = """
-    #     SELECT *
-    #     FROM noticeboard_notice
-    #     WHERE is_active = TRUE 
-    #     ORDER BY date_posted DESC
-    # """
-    # notices = Notice.objects.raw(raw_query)
-     return render(request, "transport/transport-dashboard.html", {})
+     print(request.user)
+     return render(request, "transport/transport-dashboard.html", {"provider":request.user})
+
+@login_required(login_url=reverse_lazy("transport:transporter_login"))
+def render_all_routes(request):
+     raw_query_2= """
+          SELECT r.route_num AS route_num, s.id AS stop_id, s.name AS stop_name FROM transport_route AS r JOIN transport_routestop AS rs ON r.route_num = rs.route_id JOIN transport_stop AS s ON rs.stop_id = s.id ORDER BY r.route_num, rs.stop_order;
+     """
+     # Execute the raw query
+     with connection.cursor() as cursor:
+          cursor.execute(raw_query_2)
+          results = cursor.fetchall()
+
+     # Organize results into a structure suitable for the template
+     routes = {}
+     for route_num, stop_id, stop_name in results:
+          if route_num not in routes:
+               idx=0
+               routes[route_num] = {"stops": []}
+          if stop_id:
+               idx+=1
+               routes[route_num]["stops"].append({"idx":idx,"id": stop_id, "name": stop_name})
+
+     return render(request, "transport/all-routes.html", {"routes": routes})
 
 @csrf_protect
 def logout_view(request):
@@ -138,8 +156,6 @@ def transport_fee_view(request):
           """
      providers = TransportProvider.objects.raw(raw_query)
      return render(request, "transport/fee-collection.html",{"providers":providers})
-
-
 
 def add_route_view(request):
      if request.method == 'POST':

@@ -33,6 +33,7 @@ def dashboard(request):
      providers = TransportProvider.objects.raw(raw_query_2)
      return render(request,'index3.html',{'user':request.user, 'notices':Notices,'providers':providers})      
 
+@csrf_protect
 def login_view(request):
      if request.method=="POST":
           form = LoginForm(request.POST)
@@ -42,7 +43,7 @@ def login_view(request):
                try:
                     user = User.objects.get(email__iexact=email)# using email since it is a unique field
                     auth_user = authenticate(request,username=email,password=password)
-          
+                    print(auth_user)
                     if auth_user is not None:
                          login(request,auth_user)
                          messages.success(request,"You are logged in")

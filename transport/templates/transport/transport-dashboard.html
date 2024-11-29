@@ -4,334 +4,436 @@
   <link rel="stylesheet" href="{% static 'css/routes.css' %}" />
 {% endblock %}
 
+{% block header %}
+  <div class="navbar navbar-expand-md header-menu-one bg-light">
+    <div class="nav-bar-header-one">
+      <div class="header-logo">
+        <a href="{% url 'transport:transport-dashboard' %}'}"><img src="{% static 'img/FASTransit.jpeg' %}" alt="logo" style="height: 48px; width: 161px; padding-left: 5px;" /></a>
+      </div>
+      <div class="toggle-button sidebar-toggle">
+        <button type="button" class="item-link">
+          <span class="btn-icon-wrap">
+            <span></span>
+            <span></span>
+            <span></span>
+          </span>
+        </button>
+      </div>
+    </div>
+    <div class="d-md-none mobile-nav-bar">
+      <button class="navbar-toggler pulse-animation" type="button" data-toggle="collapse" data-target="#mobile-navbar" aria-expanded="false"><i class="far fa-arrow-alt-circle-down"></i></button>
+      <button type="button" class="navbar-toggler sidebar-toggle-mobile"><i class="fas fa-bars"></i></button>
+    </div>
+    <div class="header-main-menu collapse navbar-collapse" id="mobile-navbar">
+      <ul class="navbar-nav"></ul>
+      <ul class="navbar-nav">
+        <li class="navbar-item dropdown header-admin">
+          <a class="navbar-nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-expanded="false">
+            <div class="admin-title">
+              <h5 class="item-title">{{ provider.representative_name }}</h5>
+              <span></span>
+            </div>
+            <div class="admin-img">
+              <img src="{% static 'img/figure/student10.png' %}" alt="Admin" />
+            </div>
+          </a>
+          <div class="dropdown-menu dropdown-menu-right">
+            <div class="item-header">
+              <h6 class="item-title">{{ provider.representative_name }}</h6>
+            </div>
+            <div class="item-content">
+              <ul class="settings-list">
+                <li>
+                  <a href="#"><i class="flaticon-user"></i>My Profile</a>
+                </li>
+                <li>
+                  <a href="#"><i class="flaticon-gear-loading"></i>Account Settings</a>
+                </li>
+                <li>
+                  <a href="{% url 'transport:logout' %}"><i class="flaticon-turn-off"></i>Log Out</a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+{% endblock %}
+
+{% block sidebar %}
+  <div class="sidebar-main sidebar-menu-one sidebar-expand-md sidebar-color">
+    <div class="mobile-sidebar-header d-md-none">
+      <div class="header-logo">
+        <a href="{% url 'transport:transport-dashboard' %}"><img src="{% static 'img/FASTransit.jpeg' %}" alt="logo" style="width: 161px; height: 48px;" /></a>
+      </div>
+    </div>
+    <div class="sidebar-menu-content" style="margin-top:50px;">
+      <ul class="nav nav-sidebar-menu sidebar-toggle-view">
+        <li class="nav-item">
+          <a href="{% url 'transport:transport-dashboard' %}" class="nav-link"><i class="fa-solid fa-house"></i><span>Dashboard</span></a>
+        </li>
+        <li class="nav-item sidebar-nav-item">
+          <a href="{% url 'transport:transport-dashboard' %}" class="nav-link"><i class="fa-solid fa-road"></i><span>Routes</span></a>
+          <ul class="nav sub-group-menu">
+            <li class="nav-item">
+              <a href="{% url 'transport:render_routes' %}" class="nav-link"><i class="fa-solid fa-route"></i>All Routes</a>
+            </li>
+            <li class="nav-item">
+              <a href="{% url 'transport:add-route' %}" class="nav-link"><i class="fa-solid fa-location-dot"></i>Add Route</a>
+            </li>
+          </ul>
+        </li>
+        <li class="nav-item sidebar-nav-item">
+          <a href="{% url 'transport:transport-dashboard' %}" class="nav-link"><i class="fa-solid fa-user"></i><span>Drivers</span></a>
+          <ul class="nav sub-group-menu">
+            <li class="nav-item">
+              <a href="{% url 'transport:transport-drivers' %}" class="nav-link"><i class="fa-solid fa-id-card"></i>All Drivers</a>
+            </li>
+            <li class="nav-item">
+              <a href="#" class="nav-link"><i class="fa-solid fa-user-plus"></i>Add Driver</a>
+            </li>
+          </ul>
+        </li>
+        <li class="nav-item sidebar-nav-item">
+          <a href="{% url 'transport:transport-dashboard' %}" class="nav-link"><i class="fa-solid fa-bus"></i><span>Vehicles</span></a>
+          <ul class="nav sub-group-menu">
+            <li class="nav-item">
+              <a href="#" class="nav-link"><i class="fa-solid fa-van-shuttle"></i>All Vehicles</a>
+            </li>
+            <li class="nav-item">
+              <a href="#" class="nav-link"><i class="fa-solid fa-truck-arrow-right"></i>Add Vehicle</a>
+            </li>
+          </ul>
+        </li>
+        <li class="nav-item sidebar-nav-item">
+          <a href="{% url 'transport:transport-dashboard' %}" class="nav-link"><i class="flaticon-technological"></i><span>Account</span></a>
+          <ul class="nav sub-group-menu">
+            <li class="nav-item">
+              <a href="all-fees.html" class="nav-link"><i class="fas fa-angle-right"></i>Profile</a>
+            </li>
+          </ul>
+        </li>
+        <li class="nav-item sidebar-nav-item">
+          <a href="{% url 'transport:transport-dashboard' %}" class="nav-link"><i class="flaticon-maths-class-materials-cross-of-a-pencil-and-a-ruler"></i><span>Payment</span></a>
+          <ul class="nav sub-group-menu">
+            <li class="nav-item">
+              <a href="{% url 'transport:transport-fees' %}" class="nav-link"><i class="fas fa-angle-right"></i>All Payments</a>
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+  </div>
+{% endblock %}
 {% block maincontent %}
   <!-- Breadcrumbs Area Start Here -->
   <div class="breadcrumbs-area">
     <h3>Transport</h3>
     <ul>
-        <li>
-            <a href="{% url 'transport:transport-dashboard'%}">Home</a>
-        </li>
-        <li>Transporter Dashboard</li>
+      <li>
+        <a href="{% url 'transport:transport-dashboard' %}">Home</a>
+      </li>
+      <li>Transporter Dashboard</li>
     </ul>
-</div>
-<!-- Breadcrumbs Area End Here -->
- <div class="row">
-    <div class="col-lg-4">
-        <div class="dashboard-summery-one">
-          <div class="row">
-            <div class="col-6">
-              <div class="item-icon bg-light-magenta" style="padding-top: 10px;">
-                <i class="fa-solid fa-van-shuttle"></i>
-              </div>
-            </div>
-            <div class="col-6">
-              <div class="item-content">
-                <div class="item-title">Total Vehicle</div>
-                <div class="item-number">
-                  {% if user.assigned_route.route_num %}
-                    <span class="counter" data-num="{{ user.assigned_route.route_num }}"></span>
-                  {% else %}
-                    <span>None</span>
-                  {% endif %}
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="col-lg-4">
-        <div class="dashboard-summery-one">
-          <div class="row">
-            <div class="col-6">
-              <div class="item-icon bg-light-blue" style="padding-top: 10px;">
-                <i class="fa-solid fa-route"></i>
-              </div>
-            </div>
-            <div class="col-6">
-              <div class="item-content">
-                <div class="item-title">Total Route</div>
-                {% if user.assigned_route.start_stop.name %}
-                  <div class="item-number">{{ user.assigned_route.start_stop.name }}</div>
-                {% else %}
-                  <div class="item-number">None</div>
-                {% endif %}
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="col-lg-4">
-        <div class="dashboard-summery-one">
-          <div class="row">
-            <div class="col-6">
-              <div class="item-icon bg-light-yellow" style="padding: 10px;">
-                <i class="fa-solid fa-users-line"></i>
-              </div>
-            </div>
-            <div class="col-6">
-              <div class="item-content">
-                <div class="item-title">Assigned Student/Staff</div>
-                {% if user.assigned_route.appointed_provider.name %}
-                  <div class="item-number">{{ user.assigned_route.appointed_provider.name }}</div>
-                {% else %}
-                  <div class="item-number">None</div>
-                {% endif %}
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      
- </div>
-
-
- <div class="row">
-  <!-- All Transport List Area Start Here -->
-  <div class="col-12">
-      <div class="card height-auto">
-          <div class="card-body">
-              <div class="heading-layout1">
-                  <div class="item-title">
-                      <h3>All Driver Lists</h3>
-                  </div>
-                  
-              </div>
-
-              <form class="mg-b-20">
-                  <div class="row gutters-8">
-                      <div class="col-lg-4 col-12 form-group">
-                          <input type="text" placeholder="Search by Route ..." class="form-control">
-                      </div>
-                      <div class="col-lg-3 col-12 form-group">
-                          <input type="text" placeholder="Search by Car Number ..."
-                              class="form-control">
-                      </div>
-                      <div class="col-lg-3 col-12 form-group">
-                          <input type="text" placeholder="Search by Phone ..." class="form-control">
-                      </div>
-                      <div class="col-lg-2 col-12 form-group">
-                          <button type="submit"
-                              class="fw-btn-fill btn-gradient-yellow">SEARCH</button>
-                      </div>
-                  </div>
-              </form>
-
-              <div class="table-responsive">
-                  <table class="table display data-table text-nowrap">
-                      <thead>
-                          <tr>
-                              <th>Route No</th>
-                              <th>Vehicle No</th>
-                              <th>Driver Name</th>
-                              <th>Driver License</th>
-                              <th>Contact Number</th>
-                              <th>Status</th>
-                              <th>Capacity</th>
-                              <th>Alloted Seats</th>
-                              <th>Last Maintenance</th>
-                          </tr>
-                      </thead>
-                      <tbody>
-                          <tr>
-                              <td>1</td>
-                              <td>MT988800</td>
-                              <td>Johnathan John</td>
-                              <td>DLNC025936</td>
-                              <td>+889562365846</td>
-                              <td>available</td>
-                              <td>50</td>
-                              <td>40</td>
-                              <td>10-dec-23</td>
-                          </tr>
-                          <tr>
-                              <td>1</td>
-                              <td>MT988800</td>
-                              <td>Johnathan John</td>
-                              <td>DLNC025936</td>
-                              <td>+889562365846</td>
-                              <td>available</td>
-                              <td>50</td>
-                              <td>40</td>
-                              <td>10-dec-23</td>
-                              
-                          </tr>
-                          <tr>
-                              <td>1</td>
-                              <td>MT988800</td>
-                              <td>Johnathan John</td>
-                              <td>DLNC025936</td>
-                              <td>+889562365846</td>
-                              <td>available</td>
-                              <td>50</td>
-                              <td>40</td>
-                              <td>10-dec-23</td>
-                              
-                          </tr>
-                          <tr>
-                              <td>1</td>
-                              <td>MT988800</td>
-                              <td>Johnathan John</td>
-                              <td>DLNC025936</td>
-                              <td>+889562365846</td>
-                              <td>available</td>
-                              <td>50</td>
-                              <td>40</td>
-                              <td>10-dec-23</td>
-                              
-                          </tr>
-                          <tr>
-                              <td>1</td>
-                              <td>MT988800</td>
-                              <td>Johnathan John</td>
-                              <td>DLNC025936</td>
-                              <td>+889562365846</td>
-                              <td>available</td>
-                              <td>50</td>
-                              <td>40</td>
-                              <td>10-dec-23</td>
-                              
-                          </tr>
-                          <tr>
-                              <td>1</td>
-                              <td>MT988800</td>
-                              <td>Johnathan John</td>
-                              <td>DLNC025936</td>
-                              <td>+889562365846</td>
-                              <td>available</td>
-                              <td>50</td>
-                              <td>40</td>
-                              <td>10-dec-23</td>
-                              
-                          </tr>
-                          <tr>
-                              <td>1</td>
-                              <td>MT988800</td>
-                              <td>Johnathan John</td>
-                              <td>DLNC025936</td>
-                              <td>+889562365846</td>
-                              <td>available</td>
-                              <td>50</td>
-                              <td>40</td>
-                              <td>10-dec-23</td>
-                              
-                          </tr>
-                          <tr>
-                              <td>1</td>
-                              <td>MT988800</td>
-                              <td>Johnathan John</td>
-                              <td>DLNC025936</td>
-                              <td>+889562365846</td>
-                              <td>available</td>
-                              <td>50</td>
-                              <td>40</td>
-                              <td>10-dec-23</td>
-                              
-                          </tr>
-                          <tr>
-                              <td>1</td>
-                              <td>MT988800</td>
-                              <td>Johnathan John</td>
-                              <td>DLNC025936</td>
-                              <td>+889562365846</td>
-                              <td>available</td>
-                              <td>50</td>
-                              <td>40</td>
-                              <td>10-dec-23</td>
-                              
-                          </tr>
-                          <tr>
-                              <td>1</td>
-                              <td>MT988800</td>
-                              <td>Johnathan John</td>
-                              <td>DLNC025936</td>
-                              <td>+889562365846</td>
-                              <td>available</td>
-                              <td>50</td>
-                              <td>40</td>
-                              <td>10-dec-23</td>
-                              
-                          </tr>
-                          <tr>
-                              <td>1</td>
-                              <td>MT988800</td>
-                              <td>Johnathan John</td>
-                              <td>DLNC025936</td>
-                              <td>+889562365846</td>
-                              <td>available</td>
-                              <td>50</td>
-                              <td>40</td>
-                              <td>10-dec-23</td>
-                              
-                          </tr>
-                          <tr>
-                              <td>1</td>
-                              <td>MT988800</td>
-                              <td>Johnathan John</td>
-                              <td>DLNC025936</td>
-                              <td>+889562365846</td>
-                              <td>available</td>
-                              <td>50</td>
-                              <td>40</td>
-                              <td>10-dec-23</td>
-                              
-                          </tr>
-                          <tr>
-                              <td>1</td>
-                              <td>MT988800</td>
-                              <td>Johnathan John</td>
-                              <td>DLNC025936</td>
-                              <td>+889562365846</td>
-                              <td>available</td>
-                              <td>50</td>
-                              <td>40</td>
-                              <td>10-dec-23</td>
-                              
-                          </tr>
-                          <tr>
-                              <td>1</td>
-                              <td>MT988800</td>
-                              <td>Johnathan John</td>
-                              <td>DLNC025936</td>
-                              <td>+889562365846</td>
-                              <td>available</td>
-                              <td>50</td>
-                              <td>40</td>
-                              <td>10-dec-23</td>
-                              
-                          </tr>
-                          <tr>
-                              <td>1</td>
-                              <td>MT988800</td>
-                              <td>Johnathan John</td>
-                              <td>DLNC025936</td>
-                              <td>+889562365846</td>
-                              <td>available</td>
-                              <td>50</td>
-                              <td>40</td>
-                              <td>10-dec-23</td>
-                              
-                          </tr>
-                          <tr>
-                              <td>1</td>
-                              <td>MT988800</td>
-                              <td>Johnathan John</td>
-                              <td>DLNC025936</td>
-                              <td>+889562365846</td>
-                              <td>available</td>
-                              <td>50</td>
-                              <td>40</td>
-                              <td>10-dec-23</td>
-                              
-                          </tr>
-                      </tbody>
-                  </table>
-              </div>
-          </div>
-      </div>
   </div>
-  <!-- All Transport List Area End Here -->
-</div>
+  <!-- Breadcrumbs Area End Here -->
+  <div class="row">
+    <div class="col-lg-4">
+      <div class="dashboard-summery-one">
+        <div class="row">
+          <div class="col-6">
+            <div class="item-icon bg-light-magenta" style="padding-top: 10px;">
+              <i class="fa-solid fa-van-shuttle"></i>
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="item-content">
+              <div class="item-title">Total Vehicle</div>
+              <div class="item-number">
+                {% if user.assigned_route.route_num %}
+                  <span class="counter" data-num="{{ user.assigned_route.route_num }}"></span>
+                {% else %}
+                  <span>None</span>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-4">
+      <div class="dashboard-summery-one">
+        <div class="row">
+          <div class="col-6">
+            <div class="item-icon bg-light-blue" style="padding-top: 10px;">
+              <i class="fa-solid fa-route"></i>
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="item-content">
+              <div class="item-title">Total Route</div>
+              {% if user.assigned_route.start_stop.name %}
+                <div class="item-number">{{ user.assigned_route.start_stop.name }}</div>
+              {% else %}
+                <div class="item-number">None</div>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-4">
+      <div class="dashboard-summery-one">
+        <div class="row">
+          <div class="col-6">
+            <div class="item-icon bg-light-yellow" style="padding: 10px;">
+              <i class="fa-solid fa-users-line"></i>
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="item-content">
+              <div class="item-title">Assigned Student/Staff</div>
+              {% if user.assigned_route.appointed_provider.name %}
+                <div class="item-number">{{ user.assigned_route.appointed_provider.name }}</div>
+              {% else %}
+                <div class="item-number">None</div>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <!-- All Transport List Area Start Here -->
+    <div class="col-12">
+      <div class="card height-auto">
+        <div class="card-body">
+          <div class="heading-layout1">
+            <div class="item-title">
+              <h3>All Driver Lists</h3>
+            </div>
+          </div>
+
+          <form class="mg-b-20">
+            <div class="row gutters-8">
+              <div class="col-lg-4 col-12 form-group">
+                <input type="text" placeholder="Search by Route ..." class="form-control" />
+              </div>
+              <div class="col-lg-3 col-12 form-group">
+                <input type="text" placeholder="Search by Car Number ..." class="form-control" />
+              </div>
+              <div class="col-lg-3 col-12 form-group">
+                <input type="text" placeholder="Search by Phone ..." class="form-control" />
+              </div>
+              <div class="col-lg-2 col-12 form-group">
+                <button type="submit" class="fw-btn-fill btn-gradient-yellow">SEARCH</button>
+              </div>
+            </div>
+          </form>
+
+          <div class="table-responsive">
+            <table class="table display data-table text-nowrap">
+              <thead>
+                <tr>
+                  <th>Route No</th>
+                  <th>Vehicle No</th>
+                  <th>Driver Name</th>
+                  <th>Driver License</th>
+                  <th>Contact Number</th>
+                  <th>Status</th>
+                  <th>Capacity</th>
+                  <th>Alloted Seats</th>
+                  <th>Last Maintenance</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>1</td>
+                  <td>MT988800</td>
+                  <td>Johnathan John</td>
+                  <td>DLNC025936</td>
+                  <td>+889562365846</td>
+                  <td>available</td>
+                  <td>50</td>
+                  <td>40</td>
+                  <td>10-dec-23</td>
+                </tr>
+                <tr>
+                  <td>1</td>
+                  <td>MT988800</td>
+                  <td>Johnathan John</td>
+                  <td>DLNC025936</td>
+                  <td>+889562365846</td>
+                  <td>available</td>
+                  <td>50</td>
+                  <td>40</td>
+                  <td>10-dec-23</td>
+                </tr>
+                <tr>
+                  <td>1</td>
+                  <td>MT988800</td>
+                  <td>Johnathan John</td>
+                  <td>DLNC025936</td>
+                  <td>+889562365846</td>
+                  <td>available</td>
+                  <td>50</td>
+                  <td>40</td>
+                  <td>10-dec-23</td>
+                </tr>
+                <tr>
+                  <td>1</td>
+                  <td>MT988800</td>
+                  <td>Johnathan John</td>
+                  <td>DLNC025936</td>
+                  <td>+889562365846</td>
+                  <td>available</td>
+                  <td>50</td>
+                  <td>40</td>
+                  <td>10-dec-23</td>
+                </tr>
+                <tr>
+                  <td>1</td>
+                  <td>MT988800</td>
+                  <td>Johnathan John</td>
+                  <td>DLNC025936</td>
+                  <td>+889562365846</td>
+                  <td>available</td>
+                  <td>50</td>
+                  <td>40</td>
+                  <td>10-dec-23</td>
+                </tr>
+                <tr>
+                  <td>1</td>
+                  <td>MT988800</td>
+                  <td>Johnathan John</td>
+                  <td>DLNC025936</td>
+                  <td>+889562365846</td>
+                  <td>available</td>
+                  <td>50</td>
+                  <td>40</td>
+                  <td>10-dec-23</td>
+                </tr>
+                <tr>
+                  <td>1</td>
+                  <td>MT988800</td>
+                  <td>Johnathan John</td>
+                  <td>DLNC025936</td>
+                  <td>+889562365846</td>
+                  <td>available</td>
+                  <td>50</td>
+                  <td>40</td>
+                  <td>10-dec-23</td>
+                </tr>
+                <tr>
+                  <td>1</td>
+                  <td>MT988800</td>
+                  <td>Johnathan John</td>
+                  <td>DLNC025936</td>
+                  <td>+889562365846</td>
+                  <td>available</td>
+                  <td>50</td>
+                  <td>40</td>
+                  <td>10-dec-23</td>
+                </tr>
+                <tr>
+                  <td>1</td>
+                  <td>MT988800</td>
+                  <td>Johnathan John</td>
+                  <td>DLNC025936</td>
+                  <td>+889562365846</td>
+                  <td>available</td>
+                  <td>50</td>
+                  <td>40</td>
+                  <td>10-dec-23</td>
+                </tr>
+                <tr>
+                  <td>1</td>
+                  <td>MT988800</td>
+                  <td>Johnathan John</td>
+                  <td>DLNC025936</td>
+                  <td>+889562365846</td>
+                  <td>available</td>
+                  <td>50</td>
+                  <td>40</td>
+                  <td>10-dec-23</td>
+                </tr>
+                <tr>
+                  <td>1</td>
+                  <td>MT988800</td>
+                  <td>Johnathan John</td>
+                  <td>DLNC025936</td>
+                  <td>+889562365846</td>
+                  <td>available</td>
+                  <td>50</td>
+                  <td>40</td>
+                  <td>10-dec-23</td>
+                </tr>
+                <tr>
+                  <td>1</td>
+                  <td>MT988800</td>
+                  <td>Johnathan John</td>
+                  <td>DLNC025936</td>
+                  <td>+889562365846</td>
+                  <td>available</td>
+                  <td>50</td>
+                  <td>40</td>
+                  <td>10-dec-23</td>
+                </tr>
+                <tr>
+                  <td>1</td>
+                  <td>MT988800</td>
+                  <td>Johnathan John</td>
+                  <td>DLNC025936</td>
+                  <td>+889562365846</td>
+                  <td>available</td>
+                  <td>50</td>
+                  <td>40</td>
+                  <td>10-dec-23</td>
+                </tr>
+                <tr>
+                  <td>1</td>
+                  <td>MT988800</td>
+                  <td>Johnathan John</td>
+                  <td>DLNC025936</td>
+                  <td>+889562365846</td>
+                  <td>available</td>
+                  <td>50</td>
+                  <td>40</td>
+                  <td>10-dec-23</td>
+                </tr>
+                <tr>
+                  <td>1</td>
+                  <td>MT988800</td>
+                  <td>Johnathan John</td>
+                  <td>DLNC025936</td>
+                  <td>+889562365846</td>
+                  <td>available</td>
+                  <td>50</td>
+                  <td>40</td>
+                  <td>10-dec-23</td>
+                </tr>
+                <tr>
+                  <td>1</td>
+                  <td>MT988800</td>
+                  <td>Johnathan John</td>
+                  <td>DLNC025936</td>
+                  <td>+889562365846</td>
+                  <td>available</td>
+                  <td>50</td>
+                  <td>40</td>
+                  <td>10-dec-23</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- All Transport List Area End Here -->
+  </div>
 {% endblock %}
 
 {% block customjs %}
