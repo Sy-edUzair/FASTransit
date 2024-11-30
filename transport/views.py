@@ -7,6 +7,7 @@ from django.urls import reverse,reverse_lazy
 from datetime import datetime
 from django.db import connection
 from django.contrib import messages
+from django.http import HttpResponseForbidden
 from django.contrib.auth import authenticate,login,logout
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
@@ -14,6 +15,8 @@ from django.conf import settings
 from .forms import *
 from .models import *
 from transport.models import *
+from userauth.models import AppUser  # Add Payment model here
+from payment.models import Payment,PaymentStatus
 from noticeboard.models import *
 from django.shortcuts import render
 from django.http import HttpResponse
@@ -71,14 +74,13 @@ def render_route_page(request):
      return render(request, "transport/routes.html",{"providers":providers,"routes": routes,"form":form})
 
 #@login_required(login_url=reverse_lazy("transport:transporter_login"))
-#@login_required
 def transporter_dashboard(request):
      # Get the logged-in user's transport provider
      user = request.user
      representative = getattr(user, 'providerrepresentative', None)
      
      if not representative:
-          return render(request, '403.html', {'error': 'Access denied: You are not a provider representative.'})
+          return HttpResponseForbidden("Access denied: You are not a provider representative.")
 
      provider_id = representative.transport_providers.id
 
@@ -219,113 +221,77 @@ def transport_driver_view(request):
 
      return render(request, "transport/driver.html", {"providers": providers})
 
+
 def transport_fee_view(request):
-     raw_query= """
-          SELECT * 
-          FROM transport_transportprovider
-          """
-     providers = TransportProvider.objects.raw(raw_query)
-     return render(request, "transport/fee-collection.html",{"providers":providers})
+     # Get search filters from the request
+     search_id = request.GET.get('search_id', '').strip()
+     search_name = request.GET.get('search_name', '').strip()
+     search_phone = request.GET.get('search_phone', '').strip()
+
+     # Define the raw SQL query with conditions based on search filters
+     query = """
+         SELECT 
+    base_user.name AS student_name,
+    base_user.gender,
+    appuser.roll_num,            -- Assuming 'roll_num' is a column in the appuser table
+    payment.amount,              -- Selecting the amount directly without SUM
+    payment_status.status_name AS payment_status,
+    base_user.contact AS phone,
+    base_user.email
+FROM userauth_appuser AS appuser
+JOIN userauth_customuser AS base_user ON appuser.base_user_id = base_user.id
+LEFT JOIN transport_route AS route ON appuser.assigned_route_id = route.route_num
+LEFT JOIN userauth_department AS department ON appuser.department_id = department.id
+LEFT JOIN payment_payment AS payment ON appuser.base_user_id = payment.user_id
+LEFT JOIN payment_paymentstatus AS payment_status ON payment.status_id = payment_status.status_id;
+
+
+     """
+
+     # Add filtering conditions based on the search query
+     if search_id:
+          query += " AND appuser.roll_num LIKE %s"
+     if search_name:
+          query += " AND base_user.name LIKE %s"
+     if search_phone:
+          query += " AND base_user.contact LIKE %s"
+
+     # Group by clause to ensure no duplicates and for aggregation (SUM)
+     query += """
+          GROUP BY appuser.roll_num, appuser.base_user_id, department.name, route.route_num, base_user.name, base_user.gender, base_user.contact, base_user.email, payment_status.status_name
+     """
+
+     # Parameters to safely insert the values into the query
+     params = []
+     if search_id:
+          params.append(f"%{search_id}%")
+     if search_name:
+          params.append(f"%{search_name}%")
+     if search_phone:
+          params.append(f"%{search_phone}%")
+
+     # Execute the raw query with parameters
+     with connection.cursor() as cursor:
+          cursor.execute(query, params)
+          student_data = cursor.fetchall()
+
+     # Convert query result into a list of dictionaries for easier use in the template
+     students = []
+     for row in student_data:
+          student_info = {
+     'student_name': row[0],   # Assuming 'row[0]' is student's name
+     'gender': row[1],          # Assuming 'row[1]' is gender
+     'roll_num': row[2],        # Assuming 'row[2]' is roll_num         # Assuming 'row[3]' is section
+     'amount': row[3],          # Assuming 'row[4]' is amount
+     'payment_status': row[4],  # Assuming 'row[5]' is payment status
+     'phone': row[5],           # Assuming 'row[6]' is phone
+     'email': row[6]            # Assuming 'row[7]' is email
+     }
+
+     return render(request, "transport/fee-collection.html", {"students": students, "search_id": search_id, "search_name": search_name, "search_phone": search_phone})
+
 
 def add_route_view(request):
-     if request.method == 'POST':
-          form = AddRouteForm(request.POST)
-          if form.is_valid():
-               route_number = form.cleaned_data['route_number']
-               num_stops = form.cleaned_data['num_stops']
-               stop_names = form.cleaned_data['stops']  # List of stop names
-
-               # Check if the route already exists in the database
-               with connection.cursor() as cursor:
-                    cursor.execute("SELECT * FROM transport_route WHERE route_num = %s", [route_number])
-                    existing_route = cursor.fetchone()
-
-                    if existing_route:
-                         return HttpResponse("This route number already exists.", status=400)
-
-                    # Insert new route into the database
-               try:
-                    with connection.cursor() as cursor:
-                         cursor.execute("INSERT INTO transport_route (route_num) VALUES (%s)", [route_number])
-
-                    # Fetch the new route ID (You can also get it with Django ORM if needed)
-                    with connection.cursor() as cursor:
-                         cursor.execute("SELECT id FROM transport_route WHERE route_num = %s", [route_number])
-                         route_id = cursor.fetchone()[0]
-                    
-                         # Add stops to the route
-                         for stop_name in stop_names:
-                              stop, created = Stop.objects.get_or_create(name=stop_name)
-                              cursor.execute(
-                              "INSERT INTO transport_routestop (route_id, stop_id) VALUES (%s, %s)",
-                              [route_id, stop.id]
-                         )
-
-                    return HttpResponse(f"Route {route_number} has been successfully added.")
-
-               except Exception as e:
-                    return HttpResponse(f"Error: {str(e)}", status=400)
-
-          else:
-               return HttpResponse("Invalid form submission. Please check the data.", status=400)
-
-     else:
-          form = AddRouteForm()
-
-     return render(request, 'transport/add-route.html', {'form': form})
+     return render(request, 'transport/add-route.html')
 
 
-
-def transport_driver_view(request):
-     # search_route = request.GET.get('search_route', '')
-     # search_vehicle = request.GET.get('search_vehicle', '')
-     # search_phone = request.GET.get('search_phone', '')
-
-     # raw_query = """
-     # SELECT 
-     # tp.id AS provider_id,                         -- TransportProvider ID
-     # tp.name AS provider_name,                     -- TransportProvider name
-     # v.license_number AS vehicle_license_plate,     -- Vehicle license plate
-     # r.route_num AS route_number                   -- Route number
-     # FROM transport_transportprovider tp
-     # INNER JOIN transport_appointed_vehicle v ON tp.vehicle_assigned_id = v.license_plate
-     # INNER JOIN transport_route r ON r.appointed_provider_id = tp.id
-     # WHERE 1=1;
-
-     # """
-
-     # # Append filters only if search parameters are provided
-     # if search_route or search_vehicle or search_phone:
-     #      if search_route:
-     #           raw_query += f" AND r.route_num LIKE '%{search_route}%'"
-     #      if search_vehicle:
-     #           raw_query += f" AND v.registration_number LIKE '%{search_vehicle}%'"
-     #      if search_phone:
-     #           raw_query += f" AND tp.driver_contact_number LIKE '%{search_phone}%'"
-     # else:
-     #      raw_query += " LIMIT 50"
-
-     # with connection.cursor() as cursor:
-     #      cursor.execute(raw_query)
-     #      rows = cursor.fetchall()
-
-     
-     # columns = ['provider_id', 'provider_name', 'driver_license', 'contact_number', 'vehicle_no', 'route_name']
-     # providers = [dict(zip(columns, row)) for row in rows]
-
-     raw_query= """
-          SELECT * 
-          FROM transport_transportprovider
-          """
-     providers = TransportProvider.objects.raw(raw_query)
-     return render(request, "transport/driver.html", {"providers": providers})
-
-     
-
-def tracking_view(request):
-     raw_query= """
-          SELECT * 
-          FROM transport_transportprovider
-          """
-     providers = TransportProvider.objects.raw(raw_query)
-     return render(request, "transport/tracking.html",{"providers":providers})
