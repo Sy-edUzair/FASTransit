@@ -104,12 +104,45 @@ def logout_view(request):
      return HttpResponseRedirect(reverse("transport:transporter_login"))
 
 def transport_driver_view(request):
-     raw_query= """
-          SELECT * 
-          FROM transport_transportprovider
-          """
-     providers = TransportProvider.objects.raw(raw_query)
-     return render(request, "transport/driver.html",{"providers":providers})
+     # Query to get all transport providers and their drivers
+     raw_query = """
+          SELECT tp.id AS provider_id, tp.name AS provider_name, 
+               d.id AS driver_id, d.name AS driver_name, 
+               d.contact AS driver_contact, d.cnic AS driver_cnic 
+          FROM transport_transportprovider tp
+          LEFT JOIN transport_driver d ON tp.id = d.appointed_provider_id
+     """
+    
+     # Execute raw query to get providers with their drivers
+     with connection.cursor() as cursor:
+          cursor.execute(raw_query)
+          results = cursor.fetchall()
+
+     # Prepare data for rendering: group drivers by provider
+     providers = {}
+     for result in results:
+          provider_id = result[0]
+          provider_name = result[1]
+          driver_id = result[2]
+          driver_name = result[3]
+          driver_contact = result[4]
+          driver_cnic = result[5]
+
+          # Add driver under the correct provider
+          if provider_id not in providers:
+               providers[provider_id] = {
+                    "provider_name": provider_name,
+                    "drivers": []
+               }
+
+          providers[provider_id]["drivers"].append({
+               "driver_id": driver_id,
+               "driver_name": driver_name,
+               "driver_contact": driver_contact,
+               "driver_cnic": driver_cnic,
+          })
+
+     return render(request, "transport/driver.html", {"providers": providers})
 
 def transport_fee_view(request):
      raw_query= """
@@ -177,10 +210,10 @@ def transport_driver_view(request):
      # SELECT 
      # tp.id AS provider_id,                         -- TransportProvider ID
      # tp.name AS provider_name,                     -- TransportProvider name
-     # v.license_plate AS vehicle_license_plate,     -- Vehicle license plate
+     # v.license_number AS vehicle_license_plate,     -- Vehicle license plate
      # r.route_num AS route_number                   -- Route number
      # FROM transport_transportprovider tp
-     # INNER JOIN transport_vehicle v ON tp.vehicle_assigned_id = v.license_plate
+     # INNER JOIN transport_appointed_vehicle v ON tp.vehicle_assigned_id = v.license_plate
      # INNER JOIN transport_route r ON r.appointed_provider_id = tp.id
      # WHERE 1=1;
 
