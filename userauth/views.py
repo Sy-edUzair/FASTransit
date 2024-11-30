@@ -189,3 +189,10 @@ def landing_page2_view(request):
           """
      providers = TransportProvider.objects.raw(raw_query)
      return render(request, "userauth/landing-page2.html",{"providers":providers,'user':request.user,})
+def feedback_view(request):
+     raw_query= """
+          SELECT * 
+          FROM transport_transportprovider
+          """
+     providers = TransportProvider.objects.raw(raw_query)
+     return render(request, "userauth/feedback.html",{"providers":providers,'user':request.user,})
