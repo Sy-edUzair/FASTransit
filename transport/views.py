@@ -71,11 +71,86 @@ def render_route_page(request):
      return render(request, "transport/routes.html",{"providers":providers,"routes": routes,"form":form})
 
 #@login_required(login_url=reverse_lazy("transport:transporter_login"))
+#@login_required
 def transporter_dashboard(request):
-     print(request.user)
-     return render(request, "transport/transport-dashboard.html", {"provider":request.user})
+     # Get the logged-in user's transport provider
+     user = request.user
+     representative = getattr(user, 'providerrepresentative', None)
+     
+     if not representative:
+          return render(request, '403.html', {'error': 'Access denied: You are not a provider representative.'})
 
-@login_required(login_url=reverse_lazy("transport:transporter_login"))
+     provider_id = representative.transport_providers.id
+
+     with connection.cursor() as cursor:
+          # Fetch the total number of vehicles for the transport provider
+          cursor.execute("""
+               SELECT COUNT(*) 
+               FROM transport_vehicle 
+               WHERE transport_provider_id = %s
+          """, [provider_id])
+          total_vehicles = cursor.fetchone()[0]  # Get the first value (total vehicles)
+
+          # Fetch the total number of routes for the transport provider
+          cursor.execute("""
+               SELECT COUNT(*) 
+               FROM transport_route 
+               WHERE appointed_provider_id = %s
+          """, [provider_id])
+          total_routes = cursor.fetchone()[0]  # Get the first value (total routes)
+
+          # Fetch the total number of assigned students or staff for the transport provider
+          cursor.execute("""
+               SELECT COUNT(*) 
+               FROM transport_assigned_staff  -- Replace with the correct table for assigned students/staff
+               WHERE transport_provider_id = %s
+          """, [provider_id])
+          assigned_students_staff = cursor.fetchone()[0]
+
+          # Fetch the list of all drivers with their details (like vehicle, driver name, etc.)
+          cursor.execute("""
+               SELECT 
+               r.route_num,
+               v.license_plate AS vehicle_no,
+               d.name AS driver_name,
+               d.license AS driver_license,
+               d.contact_number,
+               vs.status_name AS status,
+               v.allotted_seats AS capacity,
+               v.allotted_seats - v.current_occupancy AS alloted_seats,
+               v.Last_maintenance_date AS last_maintenance
+               FROM transport_vehicle v
+               INNER JOIN transport_route r ON v.route_no_id = r.route_num
+               INNER JOIN transport_driver d ON v.driver_id = d.id
+               INNER JOIN transport_vehiclestatus vs ON v.status_id = vs.id
+               WHERE v.transport_provider_id = %s
+          """, [provider_id])
+          drivers_data = cursor.fetchall()
+
+     # Organizing the data into a dictionary format to pass to the template
+     context = {
+          'provider': representative.transport_providers,
+          'total_vehicles': total_vehicles,
+          'total_routes': total_routes,
+          'assigned_students_staff': assigned_students_staff,
+          'drivers_data': [
+          {
+               'route_num': driver[0],
+               'vehicle_no': driver[1],
+               'driver_name': driver[2],
+               'driver_license': driver[3],
+               'contact_number': driver[4],
+               'status': driver[5],
+               'capacity': driver[6],
+               'alloted_seats': driver[7],
+               'last_maintenance': driver[8],
+          } for driver in drivers_data
+          ],
+     }
+
+     return render(request, "transport/transport-dashboard.html", context)
+
+#@login_required(login_url=reverse_lazy("transport:transporter_login"))
 def render_all_routes(request):
      raw_query_2= """
           SELECT r.route_num AS route_num, s.id AS stop_id, s.name AS stop_name FROM transport_route AS r JOIN transport_routestop AS rs ON r.route_num = rs.route_id JOIN transport_stop AS s ON rs.stop_id = s.id ORDER BY r.route_num, rs.stop_order;
@@ -244,6 +319,8 @@ def transport_driver_view(request):
           """
      providers = TransportProvider.objects.raw(raw_query)
      return render(request, "transport/driver.html", {"providers": providers})
+
+     
 
 def tracking_view(request):
      raw_query= """
