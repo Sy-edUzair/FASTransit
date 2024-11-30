@@ -23,31 +23,31 @@
       </div>
     </div>
 
-    <div class="item-img">
-      <img src="{{ user.imageURL }}" alt="User Profile">
+    <div class="item-img ">
+      <img src="{{ user.imageURL }}" alt="User Profile" class="list">
       <br>
-      <button class="update-btn" id="profile_image-update-btn" onclick="showUpdateField('profile_image')">Update Profile Picture</button>
+      <button class="update-btn list" id="profile_image-update-btn" onclick="showUpdateField('profile_image')">Update Profile Picture</button>
       <input type="file" id="profile_image-input">
-      <button class="save-btn" id="profile_image-save-btn" onclick="confirmUpdate('profile_image')">Save</button>
+      <button class="save-btn list" id="profile_image-save-btn" onclick="confirmUpdate('profile_image')">Save</button>
     </div>
 
     <div class="profile-container">
       <!-- Left Column -->
       <ul class="profile-column">
-        <li><b>Roll Number:</b> {{ user.roll_num }}</li>
-        <li>
+        <li class="list"><b>Roll Number:</b> {{ user.roll_num }}</li>
+        <li class="list">
           <b>Email:</b> {{ user.email }}
           <button class="update-btn" id="email-update-btn" onclick="showUpdateField('email')">Update</button>
           <input type="text" id="email-input" value="{{ user.email }}">
           <button class="save-btn" id="email-save-btn" onclick="confirmUpdate('email')">Save</button>
         </li>
-        <li>
+        <li class="list">
           <b>Name:</b> {{ user.name }}
           <button class="update-btn" id="name-update-btn" onclick="showUpdateField('name')">Update</button>
           <input type="text" id="name-input" value="{{ user.name }}">
           <button class="save-btn" id="name-save-btn" onclick="confirmUpdate('name')">Save</button>
         </li>
-        <li>
+        <li class="list">
           <b>Address:</b> {{ user.Address }}
           <button class="update-btn" id="Address-update-btn" onclick="showUpdateField('Address')">Update</button>
           <input type="text" id="Address-input" value="{{ user.Address }}">
@@ -57,20 +57,20 @@
 
       <!-- Right Column -->
       <ul class="profile-column">
-        <li>
+        <li class="list">
           <b>Contact:</b> {{ user.contact }}
           <button class="update-btn" id="contact-update-btn" onclick="showUpdateField('contact')">Update</button>
           <input type="text" id="contact-input" value="{{ user.contact }}">
           <button class="save-btn" id="contact-save-btn" onclick="confirmUpdate('contact')">Save</button>
         </li>
-        <li>
+        <li class="list">
           <b>Emergency Contact:</b> {{ user.emergency_contact }}
           <button class="update-btn" id="emergency_contact-update-btn" onclick="showUpdateField('emergency_contact')">Update</button>
           <input type="text" id="emergency_contact-input" value="{{ user.emergency_contact }}">
           <button class="save-btn" id="emergency_contact-save-btn" onclick="confirmUpdate('emergency_contact')">Save</button>
         </li>
-        <li><b>CNIC:</b> {{ user.cnic }}</li>
-        <li><b>Gender:</b> {{ user.gender }}</li>
+        <li class="list"><b>CNIC:</b> {{ user.cnic }}</li>
+        <li class="list"><b>Gender:</b> {{ user.gender }}</li>
       </ul>
     </div>
   </div>

@@ -4,10 +4,11 @@
   }
 
   ul li {
-    padding: 15px 0;
     font-size: 16px;
   }
-
+  .list{
+    margin-bottom: 30px;
+  }
   .update-btn,
   .save-btn {
     padding: 8px 15px;
