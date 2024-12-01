@@ -28,19 +28,21 @@ import os
 # Generate voucher after route is regsitered
 @login_required(login_url=settings.LOGIN_URL)
 def dashboard(request):
-     raw_query = """
-          SELECT * 
-          FROM noticeboard_notice
-          WHERE is_active = TRUE
-          ORDER BY date_posted DESC
-          """
-     Notices = Notice.objects.raw(raw_query)
-     raw_query_2= """
-          SELECT * 
-          FROM transport_transportprovider
-          """
-     providers = TransportProvider.objects.raw(raw_query_2)
-     return render(request,'index3.html',{'user':request.user,'notices':Notices,'providers':providers})      
+     if request.user.is_user:
+          raw_query = """
+               SELECT * 
+               FROM noticeboard_notice
+               WHERE is_active = TRUE
+               ORDER BY date_posted DESC
+               """
+          Notices = Notice.objects.raw(raw_query)
+          raw_query_2= """
+               SELECT * 
+               FROM transport_transportprovider
+               """
+          providers = TransportProvider.objects.raw(raw_query_2)
+          return render(request,'index3.html',{'user':request.user,'notices':Notices,'providers':providers}) 
+        
 
 @csrf_protect
 def login_view(request):
@@ -169,21 +171,24 @@ def signup_view(request):
 
 @login_required(login_url=settings.LOGIN_URL)
 def point_card_view(request):
-     raw_query= """
-          SELECT * 
-          FROM transport_transportprovider
-          """
-     providers = TransportProvider.objects.raw(raw_query)
-     return render(request, "userauth/point_card.html",{"providers":providers,'user':request.user,})
+     if request.user.is_user:
+          raw_query= """
+               SELECT * 
+               FROM transport_transportprovider
+               """
+          providers = TransportProvider.objects.raw(raw_query)
+          return render(request, "userauth/point_card.html",{"providers":providers,'user':request.user,})
 
 @login_required(login_url=settings.LOGIN_URL)
 def user_profile_view(request):
-     raw_query= """
-          SELECT * 
-          FROM transport_transportprovider
-          """
-     providers = TransportProvider.objects.raw(raw_query)
-     return render(request, "userauth/user-profile.html",{"providers":providers,'user':request.user,})
+     if request.user.is_user:
+          raw_query= """
+               SELECT * 
+               FROM transport_transportprovider
+               """
+          providers = TransportProvider.objects.raw(raw_query)
+          return render(request, "userauth/user-profile.html",{"providers":providers,'user':request.user,})
+     
 def landing_page_view(request):
      raw_query= """
           SELECT * 
@@ -201,44 +206,47 @@ def landing_page2_view(request):
 
 @login_required(login_url=settings.LOGIN_URL)
 def feedback_view(request):
-     raw_query= """
-          SELECT * 
-          FROM transport_transportprovider
-          """
-     providers = TransportProvider.objects.raw(raw_query)
-     raw_query2="""SELECT * FROM noticeboard_feedback"""
-     feedbacks = Feedback.objects.raw(raw_query2)
-     if request.method == "POST":
-        form = FeedbackForm(request.POST)
-        if form.is_valid():
-               comments = form.cleaned_data['comments']
-               user_id = request.user.appuser.roll_num
-               with connection.cursor() as cursor:
-                    cursor.execute("SELECT status_id FROM noticeboard_complaintstatus WHERE status_name = %s LIMIT 1", ["Pending"])
-                    complaint_status_id = cursor.fetchone() 
-                    query = """
-                    INSERT INTO noticeboard_feedback (user_id, comments,submitted_at,responded_at, complaint_status_id)
-                    VALUES (%s, %s, NOW(),NULL,%s)
-                    """
-                    with connection.cursor() as cursor:
-                         cursor.execute(query, [user_id, comments, complaint_status_id[0]])
-               messages.success(request,"Feedback Submitted!")
-     else:
-        form = FeedbackForm()
-     return render(request, "userauth/feedback.html",{"providers":providers,'feedbacks':feedbacks,'user':request.user,"form":form})
+     if request.user.is_user:
+          raw_query= """
+               SELECT * 
+               FROM transport_transportprovider
+               """
+          providers = TransportProvider.objects.raw(raw_query)
+          raw_query2="""SELECT * FROM noticeboard_feedback"""
+          feedbacks = Feedback.objects.raw(raw_query2)
+          if request.method == "POST":
+               form = FeedbackForm(request.POST)
+               if form.is_valid():
+                         comments = form.cleaned_data['comments']
+                         user_id = request.user.appuser.roll_num
+                         with connection.cursor() as cursor:
+                              cursor.execute("SELECT status_id FROM noticeboard_complaintstatus WHERE status_name = %s LIMIT 1", ["Pending"])
+                              complaint_status_id = cursor.fetchone() 
+                              query = """
+                              INSERT INTO noticeboard_feedback (user_id, comments,submitted_at,responded_at, complaint_status_id)
+                              VALUES (%s, %s, NOW(),NULL,%s)
+                              """
+                              with connection.cursor() as cursor:
+                                   cursor.execute(query, [user_id, comments, complaint_status_id[0]])
+                         messages.success(request,"Feedback Submitted!")
+               else:
+                    form = FeedbackForm()
+          return render(request, "userauth/feedback.html",{"providers":providers,'feedbacks':feedbacks,'user':request.user,"form":form})
 
 
 @login_required(login_url=settings.LOGIN_URL)
 def tracking_view(request):
-     return render(request,"transport/tracking.html")
+     if request.user.is_user:
+          return render(request,"transport/tracking.html")
 
 @login_required(login_url=settings.LOGIN_URL)
 def provider_detail_view(request):
-     raw_query= """
-          SELECT * 
-          FROM transport_transportprovider
-          """
-     providers = TransportProvider.objects.raw(raw_query)
-     assigned_provider=request.user.appuser.assigned_route.appointed_provider
-     assigned_rep = assigned_provider.representative
-     return render(request, "provider-details.html",{"providers":providers,'user':request.user,'assigned_provider':assigned_provider,'assigned_rep':assigned_rep})
+     if request.user.is_user:
+          raw_query= """
+               SELECT * 
+               FROM transport_transportprovider
+               """
+          providers = TransportProvider.objects.raw(raw_query)
+          assigned_provider=request.user.appuser.assigned_route.appointed_provider
+          assigned_rep = assigned_provider.representative
+          return render(request, "provider-details.html",{"providers":providers,'user':request.user,'assigned_provider':assigned_provider,'assigned_rep':assigned_rep})
