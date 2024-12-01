@@ -12,5 +12,7 @@ urlpatterns=[
     path("user-profile/",views.user_profile_view,name='user-profile'),
     path("landing-page/",views.landing_page_view,name='landing-page'),
     path("landing-page2/",views.landing_page2_view,name='landing-page2'),
+    path("provider-details/",views.provider_detail_view,name='provider-details'),
     path("feedback/",views.feedback_view,name='feedback'),
+    path("tracking/",views.tracking_view,name="tracking"),
 ]

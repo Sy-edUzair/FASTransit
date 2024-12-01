@@ -27,7 +27,10 @@ def driver_detail_view(request):
           FROM transport_transportprovider
           """
      providers = TransportProvider.objects.raw(raw_query)
-     return render(request, "driver/driver-detail.html",{"providers":providers})
+     route_id = request.user.appuser.assigned_route.route_num
+     vehicle = Vehicle.objects.get(route_no=route_id)
+     driver=Driver.objects.get(appointed_vehicle=vehicle.license_plate)
+     return render(request, "driver/driver-detail.html",{"providers":providers,'user':request.user,'vehicle':vehicle,'driver':driver})
 
 def modify_driver_detail_view(request):
      raw_query= """

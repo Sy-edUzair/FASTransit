@@ -32,6 +32,7 @@ def dashboard(request):
     total_providers = TransportProvider.objects.count()
     recent_vehicles = Vehicle.objects.select_related('status', 'capacity_type', 'transport_provider')[:5]
 
+<<<<<<< HEAD
     context = {
         'total_vehicles': total_vehicles,
         'total_routes': total_routes,
@@ -39,6 +40,146 @@ def dashboard(request):
         'recent_vehicles': recent_vehicles
     }
     return render(request, 'transport/dashboard.html', context)
+=======
+     # Execute the raw query
+     with connection.cursor() as cursor:
+          cursor.execute(raw_query_2)
+          results = cursor.fetchall()
+
+     # Organize results into a structure suitable for the template
+     routes = {}
+     for route_num, stop_id, stop_name in results:
+          if route_num not in routes:
+               idx=0
+               routes[route_num] = {"stops": []}
+          if stop_id:
+               idx+=1
+               routes[route_num]["stops"].append({"idx":idx,"id": stop_id, "name": stop_name})
+
+     if request.method == 'POST':
+          form = RouteForm(request.POST)
+          if form.is_valid():
+               route_number = form.cleaned_data['route_number']
+               with connection.cursor() as cursor:
+               # Fetch the specific route
+                    cursor.execute("SELECT route_num FROM transport_route WHERE route_num = %s", [route_number])
+                    route = cursor.fetchone()
+                    if route:
+                         route_id = route[0]
+
+                         # Assign the route to the user
+                         cursor.execute(
+                              "UPDATE userauth_appuser SET assigned_route_id = %s WHERE roll_num = %s",
+                              [route_id, request.user.appuser.roll_num]
+                              )
+                         messages.success(request,f"Route {route_number} assigned to user {request.user.appuser.roll_num}.")
+                    else:
+                         messages.error(request,f"Route {route_number} not found.")
+     else:
+          form = RouteForm()
+     return render(request, "transport/routes.html",{"providers":providers,"routes": routes,"form":form})
+
+#@login_required(login_url=reverse_lazy("transport:transporter_login"))
+def transporter_dashboard(request):
+     # Get the logged-in user's transport provider
+     user = request.user
+     representative = getattr(user, 'providerrepresentative', None)
+     
+     if not representative:
+          return HttpResponseForbidden("Access denied: You are not a provider representative.")
+
+     provider_id = representative.transport_providers.id
+
+     with connection.cursor() as cursor:
+          # Fetch the total number of vehicles for the transport provider
+          cursor.execute("""
+               SELECT COUNT(*) 
+               FROM transport_vehicle 
+               WHERE transport_provider_id = %s
+          """, [provider_id])
+          total_vehicles = cursor.fetchone()[0]  # Get the first value (total vehicles)
+
+          # Fetch the total number of routes for the transport provider
+          cursor.execute("""
+               SELECT COUNT(*) 
+               FROM transport_route 
+               WHERE appointed_provider_id = %s
+          """, [provider_id])
+          total_routes = cursor.fetchone()[0]  # Get the first value (total routes)
+
+          # Fetch the total number of assigned students or staff for the transport provider
+          cursor.execute("""
+               SELECT COUNT(*) 
+               FROM transport_assigned_staff  -- Replace with the correct table for assigned students/staff
+               WHERE transport_provider_id = %s
+          """, [provider_id])
+          assigned_students_staff = cursor.fetchone()[0]
+
+          # Fetch the list of all drivers with their details (like vehicle, driver name, etc.)
+          cursor.execute("""
+               SELECT 
+               r.route_num,
+               v.license_plate AS vehicle_no,
+               d.name AS driver_name,
+               d.license AS driver_license,
+               d.contact_number,
+               vs.status_name AS status,
+               v.allotted_seats AS capacity,
+               v.allotted_seats - v.current_occupancy AS alloted_seats,
+               v.Last_maintenance_date AS last_maintenance
+               FROM transport_vehicle v
+               INNER JOIN transport_route r ON v.route_no_id = r.route_num
+               INNER JOIN transport_driver d ON v.driver_id = d.id
+               INNER JOIN transport_vehiclestatus vs ON v.status_id = vs.id
+               WHERE v.transport_provider_id = %s
+          """, [provider_id])
+          drivers_data = cursor.fetchall()
+
+     # Organizing the data into a dictionary format to pass to the template
+     context = {
+          'provider': representative.transport_providers,
+          'total_vehicles': total_vehicles,
+          'total_routes': total_routes,
+          'assigned_students_staff': assigned_students_staff,
+          'drivers_data': [
+          {
+               'route_num': driver[0],
+               'vehicle_no': driver[1],
+               'driver_name': driver[2],
+               'driver_license': driver[3],
+               'contact_number': driver[4],
+               'status': driver[5],
+               'capacity': driver[6],
+               'alloted_seats': driver[7],
+               'last_maintenance': driver[8],
+          } for driver in drivers_data
+          ],
+     }
+
+     return render(request, "transport/transport-dashboard.html", context)
+
+#@login_required(login_url=reverse_lazy("transport:transporter_login"))
+def render_all_routes(request):
+     raw_query_2= """
+          SELECT r.route_num AS route_num, s.id AS stop_id, s.name AS stop_name FROM transport_route AS r JOIN transport_routestop AS rs ON r.route_num = rs.route_id JOIN transport_stop AS s ON rs.stop_id = s.id ORDER BY r.route_num, rs.stop_order;
+     """
+     # Execute the raw query
+     with connection.cursor() as cursor:
+          cursor.execute(raw_query_2)
+          results = cursor.fetchall()
+
+     # Organize results into a structure suitable for the template
+     routes = {}
+     for route_num, stop_id, stop_name in results:
+          if route_num not in routes:
+               idx=0
+               routes[route_num] = {"stops": []}
+          if stop_id:
+               idx+=1
+               routes[route_num]["stops"].append({"idx":idx,"id": stop_id, "name": stop_name})
+
+     return render(request, "transport/all-routes.html", {"routes": routes})
+>>>>>>> e66ffd644dec956633fdad37f56160100b840fd5
 
 @csrf_protect
 def logout_view(request):
@@ -122,6 +263,7 @@ def add_route_view(request):
                     appointed_provider=appointed_provider
                 )
 
+<<<<<<< HEAD
                 # Add stops to the route through the many-to-many relationship
                 route.stops.set(stops)
                 route.save()
@@ -306,3 +448,6 @@ def payment_status_view(request):
         'users_not_paid': users_not_paid,
     }
     return render(request, 'transport/view_fees_paid.html', context)
+=======
+
+>>>>>>> e66ffd644dec956633fdad37f56160100b840fd5

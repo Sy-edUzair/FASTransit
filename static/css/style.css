@@ -316,7 +316,7 @@ h6 {
 }
 
 .row.no-gutters>[class^="col-"],
-.row.no-gutters>[class*=" col-"] {
+.row.no-gutters>[class*="col-"] {
   padding-right: 0;
   padding-left: 0;
 }
@@ -5986,7 +5986,7 @@ ul {
 }
 
 .font-light {
-  font-weight: 300;
+  font-weight: normal;
 }
 
 .text-light {

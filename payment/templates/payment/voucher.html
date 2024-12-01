@@ -2,115 +2,137 @@
 {% load static %}
 {% block customcss %}
   <link rel="stylesheet" href="{% static 'css/voucher.css' %}" />
+  <style>
+    .center-page {
+      display: grid;
+      place-items: center; /* Centers content horizontally and vertically */
+      height: 100vh; /* Full viewport height */
+    }
+  </style>
 {% endblock %}
 
 {% block maincontent %}
   <div class="row justify-content-center">
     <!-- Voucher Section -->
-    <div class="col-lg-8 col-md-10 col-sm-12">
-      <div class="card p-4">
-        <div class="card-body">
-          <div class="voucher">
-            <!-- Logo Section -->
-            <div class="nu-logo">
-              <img src="{% static 'img/NU-logo.jpg' %}" alt="NU-LOGO" class="img-fluid mb-3" />
-            </div>
-            <h3 class="text-center fw-bold"><strong>BANK CHALLAN</strong></h3>
-            <!-- Voucher Details -->
-            <p>
-              <strong>Challan No:</strong> 31114
-            </p>
-            <p>
-              <strong>Br Code:</strong> BCCI-FAST / NUCES
-            </p>
-            <p>
-              <strong>Please receive and credit to A/c No:</strong>0010003027230048
-            </p>
-            <p>
-              <strong>Title:</strong> BCCI – FAST / NUCES COLLECTION
-            </p>
-            <p>
-              <strong>Transportation No:</strong> 224212
-            </p>
-            <p>
-              <strong>Semester:</strong> Fall 2024
-            </p>
-            <p>
-              <strong>Roll No:</strong> 22K-4212
-            </p>
-            <p>
-              <strong>Student Name:</strong> Syed Uzair Hussain
-            </p>
-            <p>
-              <strong>Fee Category:</strong> Transportation Fee
-            </p>
-            <p>
-              <strong>Transporter Name:</strong> Others
-            </p>
+    {% if voucher %}
+      <div class="col-lg-8 col-md-10 col-sm-12">
+        <div class="card p-4">
+          <div class="card-body">
+            <div class="voucher">
+              <!-- Logo Section -->
+              <div class="nu-logo">
+                <img src="{% static 'img/NU-logo.jpg' %}" alt="NU-LOGO" class="img-fluid mb-3" />
+              </div>
+              <h3 class="text-center fw-bold"><strong>BANK CHALLAN</strong></h3>
+              <!-- Voucher Details -->
+              <p>
+                <strong>Challan No:</strong> {{ voucher.id }}
+              </p>
+              <p>
+                <strong>Br Code:</strong> BCCI-FAST / NUCES
+              </p>
+              <p>
+                <strong>Please receive and credit to A/c No:</strong>0010003027230048
+              </p>
+              <p>
+                <strong>Title:</strong> BCCI – FAST / NUCES COLLECTION
+              </p>
+              <p>
+                <strong>Semester:</strong> {{ voucher.semester }}
+              </p>
+              <p>
+                <strong>Roll No:</strong> {{ user.appuser.roll_num }}
+              </p>
+              <p>
+                <strong>Student Name:</strong> {{ user.name }}
+              </p>
+              <p>
+                <strong>Fee Category:</strong> Transportation Fee
+              </p>
+              <p>
+                {% if user.assigned_route %}
+                  <strong>Transporter Name:</strong> {{ user.assigned_route.appointed_provider }}
+                {% else %}
+                  <strong>Transporter Name:</strong> Others
+                {% endif %}
+              </p>
 
-            <!-- Payment Details Table -->
-            <div class="table-responsive">
-              <table class="table table-bordered">
-                <thead>
-                  <tr>
-                    <th>Date</th>
-                    <th>Amount Rs.</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td>Payment Till 9-Aug-2024</td>
-                    <td>39,000</td>
-                  </tr>
-                  <tr>
-                    <td>Payment 10th Aug 24 - 15th Aug 2024</td>
-                    <td>40,000</td>
-                  </tr>
-                  <tr>
-                    <td>Payment After 15-Aug-2024</td>
-                    <td>42,000</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
+              <!-- Payment Details Table -->
+              <div class="table-responsive">
+                <table class="table table-bordered">
+                  <thead>
+                    <tr>
+                      <th>Date</th>
+                      <th>Amount Rs.</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>Payment Till {{ voucher.due_date }}</td>
+                      <td>{{ voucher.amount }}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
 
-            <!-- Depositor Information -->
-            <p>
-              <strong>Depositor Name:</strong> _____________________
-            </p>
-            <p>
-              <strong>CNIC:</strong> _____________________
-            </p>
-            <p>
-              <strong>Mobile:</strong> _____________________
-            </p>
-            <p>
-              <strong>Depositor Signature:</strong> _____________________
-            </p>
-            <p>
-              <strong>Terms and Conditions:</strong>
-            </p>
-            <p style="font-size: 12px;">“Cash/Cheque should always be deposited...</p>
+              <!-- Depositor Information -->
+              <p>
+                <strong>Depositor Name:</strong> _____________________
+              </p>
+              <p>
+                <strong>CNIC:</strong> _____________________
+              </p>
+              <p>
+                <strong>Mobile:</strong> _____________________
+              </p>
+              <p>
+                <strong>Depositor Signature:</strong> _____________________
+              </p>
+              <p>
+                <strong>Terms and Conditions:</strong>
+              </p>
+              <p style="font-size: 12px;">Cash/Cheque should always be deposited at the respective counter and electronic computer-generated receipt printed through flatbed printer on deposit slip/challan should be obtained before leaving the counter, please be sure to check the receipt and satisfy that complete details including account number and amount deposited are correctly printed failing which the bank will not be responsible”.</p>
+            </div>
           </div>
         </div>
       </div>
-    </div>
 
-    <!-- Action Buttons -->
-    <div class="col-lg-3 col-md-10 col-sm-12 mt-4">
-      <div class="action-buttons text-center">
-        <!-- Download Button -->
-        <a href="/download/voucher/31114" class="btn">Download Voucher</a>
+      <!-- Action Buttons -->
+      <div class="col-lg-3 col-md-10 col-sm-12 mt-4">
+        <div class="action-buttons text-center">
+          <!-- Download Button -->
+          <form action="/create-checkout-session" method="POST">
+            {% csrf_token %}
+            <button type="submit" id="checkout-button" class="btn">Pay Online</button>
+          </form>
+          <a href="{% url 'payment:generate_challan_pdf' %}" class="btn">Download Voucher</a>
 
-        <!-- Upload Button & File Input -->
-        <button id="upload-btn" class="btn">Upload Paid Voucher</button>
-        <form id="upload-section" method="post" enctype="multipart/form-data">
-          {% csrf_token %}
-          <input type="file" id="voucher-file" name="voucher_image" accept="image/png, image/jpeg" />
-          <button type="submit" class="btn btn-primary mt-2">Submit</button>
-        </form>
+          <!-- Upload Button & File Input -->
+          <button id="upload-btn" class="btn">Upload Paid Voucher Pic</button>
+          <form id="upload-section" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ form }}
+            <button type="submit" class="btn btn-primary mt-2">Submit</button>
+          </form>
+          <p style="font-weight:bold">*Only upload pic if paid in cash through bank</p>
+        </div>
       </div>
-    </div>
+    {% else %}
+      <div class="center-page">
+        <div class="col-lg-8 col-md-10 col-sm-12">
+          <div class="card p-4">
+            <div class="card-body">
+              <div class="voucher">
+                <div class="nu-logo">
+                  <img src="{% static 'img/NU-logo.jpg' %}" alt="NU-LOGO" class="img-fluid mb-3" />
+                </div>
+                <h3 class="text-center fw-bold"><strong>No New Vouchers Yet!</strong></h3>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    {% endif %}
   </div>
 {% endblock %}
 
@@ -125,4 +147,5 @@
       }
     })
   </script>
+  <script src="https://js.stripe.com/v3/"></script>
 {% endblock %}

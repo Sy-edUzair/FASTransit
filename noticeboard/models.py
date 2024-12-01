@@ -17,7 +17,6 @@ class ComplaintStatus(models.Model):
 class Feedback(models.Model):
     user = models.ForeignKey(AppUser, on_delete=models.CASCADE,related_name='feedbacks')
     comments = models.TextField()
-    rating = models.IntegerField()
     submitted_at = models.DateTimeField(auto_now_add=True)
     responded_at = models.DateTimeField(null=True, blank=True)
     complaint_status = models.ForeignKey(ComplaintStatus, on_delete=models.SET_NULL, null=True)
