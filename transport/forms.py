@@ -3,6 +3,8 @@ from django_recaptcha.fields import ReCaptchaField
 from django_recaptcha.widgets import ReCaptchaV2Checkbox
 from django.conf import settings
 from userauth.models import ProviderRepresentative
+from driver.models import Driver
+from transport.models import Stop,Route,TransportProvider,Vehicle
 
 class transportLoginForm(forms.Form):
     email=forms.CharField(widget=forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'Provider Email'}))
@@ -21,39 +23,63 @@ class RouteForm(forms.Form):
         })
     )
     
-class AddRouteForm(forms.Form):
-    route_number = forms.CharField(
-        label="Route Number",
-        max_length=100,
-        widget=forms.TextInput(attrs={
-            'class': 'form-control',
-            'placeholder': 'Enter Route Number'
-        })
-    )
-    num_stops = forms.IntegerField(
-        label="Number of Stops",
-        min_value=1,
-        widget=forms.NumberInput(attrs={
-            'id': 'numStops',
-            'class': 'form-control',
-            'placeholder': 'Enter Number of Stops',
-            'oninput': 'generateStopFields()'
-        })
-    )
-    # Dynamically generated fields will be added as stop fields in the view.
-    # This will be populated with the actual stop names.
-    stops = forms.CharField(
-        required=False,  # This field will be populated dynamically
-        widget=forms.HiddenInput()  # Hidden field to hold the stops
+class RouteForm(forms.Form):
+    # Input for route number
+    route_num = forms.IntegerField(
+        widget=forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Enter Route Number'}),
+        label="Route Number"
     )
     
-    def clean_stops(self):
-        # This will clean and process the dynamically generated stop fields
-        stops = self.cleaned_data['stops']
-        # Convert the stops from string to list if needed (e.g., 'Stop 1, Stop 2')
-        stop_list = stops.split(",")  # Assuming stops are separated by commas
-        return stop_list
-
+    # Dropdown to select a start stop from existing stops
+    start_stop = forms.ModelChoiceField(
+        queryset=Stop.objects.all(),
+        widget=forms.Select(attrs={'class': 'form-control'}),
+        label="Start Stop"
+    )
+    
+    # Dropdown to select a transport provider from existing providers
+    appointed_provider = forms.ModelChoiceField(
+        queryset=TransportProvider.objects.all(),
+        widget=forms.Select(attrs={'class': 'form-control'}),
+        label="Transport Provider"
+    )
+    
+    # Multiple selection dropdown to choose stops from existing ones
+    stops = forms.ModelMultipleChoiceField(
+        queryset=Stop.objects.all(),
+        widget=forms.SelectMultiple(attrs={'class': 'form-control'}),
+        label="Select Stops"
+    )
+    
+    # You can add custom validation here if needed
+    def clean_route_num(self):
+        route_num = self.cleaned_data.get('route_num')
+        # Ensure the route number is unique, add validation logic here if required
+        if Route.objects.filter(route_num=route_num).exists():
+            raise forms.ValidationError("Route number already exists.")
+        return route_num
+    
+    
 class TransportFeeForm(forms.Form):
     # provider = forms.ModelChoiceField(queryset=TransportProvider.objects.all(), label="Transport Provider", empty_label="Select a Provider")
     fee = forms.DecimalField(max_digits=10, decimal_places=2, label="Fee Amount", widget=forms.NumberInput(attrs={'class': 'form-control'}))
+    
+    
+class DriverForm(forms.ModelForm):
+    class Meta:
+        model = Driver
+        fields = ['name', 'cnic', 'contact', 'license_number', 'appointed_provider', 'appointed_vehicle']
+
+        widgets = {
+            'appointed_provider': forms.Select(),
+            'appointed_vehicle': forms.Select(),
+        }
+
+class VehicleForm(forms.ModelForm):
+    class Meta:
+        model = Vehicle
+        fields = ['license_plate', 'allotted_seats', 'tracking_id', 'Last_maintenance_date',  # Use exact field name
+                  'status', 'capacity_type', 'transport_provider', 'route_no']
+        widgets = {
+            'Last_maintenance_date': forms.DateInput(attrs={'type': 'date'})  # Update this as well
+        }

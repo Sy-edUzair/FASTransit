@@ -1,0 +1,196 @@
+{% extends 'index.html' %}
+
+{% load static %}
+
+{% block customcss %}
+  <link rel="stylesheet" href="{% static 'css/routes.css' %}" />
+  <style>
+    .breadcrumbs-area {
+      background-color: #f5f5f5;
+      padding: 15px;
+      border-radius: 5px;
+      margin-bottom: 30px;
+    }
+
+    .breadcrumbs-area h3 {
+      font-size: 24px;
+      margin-bottom: 10px;
+    }
+
+    .breadcrumbs-area ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .breadcrumbs-area ul li {
+      display: inline;
+      margin-right: 10px;
+    }
+
+    .breadcrumbs-area ul li a {
+      text-decoration: none;
+      color: #007bff;
+    }
+
+    .breadcrumbs-area ul li::after {
+      content: ">";
+      margin-left: 10px;
+    }
+
+    .breadcrumbs-area ul li:last-child::after {
+      content: "";
+    }
+
+    .card {
+      border-radius: 10px;
+      border: none;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .card-body {
+      padding: 30px;
+    }
+
+    .form-group label {
+      font-weight: bold;
+      font-size: 14px;
+      color: #333;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-control {
+      border-radius: 5px;
+      border: 1px solid #ddd;
+      padding: 10px;
+      font-size: 14px;
+    }
+
+    .btn-primary {
+      background-color: #007bff;
+      border-color: #007bff;
+      padding: 12px 30px;
+      font-size: 16px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .btn-primary:hover {
+      background-color: #0056b3;
+      border-color: #004085;
+    }
+
+    .vehicle-form {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .table-responsive {
+      margin-top: 30px;
+    }
+
+    .alert-container {
+      margin-bottom: 20px;
+    }
+
+    .alert {
+      padding: 15px;
+      border-radius: 5px;
+      font-size: 16px;
+    }
+
+    .alert-success {
+      background-color: #d4edda;
+      color: #155724;
+      border: 1px solid #c3e6cb;
+    }
+
+    .alert-error {
+      background-color: #f8d7da;
+      color: #721c24;
+      border: 1px solid #f5c6cb;
+    }
+  </style>
+{% endblock %}
+
+{% block maincontent %}
+  <div class="breadcrumbs-area">
+    <h3>Add Vehicle</h3>
+    <ul>
+      <li>
+        <a href="{% url 'transport:transport-dashboard' %}">Home</a>
+      </li>
+      <li>Add New Vehicle</li>
+    </ul>
+  </div>
+
+  <div class="row">
+    <div class="col-12">
+      <div class="card">
+        <div class="card-body">
+          <div class="table-responsive">
+            <form method="POST" class="vehicle-form">
+              {% csrf_token %}
+              
+              {% if messages %}
+                <div class="alert-container">
+                  {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }}">
+                      {{ message }}
+                    </div>
+                  {% endfor %}
+                </div>
+              {% endif %}
+              
+              <div class="form-group">
+                <label for="license_plate">License Plate</label>
+                {{ form.license_plate }}
+              </div>
+
+              <div class="form-group">
+                <label for="allotted_seats">Allotted Seats</label>
+                {{ form.allotted_seats }}
+              </div>
+
+              <div class="form-group">
+                <label for="tracking_id">Tracking ID</label>
+                {{ form.tracking_id }}
+              </div>
+
+              <div class="form-group">
+                <label for="Last_maintenance_date">Last Maintenance Date</label>
+                {{ form.Last_maintenance_date }}
+              </div>
+
+              <div class="form-group">
+                <label for="status">Vehicle Status</label>
+                {{ form.status }}
+              </div>
+
+              <div class="form-group">
+                <label for="capacity_type">Capacity Type</label>
+                {{ form.capacity_type }}
+              </div>
+
+              <div class="form-group">
+                <label for="transport_provider">Transport Provider</label>
+                {{ form.transport_provider }}
+              </div>
+
+              <div class="form-group">
+                <label for="route_no">Route Number</label>
+                {{ form.route_no }}
+              </div>
+
+              <button type="submit" class="btn btn-primary">Add Vehicle</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+{% endblock %}

@@ -1,0 +1,150 @@
+{% extends 'index.html' %}
+
+{% load static %}
+
+{% block customcss %}
+  <link rel="stylesheet" href="{% static 'css/routes.css' %}" />
+  <style>
+    .breadcrumbs-area {
+      background-color: #f5f5f5;
+      padding: 15px;
+      border-radius: 5px;
+      margin-bottom: 30px;
+    }
+
+    .breadcrumbs-area h3 {
+      font-size: 24px;
+      margin-bottom: 10px;
+    }
+
+    .breadcrumbs-area ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .breadcrumbs-area ul li {
+      display: inline;
+      margin-right: 10px;
+    }
+
+    .breadcrumbs-area ul li a {
+      text-decoration: none;
+      color: #007bff;
+    }
+
+    .breadcrumbs-area ul li::after {
+      content: ">";
+      margin-left: 10px;
+    }
+
+    .breadcrumbs-area ul li:last-child::after {
+      content: "";
+    }
+
+    .card {
+      border-radius: 10px;
+      border: none;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .card-body {
+      padding: 30px;
+    }
+
+    .table {
+      width: 100%;
+      margin-top: 20px;
+      border-collapse: collapse;
+    }
+
+    .table th, .table td {
+      padding: 12px;
+      text-align: left;
+      border: 1px solid #ddd;
+    }
+
+    .table th {
+      background-color: #f1f1f1;
+      font-weight: bold;
+    }
+
+    .table tbody tr:nth-child(even) {
+      background-color: #f9f9f9;
+    }
+
+    .btn-primary {
+      background-color: #007bff;
+      border-color: #007bff;
+      padding: 12px 30px;
+      font-size: 16px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .btn-primary:hover {
+      background-color: #0056b3;
+      border-color: #004085;
+    }
+  </style>
+{% endblock %}
+
+{% block maincontent %}
+  <div class="breadcrumbs-area">
+    <h3>All Vehicles</h3>
+    <ul>
+      <li>
+        <a href="{% url 'transport:transport-dashboard' %}">Home</a>
+      </li>
+      <li>All Vehicles</li>
+    </ul>
+  </div>
+
+  <div class="row">
+    <div class="col-12">
+      <div class="card">
+        <div class="card-body">
+          <div class="table-responsive">
+            {% if messages %}
+              <div class="alert-container">
+                {% for message in messages %}
+                  <div class="alert alert-{{ message.tags }}">
+                    {{ message }}
+                  </div>
+                {% endfor %}
+              </div>
+            {% endif %}
+            
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>License Plate</th>
+                  <th>Allotted Seats</th>
+                  <th>Tracking ID</th>
+                  <th>Last Maintenance Date</th>
+                  <th>Route Number</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for vehicle in vehicles %}
+                  <tr>
+                    <td>{{ vehicle.license_plate }}</td>
+                    <td>{{ vehicle.allotted_seats }}</td>
+                    <td>{{ vehicle.tracking_id }}</td>
+                    <td>{{ vehicle.Last_maintenance_date }}</td>
+                    <td>{{ vehicle.route_no }}</td>
+                  </tr>
+                {% empty %}
+                  <tr>
+                    <td colspan="8" class="text-center">No vehicles available.</td>
+                  </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+{% endblock %}

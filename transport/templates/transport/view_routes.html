@@ -1,0 +1,60 @@
+{% extends 'index.html' %}
+{% load static %}
+
+{% block customcss %}
+  <link rel="stylesheet" href="{% static 'css/routes.css' %}" />
+{% endblock %}
+
+{% block maincontent %}
+  <div class="breadcrumbs-area">
+    <h3>Transport</h3>
+    <ul>
+      <li>
+        <a href="{% url 'transport:transport-dashboard' %}">Home</a>
+      </li>
+      <li>All Routes</li>
+    </ul>
+  </div>
+  <!-- Breadcrumbs Area End Here -->
+
+  <!-- Routes List Area Start -->
+  <div class="row">
+    <div class="col-12">
+      <div class="card">
+        <div class="card-body">
+          <div class="table-responsive">
+            <table class="table display data-table text-nowrap">
+              <thead>
+                <tr>
+                  <th>Route Number</th>
+                  <th>Start Stop</th>
+                  <th>Transport Provider</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% if routes %}
+                  {% for route in routes %}
+                    <tr>
+                      <td>{{ route.route_num }}</td> <!-- Route Number -->
+                      <td>{{ route.start_stop_name }}</td> <!-- Start Stop -->
+                      <td>{{ route.transport_provider_name }}</td> <!-- Transport Provider -->
+                    </tr>
+                  {% endfor %}
+                {% else %}
+                  <tr>
+                    <td colspan="3" class="text-center">No routes found.</td>
+                  </tr>
+                {% endif %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Routes List Area End -->
+{% endblock %}
+
+{% block customjs %}
+  <!-- Custom JS if needed -->
+{% endblock %}

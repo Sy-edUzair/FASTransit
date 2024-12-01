@@ -52,6 +52,7 @@ INSTALLED_APPS = [
     'noticeboard',
     'driver',
     'django_recaptcha',
+    'widget_tweaks',
 
 ]
 

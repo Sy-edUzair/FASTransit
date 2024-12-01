@@ -1,4 +1,5 @@
 {% extends 'index.html' %}
+
 {% load static %}
 
 {% block customcss %}
@@ -6,9 +7,8 @@
 {% endblock %}
 
 {% block maincontent %}
-  <!-- Breadcrumbs Area Start Here -->
   <div class="breadcrumbs-area">
-    <h3>Transport</h3>
+    <h3>Add Route</h3>
     <ul>
       <li>
         <a href="{% url 'transport:transport-dashboard' %}">Home</a>
@@ -16,72 +16,36 @@
       <li>Add New Route</li>
     </ul>
   </div>
-  <!-- Breadcrumbs Area End Here -->
-
-  <!-- Add New Route Area Start Here -->
-  <div class="card height-auto">
-    <div class="card-body">
-      <div class="heading-layout1">
-        <div class="item-title">
-          <h3>Add New Route</h3>
-        </div>
-        <div class="dropdown">
-          <a class="dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-expanded="false">...</a>
-          <div class="dropdown-menu dropdown-menu-right">
-            <a class="dropdown-item" href="#"><i class="fas fa-times text-orange-red"></i>Close</a>
-            <a class="dropdown-item" href="#"><i class="fas fa-cogs text-dark-pastel-green"></i>Edit</a>
-            <a class="dropdown-item" href="#"><i class="fas fa-redo-alt text-orange-peel"></i>Refresh</a>
+  
+  <div class="row">
+    <div class="col-12">
+      <div class="card">
+        <div class="card-body">
+          <div class="table-responsive">
+            <form method="POST">
+              {% csrf_token %}
+              <div class="form-group">
+                <label for="route_num">Route Number</label>
+                {{ form.route_num }}
+              </div>
+              <div class="form-group">
+                <label for="start_stop">Start Stop</label>
+                {{ form.start_stop }}
+              </div>
+              <div class="form-group">
+                <label for="appointed_provider">Transport Provider</label>
+                {{ form.appointed_provider }}
+              </div>
+              <div class="form-group">
+                <label for="stops">Select Stops</label>
+                {{ form.stops }}
+              </div>
+              <button type="submit" class="btn btn-primary">Add Route</button>
+            </form>
           </div>
         </div>
       </div>
-
-      <form class="new-added-form" method="POST" action="{% url 'transport:add-route' %}">
-        {% csrf_token %}
-        <div class="row">
-          <div class="col-xl-3 col-lg-6 col-12 form-group">
-            <label>Route Number *</label>
-            <input type="text" name="route_number" placeholder="Enter Route Number" class="form-control" required />
-          </div>
-          <div class="col-xl-3 col-lg-6 col-12 form-group">
-            <label>Number of Stops *</label>
-            <input type="number" id="numStops" name="num_stops" placeholder="Enter Number of Stops" class="form-control" oninput="generateStopFields()" required />
-          </div>
-        </div>
-
-        <!-- Dynamic Stop Fields -->
-        <div id="stopsContainer" class="row"></div>
-
-        <div class="row">
-          <div class="col-12 form-group mg-t-8">
-            <button type="submit" class="btn-fill-lg btn-gradient-yellow btn-hover-bluedark">Save</button>
-            <button type="reset" class="btn-fill-lg bg-blue-dark btn-hover-yellow">Reset</button>
-          </div>
-        </div>
-      </form>
     </div>
   </div>
-  <!-- Add New Route Area End Here -->
-{% endblock %}
 
-{% block customjs %}
-  <script>
-    let stopCount = 1;
-
-    // Function to generate stop fields dynamically
-    function generateStopFields() {
-      const numStops = document.getElementById('numStops').value;
-      const container = document.getElementById('stopsContainer');
-      container.innerHTML = '';  // Clear previous stop fields
-
-      for (let i = 1; i <= numStops; i++) {
-        const stopField = document.createElement('div');
-        stopField.classList.add('col-xl-3', 'col-lg-6', 'col-12', 'form-group');
-        stopField.innerHTML = `
-          <label>Stop ${i} *</label>
-          <input type="text" name="stop_${i}" placeholder="Enter Stop ${i} Name" class="form-control" required />
-        `;
-        container.appendChild(stopField);
-      }
-    }
-  </script>
 {% endblock %}
