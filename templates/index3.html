@@ -86,10 +86,7 @@
                   <div class="item-content">
                     <ul class="settings-list">
                       <li>
-                        <a href="#"><i class="flaticon-user"></i>My Profile</a>
-                      </li>
-                      <li>
-                        <a href="#"><i class="flaticon-gear-loading"></i>Account Settings</a>
+                        <a href="{% url 'userauth:user-profile' %}"><i class="flaticon-user"></i>My Profile</a>
                       </li>
                       <li>
                         <a href="{% url 'userauth:logout' %}"><i class="flaticon-turn-off"></i>Log Out</a>
@@ -144,7 +141,7 @@
                   <a href="#" class="nav-link"><i class="flaticon-technological"></i><span>Account</span></a>
                   <ul class="nav sub-group-menu">
                     <li class="nav-item">
-                      <a href="all-fees.html" class="nav-link"><i class="fas fa-angle-right"></i>Profile</a>
+                      <a href="{% url 'userauth:user-profile' %}" class="nav-link"><i class="fas fa-angle-right"></i>Profile</a>
                     </li>
                   </ul>
                 </li>
@@ -152,10 +149,10 @@
                   <a href="#" class="nav-link"><i class="flaticon-maths-class-materials-cross-of-a-pencil-and-a-ruler"></i><span>Payment</span></a>
                   <ul class="nav sub-group-menu">
                     <li class="nav-item">
-                      <a href="all-class.html" class="nav-link"><i class="fas fa-angle-right"></i>Fees Voucher</a>
+                      <a href="{% url 'payment:voucher' %}" class="nav-link"><i class="fas fa-angle-right"></i>Fees Voucher</a>
                     </li>
                     <li class="nav-item">
-                      <a href="add-class.html" class="nav-link"><i class="fas fa-angle-right"></i>Payment History</a>
+                      <a href="{% url 'payment:payment-history' %}" class="nav-link"><i class="fas fa-angle-right"></i>Payment History</a>
                     </li>
                   </ul>
                 </li>
@@ -166,10 +163,10 @@
                   <a href="{% url 'noticeboard:noticeboard' %}" class="nav-link"><i class="flaticon-script"></i><span>Noticeboard</span></a>
                 </li>
                 <li class="nav-item">
-                  <a href="notice-board.html" class="nav-link"><i class="flaticon-script"></i><span>Feedback/Complaints</span></a>
+                  <a href="{% url 'userauth:feedback' %}" class="nav-link"><i class="flaticon-script"></i><span>Feedback/Complaints</span></a>
                 </li>
                 <li class="nav-item">
-                  <a href="account-settings.html" class="nav-link"><i class="flaticon-planet-earth"></i><span>Tracking</span></a>
+                  <a href="{% url 'transport:tracking' %}" class="nav-link"><i class="flaticon-planet-earth"></i><span>Tracking</span></a>
                 </li>
               </ul>
             </div>

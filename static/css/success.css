@@ -1,0 +1,41 @@
+/* success.css */
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #eaf6fb;
+    /* Soft pastel blue */
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+section {
+    background: #ffffff;
+    /* White background for the section */
+    border-radius: 12px;
+    /* Rounded corners */
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    /* Subtle shadow */
+    padding: 20px;
+    max-width: 600px;
+    text-align: center;
+}
+
+p {
+    font-size: 1.2rem;
+    color: #333333;
+    /* Soft black for text */
+    margin: 0;
+}
+
+a {
+    color: #007acc;
+    /* Blue for links */
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
