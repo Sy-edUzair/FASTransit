@@ -105,15 +105,16 @@
             {% csrf_token %}
             <button type="submit" id="checkout-button" class="btn">Pay Online</button>
           </form>
-          <a href="{% url 'generate_challan_pdf' %}" class="btn">Download Voucher</a>
+          <a href="{% url 'payment:generate_challan_pdf' %}" class="btn">Download Voucher</a>
 
           <!-- Upload Button & File Input -->
-          <button id="upload-btn" class="btn">Upload Paid Voucher</button>
+          <button id="upload-btn" class="btn">Upload Paid Voucher Pic</button>
           <form id="upload-section" method="post" enctype="multipart/form-data">
             {% csrf_token %}
-            <input type="file" id="voucher-file" name="voucher_image" accept="image/png, image/jpeg" />
+            {{ form }}
             <button type="submit" class="btn btn-primary mt-2">Submit</button>
           </form>
+          <p style="font-weight:bold">*Only upload pic if paid in cash through bank</p>
         </div>
       </div>
     {% else %}

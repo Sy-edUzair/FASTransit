@@ -1,8 +1,7 @@
+{% load static %}
 <!DOCTYPE html>
 <html class="no-js" lang="">
   <head>
-    <link rel="stylesheet" href="../static/css/style.css" />
-    <link rel="stylesheet" href="../static/css/voucher.css" />
     <style>
       .li {
         padding-bottom: 20px;
@@ -86,157 +85,165 @@
         </p>
         <p style="font-size: 12px;">Cash/Cheque should always be deposited at the respective counter and electronic computer-generated receipt printed through flatbed printer on deposit slip/challan should be obtained before leaving the counter, please be sure to check the receipt and satisfy that complete details including account number and amount deposited are correctly printed failing which the bank will not be responsible”.</p>
       </div>
-
-      <div class="voucher">
-        <!-- Logo Section -->
-        <div class="nu-logo">
-          <img src="../static/img/NU-logo.jpg" alt="NU-LOGO" class="img-fluid mb-3" />
-        </div>
-        <h3 class="text-center fw-bold"><strong>BANK COPY</strong></h3>
-        <!-- Voucher Details -->
-        <p>
-          <strong>Challan No:</strong> {{ voucher.id }}
-        </p>
-        <p>
-          <strong>Br Code:</strong> BCCI-FAST / NUCES
-        </p>
-        <p>
-          <strong>Please receive and credit to A/c No:</strong>0010003027230048
-        </p>
-        <p>
-          <strong>Title:</strong> BCCI – FAST / NUCES COLLECTION
-        </p>
-        <p>
-          <strong>Semester:</strong> {{ voucher.semester }}
-        </p>
-        <p>
-          <strong>Roll No:</strong> {{ user.appuser.roll_num }}
-        </p>
-        <p>
-          <strong>Student Name:</strong> {{ user.name }}
-        </p>
-        <p>
-          <strong>Fee Category:</strong> Transportation Fee
-        </p>
-        <p>
-          {% if user.assigned_route %}
-            <strong>Transporter Name:</strong> {{ user.assigned_route.appointed_provider }}
-          {% else %}
-            <strong>Transporter Name:</strong> Others
-          {% endif %}
-        </p>
-
-        <!-- Payment Details Table -->
-        <div class="table-responsive">
-          <table class="table table-bordered">
-            <thead>
-              <tr>
-                <th>Date</th>
-                <th>Amount Rs.</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>Payment Till {{ voucher.due_date }}</td>
-                <td>{{ voucher.amount }}</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-
-        <!-- Depositor Information -->
-        <p>
-          <strong>Depositor Name:</strong> _____________________
-        </p>
-        <p>
-          <strong>CNIC:</strong> _____________________
-        </p>
-        <p>
-          <strong>Mobile:</strong> _____________________
-        </p>
-        <p>
-          <strong>Depositor Signature:</strong> _____________________
-        </p>
-        <p>
-          <strong>Terms and Conditions:</strong>
-        </p>
-        <p style="font-size: 12px;">Cash/Cheque should always be deposited at the respective counter and electronic computer-generated receipt printed through flatbed printer on deposit slip/challan should be obtained before leaving the counter, please be sure to check the receipt and satisfy that complete details including account number and amount deposited are correctly printed failing which the bank will not be responsible”.</p>
+      <div>
+        <p>----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------</p>
       </div>
+      <div class="card-body">
+        <div class="voucher">
+          <!-- Logo Section -->
+          <div class="nu-logo">
+            <img src="../static/img/NU-logo.jpg" alt="NU-LOGO" class="img-fluid mb-3" />
+          </div>
+          <h3 class="text-center fw-bold"><strong>BANK COPY</strong></h3>
+          <!-- Voucher Details -->
+          <p>
+            <strong>Challan No:</strong> {{ voucher.id }}
+          </p>
+          <p>
+            <strong>Br Code:</strong> BCCI-FAST / NUCES
+          </p>
+          <p>
+            <strong>Please receive and credit to A/c No:</strong>0010003027230048
+          </p>
+          <p>
+            <strong>Title:</strong> BCCI – FAST / NUCES COLLECTION
+          </p>
+          <p>
+            <strong>Semester:</strong> {{ voucher.semester }}
+          </p>
+          <p>
+            <strong>Roll No:</strong> {{ user.appuser.roll_num }}
+          </p>
+          <p>
+            <strong>Student Name:</strong> {{ user.name }}
+          </p>
+          <p>
+            <strong>Fee Category:</strong> Transportation Fee
+          </p>
+          <p>
+            {% if user.assigned_route %}
+              <strong>Transporter Name:</strong> {{ user.assigned_route.appointed_provider }}
+            {% else %}
+              <strong>Transporter Name:</strong> Others
+            {% endif %}
+          </p>
 
-      <div class="voucher">
-        <!-- Logo Section -->
-        <div class="nu-logo">
-          <img src="../static/img/NU-logo.jpg" alt="NU-LOGO" class="img-fluid mb-3" />
+          <!-- Payment Details Table -->
+          <div class="table-responsive">
+            <table class="table table-bordered">
+              <thead>
+                <tr>
+                  <th>Date</th>
+                  <th>Amount Rs.</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Payment Till {{ voucher.due_date }}</td>
+                  <td>{{ voucher.amount }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Depositor Information -->
+          <p>
+            <strong>Depositor Name:</strong> _____________________
+          </p>
+          <p>
+            <strong>CNIC:</strong> _____________________
+          </p>
+          <p>
+            <strong>Mobile:</strong> _____________________
+          </p>
+          <p>
+            <strong>Depositor Signature:</strong> _____________________
+          </p>
+          <p>
+            <strong>Terms and Conditions:</strong>
+          </p>
+          <p style="font-size: 12px;">Cash/Cheque should always be deposited at the respective counter and electronic computer-generated receipt printed through flatbed printer on deposit slip/challan should be obtained before leaving the counter, please be sure to check the receipt and satisfy that complete details including account number and amount deposited are correctly printed failing which the bank will not be responsible”.</p>
         </div>
-        <h3 class="text-center fw-bold"><strong>STUDENT COPY</strong></h3>
-        <!-- Voucher Details -->
-        <p>
-          <strong>Challan No:</strong> {{ voucher.id }}
-        </p>
-        <p>
-          <strong>Br Code:</strong> BCCI-FAST / NUCES
-        </p>
-        <p>
-          <strong>Please receive and credit to A/c No:</strong>0010003027230048
-        </p>
-        <p>
-          <strong>Title:</strong> BCCI – FAST / NUCES COLLECTION
-        </p>
-        <p>
-          <strong>Semester:</strong> {{ voucher.semester }}
-        </p>
-        <p>
-          <strong>Roll No:</strong> {{ user.appuser.roll_num }}
-        </p>
-        <p>
-          <strong>Student Name:</strong> {{ user.name }}
-        </p>
-        <p>
-          <strong>Fee Category:</strong> Transportation Fee
-        </p>
-        <p>
-          {% if user.assigned_route %}
-            <strong>Transporter Name:</strong> {{ user.assigned_route.appointed_provider }}
-          {% else %}
-            <strong>Transporter Name:</strong> Others
-          {% endif %}
-        </p>
+      </div>
+      <div>
+        <p>----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------</p>
+      </div>
+      <div class="card-body">
+        <div class="voucher">
+          <!-- Logo Section -->
+          <div class="nu-logo">
+            <img src="../static/img/NU-logo.jpg" alt="NU-LOGO" class="img-fluid mb-3" />
+          </div>
+          <h3 class="text-center fw-bold"><strong>STUDENT COPY</strong></h3>
+          <!-- Voucher Details -->
+          <p>
+            <strong>Challan No:</strong> {{ voucher.id }}
+          </p>
+          <p>
+            <strong>Br Code:</strong> BCCI-FAST / NUCES
+          </p>
+          <p>
+            <strong>Please receive and credit to A/c No:</strong>0010003027230048
+          </p>
+          <p>
+            <strong>Title:</strong> BCCI – FAST / NUCES COLLECTION
+          </p>
+          <p>
+            <strong>Semester:</strong> {{ voucher.semester }}
+          </p>
+          <p>
+            <strong>Roll No:</strong> {{ user.appuser.roll_num }}
+          </p>
+          <p>
+            <strong>Student Name:</strong> {{ user.name }}
+          </p>
+          <p>
+            <strong>Fee Category:</strong> Transportation Fee
+          </p>
+          <p>
+            {% if user.assigned_route %}
+              <strong>Transporter Name:</strong> {{ user.assigned_route.appointed_provider }}
+            {% else %}
+              <strong>Transporter Name:</strong> Others
+            {% endif %}
+          </p>
 
-        <!-- Payment Details Table -->
-        <div class="table-responsive">
-          <table class="table table-bordered">
-            <thead>
-              <tr>
-                <th>Date</th>
-                <th>Amount Rs.</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>Payment Till {{ voucher.due_date }}</td>
-                <td>{{ voucher.amount }}</td>
-              </tr>
-            </tbody>
-          </table>
+          <!-- Payment Details Table -->
+          <div class="table-responsive">
+            <table class="table table-bordered">
+              <thead>
+                <tr>
+                  <th>Date</th>
+                  <th>Amount Rs.</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Payment Till {{ voucher.due_date }}</td>
+                  <td>{{ voucher.amount }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Depositor Information -->
+          <p>
+            <strong>Depositor Name:</strong> _____________________
+          </p>
+          <p>
+            <strong>CNIC:</strong> _____________________
+          </p>
+          <p>
+            <strong>Mobile:</strong> _____________________
+          </p>
+          <p>
+            <strong>Depositor Signature:</strong> _____________________
+          </p>
+          <p>
+            <strong>Terms and Conditions:</strong>
+          </p>
+          <p style="font-size: 12px;">Cash/Cheque should always be deposited at the respective counter and electronic computer-generated receipt printed through flatbed printer on deposit slip/challan should be obtained before leaving the counter, please be sure to check the receipt and satisfy that complete details including account number and amount deposited are correctly printed failing which the bank will not be responsible”.</p>
         </div>
-
-        <!-- Depositor Information -->
-        <p>
-          <strong>Depositor Name:</strong> _____________________
-        </p>
-        <p>
-          <strong>CNIC:</strong> _____________________
-        </p>
-        <p>
-          <strong>Mobile:</strong> _____________________
-        </p>
-        <p>
-          <strong>Depositor Signature:</strong> _____________________
-        </p>
-        <p>
-          <strong>Terms and Conditions:</strong>
-        </p>
-        <p style="font-size: 12px;">Cash/Cheque should always be deposited at the respective counter and electronic computer-generated receipt printed through flatbed printer on deposit slip/challan should be obtained before leaving the counter, please be sure to check the receipt and satisfy that complete details including account number and amount deposited are correctly printed failing which the bank will not be responsible”.</p>
       </div>
     </div>
   </body>

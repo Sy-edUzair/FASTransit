@@ -53,7 +53,6 @@ def render_route_page(request):
           form = RouteForm(request.POST)
           if form.is_valid():
                route_number = form.cleaned_data['route_number']
-               print(route_number)
                with connection.cursor() as cursor:
                # Fetch the specific route
                     cursor.execute("SELECT route_num FROM transport_route WHERE route_num = %s", [route_number])
@@ -293,5 +292,6 @@ LEFT JOIN payment_paymentstatus AS payment_status ON payment.status_id = payment
 
 def add_route_view(request):
      return render(request, 'transport/add-route.html')
+
 
 

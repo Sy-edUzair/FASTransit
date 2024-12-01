@@ -12,7 +12,7 @@
       <li>
         <a href="{% url 'userauth:dashboard' %}">Home</a>
       </li>
-      <li>Driver Details</li>
+      <li>Provider Details</li>
     </ul>
   </div>
   <!-- Breadcrumbs Area End Here -->
@@ -50,9 +50,9 @@
           </div>
           <div class="col-6">
             <div class="item-content">
-              <div class="item-title">Driver Name</div>
-              {% if driver %}
-                <div class="item-number">{{ driver.name }}</div>
+              <div class="item-title">Provider Representative Name</div>
+              {% if assigned_rep %}
+                <div class="item-number">{{ assigned_rep.base_user.name }}</div>
               {% else %}
                 <div class="item-number">None</div>
               {% endif %}
@@ -94,8 +94,8 @@
             <div class="item-content">
               <div class="item-title">Contact Number</div>
               <div class="item-number">
-                {% if driver %}
-                  <span>{{ driver.contact }}</span>
+                {% if assigned_rep %}
+                  <span>{{ assigned_rep.base_user.contact }}</span>
                 {% else %}
                   <span>None</span>
                 {% endif %}
@@ -115,9 +115,9 @@
           </div>
           <div class="col-6">
             <div class="item-content">
-              <div class="item-title">License Number</div>
-              {% if driver %}
-                <div class="item-number">{{ driver.license_number }}</div>
+              <div class="item-title">CNIC</div>
+              {% if assigned_rep %}
+                <div class="item-number">{{ assigned_rep.representative_cnic }}</div>
               {% else %}
                 <div class="item-number">None</div>
               {% endif %}
@@ -136,51 +136,9 @@
           </div>
           <div class="col-6">
             <div class="item-content">
-              <div class="item-title">Vechicle</div>
-              {% if vehicle %}
-                <div class="item-number">{{ vehicle.license_plate }}</div>
-              {% else %}
-                <div class="item-number">None</div>
-              {% endif %}
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="col-lg-6">
-      <div class="dashboard-summery-one">
-        <div class="row">
-          <div class="col-6">
-            <div class="item-icon bg-light-yellow" style="padding: 10px;">
-              <i class="fa-solid fa-file-contract"></i>
-            </div>
-          </div>
-          <div class="col-6">
-            <div class="item-content">
-              <div class="item-title">Vehicle type</div>
-              {% if vehicle %}
-                <div class="item-number">{{ vehicle.capacity_type.vehicle_type }}</div>
-              {% else %}
-                <div class="item-number">None</div>
-              {% endif %}
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="col-lg-6">
-      <div class="dashboard-summery-one">
-        <div class="row">
-          <div class="col-6">
-            <div class="item-icon bg-light-yellow" style="padding: 10px;">
-              <i class="fa-regular fa-id-card"></i>
-            </div>
-          </div>
-          <div class="col-6">
-            <div class="item-content">
-              <div class="item-title">CNIC</div>
-              {% if driver %}
-                <div class="item-number">{{ driver.cnic }}</div>
+              <div class="item-title">Rep Email</div>
+              {% if assigned_rep %}
+                <div class="item-number">{{ assigned_rep.base_user.email }}</div>
               {% else %}
                 <div class="item-number">None</div>
               {% endif %}

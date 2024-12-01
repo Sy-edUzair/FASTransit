@@ -1,6 +1,23 @@
 {% extends 'index3.html' %}
 
+{% block customcss %}
+  <style>
+    .feedback-box {
+      font-size: 1.2rem;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+  </style>
+{% endblock %}
+
 {% block maincontent %}
+  {% if messages %}
+    <ul class="messages">
+      {% for message in messages %}
+        <li class="{{ message.tags }}">{{ message }}</li>
+      {% endfor %}
+    </ul>
+  {% endif %}
   <div class="breadcrumbs-area">
     <h3>Feedback & Complaints</h3>
     <ul>
@@ -26,62 +43,25 @@
           <!-- Hardcoded Feedback Section -->
           <div class="feedback-list mt-4">
             <h5 class="mb-4" style="text-align: left; color:#707070;">Recent Feedback from Users</h5>
-            <ul id="feedbackList" class="list-group" style="max-width: 600px; margin: 0; padding: 0;">
-              <li class="list-group-item" style="border: none; padding: 15px; background: #f9f9f9; border-radius: 10px; margin-bottom: 10px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
-                <strong style="color: #007bff;">22K-1234:</strong> The driver for Jaddon is very punctual and polite. Excellent service!
-              </li>
-              <li class="list-group-item" style="border: none; padding: 15px; background: #f9f9f9; border-radius: 10px; margin-bottom: 10px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
-                <strong style="color: #007bff;">22K-5678:</strong> Nadeem's point service is usually late. Needs improvement in punctuality.
-              </li>
-              <li class="list-group-item" style="border: none; padding: 15px; background: #f9f9f9; border-radius: 10px; margin-bottom: 10px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
-                <strong style="color: #007bff;">22K-9012:</strong> The bus for Jaddon is clean and well-maintained. Great experience overall.
-              </li>
-              <li class="list-group-item" style="border: none; padding: 15px; background: #f9f9f9; border-radius: 10px; margin-bottom: 10px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
-                <strong style="color: #007bff;">22K-3456:</strong> Nadeem's service is overcrowded during peak hours. Please address this issue.
-              </li>
-            </ul>
+            {% for feedback in feedbacks %}
+              <ul id="feedbackList" class="list-group" style="max-width: 600px; margin: 0; padding: 0;">
+                <li class="list-group-item" style="border: none; padding: 15px; background: #f9f9f9; border-radius: 10px; margin-bottom: 10px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
+                  <strong style="color: #007bff;">{{ feedback.user.roll_num }}:&nbsp;</strong>{{ feedback.comments }}
+                </li>
+              </ul>
+            {% endfor %}
           </div>
 
           <!-- Feedback Form -->
           <div class="text-center mt-5">
-            <textarea id="feedbackText" class="form-control" rows="5" placeholder="Give your feedback" style="font-size: 1.2rem; max-width: 600px; margin: 0 auto;"></textarea>
-            <button id="submitFeedback" class="btn btn-primary mt-3" style="font-size: 1.4rem; padding: 12px 30px; border-radius: 25px; width: auto;">Submit Feedback</button>
+            <form method="POST">
+              {% csrf_token %}
+              {{ form }}
+              <button id="submitFeedback" class="btn btn-primary mt-3" style="font-size: 1.4rem; padding: 12px 30px; border-radius: 25px; width: auto;">Submit Feedback</button>
+            </form>
           </div>
         </div>
       </div>
     </div>
   </div>
-{% endblock %}
-
-{% block customjs %}
-  <script>
-    document.addEventListener('DOMContentLoaded', function () {
-      const feedbackButton = document.getElementById('submitFeedback')
-      const feedbackList = document.getElementById('feedbackList')
-    
-      feedbackButton.addEventListener('click', function () {
-        const feedbackText = document.getElementById('feedbackText').value.trim()
-        if (!feedbackText) {
-          alert('Please enter some feedback before submitting.')
-          return
-        }
-    
-        const confirmSubmit = confirm('Are you sure you want to submit this feedback?')
-        if (confirmSubmit) {
-          // Create a new list item for the feedback
-          const newFeedbackItem = document.createElement('li')
-          newFeedbackItem.className = 'list-group-item'
-          newFeedbackItem.style.cssText = 'border: none; padding: 15px; background: #f9f9f9; border-radius: 10px; margin-bottom: 10px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);'
-          newFeedbackItem.innerHTML = `<strong style="color: #007bff;">New User:</strong> ${feedbackText}`
-    
-          // Add the new feedback to the top of the list
-          feedbackList.insertBefore(newFeedbackItem, feedbackList.firstChild)
-    
-          // Notify the user and clear the text area
-          alert('Thank you! Your feedback has been submitted.')
-          document.getElementById('feedbackText').value = ''
-        }
-      })
-    })
-  </script>
 {% endblock %}

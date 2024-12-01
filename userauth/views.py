@@ -13,10 +13,19 @@ from .forms import *
 from .models import *
 from transport.models import *
 from noticeboard.models import *
+from noticeboard.forms import *
+from payment.models import *
+from datetime import datetime
+from dateutil.relativedelta import relativedelta
 import os
 
 # Create your views here.
-
+# user = AppUser.objects.get(roll_num=user_roll_num)
+#                          status = PaymentStatus.objects.get(status_name='Pending')
+#                          current_date = datetime.now()
+#                          due_date = current_date + relativedelta(months=+2)
+#                          Voucher.objects.create(user=user,semester='Fall 2025',status=status,amount=39000,due_date=due_date)
+# Generate voucher after route is regsitered
 @login_required(login_url=settings.LOGIN_URL)
 def dashboard(request):
      raw_query = """
@@ -126,8 +135,7 @@ def signup_view(request):
                     emergency_contact = app_user_form.cleaned_data.get('emergency_contact')
                     department = app_user_form.cleaned_data.get('department')  
 
-                    cursor.execute(
-                         """SELECT COUNT(*) FROM userauth_appuser WHERE roll_num = %s""", [roll_num])
+                    cursor.execute("""SELECT COUNT(*) FROM userauth_appuser WHERE roll_num = %s""", [roll_num])
                     if cursor.fetchone()[0] > 0:
                          messages.error(request, 'Roll number already exists.')
                          return HttpResponseRedirect(reverse('userauth:signup'))
@@ -137,8 +145,7 @@ def signup_view(request):
                          cursor.execute("""INSERT INTO userauth_appuser (roll_num, Address, cnic, emergency_contact,base_user_id)VALUES (%s, %s, %s, %s, %s) RETURNING roll_num""", [roll_num, address, cnic, emergency_contact,user_id])
 
                          user_roll_num = cursor.fetchone()[0]
-                         print(user_roll_num)
-
+                         
                          # Update department if provided
                          if department:
                               cursor.execute("""SELECT id FROM userauth_department WHERE name = %s""",[department])
@@ -160,6 +167,7 @@ def signup_view(request):
           app_user_form = AppUserForm()
      return render(request, 'userauth/signup.html',{'user_form': user_form,'app_user_form': app_user_form})
 
+@login_required(login_url=settings.LOGIN_URL)
 def point_card_view(request):
      raw_query= """
           SELECT * 
@@ -168,6 +176,7 @@ def point_card_view(request):
      providers = TransportProvider.objects.raw(raw_query)
      return render(request, "userauth/point_card.html",{"providers":providers,'user':request.user,})
 
+@login_required(login_url=settings.LOGIN_URL)
 def user_profile_view(request):
      raw_query= """
           SELECT * 
@@ -189,10 +198,47 @@ def landing_page2_view(request):
           """
      providers = TransportProvider.objects.raw(raw_query)
      return render(request, "userauth/landing-page2.html",{"providers":providers,'user':request.user,})
+
+@login_required(login_url=settings.LOGIN_URL)
 def feedback_view(request):
      raw_query= """
           SELECT * 
           FROM transport_transportprovider
           """
      providers = TransportProvider.objects.raw(raw_query)
-     return render(request, "userauth/feedback.html",{"providers":providers,'user':request.user,})
+     raw_query2="""SELECT * FROM noticeboard_feedback"""
+     feedbacks = Feedback.objects.raw(raw_query2)
+     if request.method == "POST":
+        form = FeedbackForm(request.POST)
+        if form.is_valid():
+               comments = form.cleaned_data['comments']
+               user_id = request.user.appuser.roll_num
+               with connection.cursor() as cursor:
+                    cursor.execute("SELECT status_id FROM noticeboard_complaintstatus WHERE status_name = %s LIMIT 1", ["Pending"])
+                    complaint_status_id = cursor.fetchone() 
+                    query = """
+                    INSERT INTO noticeboard_feedback (user_id, comments,submitted_at,responded_at, complaint_status_id)
+                    VALUES (%s, %s, NOW(),NULL,%s)
+                    """
+                    with connection.cursor() as cursor:
+                         cursor.execute(query, [user_id, comments, complaint_status_id[0]])
+               messages.success(request,"Feedback Submitted!")
+     else:
+        form = FeedbackForm()
+     return render(request, "userauth/feedback.html",{"providers":providers,'feedbacks':feedbacks,'user':request.user,"form":form})
+
+
+@login_required(login_url=settings.LOGIN_URL)
+def tracking_view(request):
+     return render(request,"transport/tracking.html")
+
+@login_required(login_url=settings.LOGIN_URL)
+def provider_detail_view(request):
+     raw_query= """
+          SELECT * 
+          FROM transport_transportprovider
+          """
+     providers = TransportProvider.objects.raw(raw_query)
+     assigned_provider=request.user.appuser.assigned_route.appointed_provider
+     assigned_rep = assigned_provider.representative
+     return render(request, "provider-details.html",{"providers":providers,'user':request.user,'assigned_provider':assigned_provider,'assigned_rep':assigned_rep})

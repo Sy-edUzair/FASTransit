@@ -120,10 +120,10 @@
                       <a href="{% url 'userauth:point-card' %}" class="nav-link"><i class="fa-solid fa-id-card"></i>Point Card</a>
                     </li>
                     <li class="nav-item">
-                      <a href="std_card.html" class="nav-link"><i class="fa-solid fa-truck-arrow-right"></i>Your Provider Details</a>
+                      <a href="{% url 'userauth:provider-details' %}" class="nav-link"><i class="fa-solid fa-truck-arrow-right"></i>Your Provider Details</a>
                     </li>
                     <li class="nav-item">
-                      <a href="std_card.html" class="nav-link"><i class="fa-solid fa-id-badge"></i>Your Driver Details</a>
+                      <a href="{% url 'driver:driver-detail' %}" class="nav-link"><i class="fa-solid fa-id-badge"></i>Your Driver Details</a>
                     </li>
                   </ul>
                 </li>
@@ -166,7 +166,7 @@
                   <a href="{% url 'userauth:feedback' %}" class="nav-link"><i class="flaticon-script"></i><span>Feedback/Complaints</span></a>
                 </li>
                 <li class="nav-item">
-                  <a href="{% url 'transport:tracking' %}" class="nav-link"><i class="flaticon-planet-earth"></i><span>Tracking</span></a>
+                  <a href="{% url 'userauth:tracking' %}" class="nav-link"><i class="flaticon-planet-earth"></i><span>Tracking</span></a>
                 </li>
               </ul>
             </div>

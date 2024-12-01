@@ -1,5 +1,13 @@
 from django import forms
 
-class GenerateVoucherForm(forms.ModelForm):
-    semester = forms.CharField(max_length=100, required=True, label='Semester')
-    
+class VoucherUploadForm(forms.Form): 
+    file = forms.ImageField(
+        required=True,
+        widget=forms.ClearableFileInput(
+            attrs={
+                'id': 'voucher-file',
+                'name': 'voucher_image',  
+                'accept': 'image/png, image/jpeg',  
+            }
+        )
+    )

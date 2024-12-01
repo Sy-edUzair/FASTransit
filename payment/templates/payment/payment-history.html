@@ -64,13 +64,9 @@
                       <td>{{ payment.method.method_name }}</td>
                       <td>{{ payment.user.base_user.name }}</td>
                       <td>{{ payment.user.cnic }}</td>
-                      {% if payment.method.method_name == 'Online' and payment.voucher.status.status_name == 'Succeeded' %}
-                        <td>
-                          <a href="{{ payment.receipt.browser_view }}">View Online Reciept here</a>
-                        </td>
-                      {% else %}
-                        <td>None</td>
-                      {% endif %}
+                      <td>
+                        <a href="{{ payment.receipt.browser_view }}">View Online Reciept here</a>
+                      </td>
                     </tr>
                   {% endfor %}
                 </tbody>
