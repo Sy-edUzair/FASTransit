@@ -2,6 +2,11 @@
 {% load static %}
 {% block customcss %}
   <link rel="stylesheet" href="{% static 'css/routes.css' %}" />
+  <style>
+    .row {
+      margin-bottom: 20px;
+    }
+  </style>
 {% endblock %}
 
 {% block header %}
@@ -30,7 +35,7 @@
         <li class="navbar-item dropdown header-admin">
           <a class="navbar-nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-expanded="false">
             <div class="admin-title">
-              <h5 class="item-title">{{ provider.representative_name }}</h5>
+              <h5 class="item-title">{{ user.name }}</h5>
               <span></span>
             </div>
             <div class="admin-img">
@@ -39,16 +44,10 @@
           </a>
           <div class="dropdown-menu dropdown-menu-right">
             <div class="item-header">
-              <h6 class="item-title">{{ provider.representative_name }}</h6>
+              <h6 class="item-title">{{ user.name }}</h6>
             </div>
             <div class="item-content">
               <ul class="settings-list">
-                <li>
-                  <a href="#"><i class="flaticon-user"></i>My Profile</a>
-                </li>
-                <li>
-                  <a href="#"><i class="flaticon-gear-loading"></i>Account Settings</a>
-                </li>
                 <li>
                   <a href="{% url 'transport:logout' %}"><i class="flaticon-turn-off"></i>Log Out</a>
                 </li>
@@ -127,97 +126,97 @@
   </div>
 {% endblock %}
 {% block maincontent %}
-<!-- Breadcrumbs Area Start Here -->
-<div class="breadcrumbs-area">
-  <h3 class="text-primary">Transport</h3>
-  <ul>
-    <li>
-      <a href="{% url 'transport:transport-dashboard' %}" class="text-muted">Home</a>
-    </li>
-    <li class="text-dark">Transporter Dashboard</li>
-  </ul>
-</div>
-<!-- Breadcrumbs Area End Here -->
+  <!-- Breadcrumbs Area Start Here -->
+  <div class="breadcrumbs-area">
+    <h3 class="text-primary">Transport</h3>
+    <ul>
+      <li>
+        <a href="{% url 'transport:transport-dashboard' %}" class="text-muted">Home</a>
+      </li>
+      <li class="text-dark">Transporter Dashboard</li>
+    </ul>
+  </div>
+  <!-- Breadcrumbs Area End Here -->
 
-<!-- Dashboard Stats Section -->
-<div class="row justify-content-center">
-  <div class="col-lg-4 col-md-6 mb-4">
-    <div class="dashboard-summery-one rounded-lg shadow-sm">
-      <div class="row align-items-center">
-        <div class="col-6">
-          <div class="item-icon bg-light-magenta text-center p-3 rounded-circle">
-            <i class="fa-solid fa-van-shuttle text-white"></i>
+  <!-- Dashboard Stats Section -->
+  <div class="row justify-content-center">
+    <div class="col-lg-4 col-md-6 mb-4">
+      <div class="dashboard-summery-one rounded-lg shadow-sm">
+        <div class="row align-items-center">
+          <div class="col-6">
+            <div class="item-icon bg-light-magenta text-center p-3 rounded-circle">
+              <i class="fa-solid fa-van-shuttle text-white"></i>
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="item-content">
+              <div class="item-title text-muted">Total Vehicle</div>
+              <div class="item-number display-4">{{ total_vehicles }}</div>
+            </div>
           </div>
         </div>
-        <div class="col-6">
-          <div class="item-content">
-            <div class="item-title text-muted">Total Vehicle</div>
-            <div class="item-number display-4">{{ total_vehicles }}</div>
+      </div>
+    </div>
+    <div class="col-lg-4 col-md-6 mb-4">
+      <div class="dashboard-summery-one rounded-lg shadow-sm">
+        <div class="row align-items-center">
+          <div class="col-6">
+            <div class="item-icon bg-light-blue text-center p-3 rounded-circle">
+              <i class="fa-solid fa-route text-white"></i>
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="item-content">
+              <div class="item-title text-muted">Total Route</div>
+              <div class="item-number display-4">{{ total_routes }}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-4 col-md-6 mb-4">
+      <div class="dashboard-summery-one rounded-lg shadow-sm">
+        <div class="row align-items-center">
+          <div class="col-6">
+            <div class="item-icon bg-light-yellow text-center p-3 rounded-circle">
+              <i class="fa-solid fa-users-line text-white"></i>
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="item-content">
+              <div class="item-title text-muted">Total Providers</div>
+              <div class="item-number display-4">{{ total_providers }}</div>
+            </div>
           </div>
         </div>
       </div>
     </div>
   </div>
-  <div class="col-lg-4 col-md-6 mb-4">
-    <div class="dashboard-summery-one rounded-lg shadow-sm">
-      <div class="row align-items-center">
-        <div class="col-6">
-          <div class="item-icon bg-light-blue text-center p-3 rounded-circle">
-            <i class="fa-solid fa-route text-white"></i>
-          </div>
-        </div>
-        <div class="col-6">
-          <div class="item-content">
-            <div class="item-title text-muted">Total Route</div>
-            <div class="item-number display-4">{{ total_routes }}</div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-  <div class="col-lg-4 col-md-6 mb-4">
-    <div class="dashboard-summery-one rounded-lg shadow-sm">
-      <div class="row align-items-center">
-        <div class="col-6">
-          <div class="item-icon bg-light-yellow text-center p-3 rounded-circle">
-            <i class="fa-solid fa-users-line text-white"></i>
-          </div>
-        </div>
-        <div class="col-6">
-          <div class="item-content">
-            <div class="item-title text-muted">Total Providers</div>
-            <div class="item-number display-4">{{ total_providers }}</div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
 
-<!-- Recent Vehicles Section -->
-<div class="table-container mt-5">
-  <h2 class="text-dark mb-3">Recent Vehicles</h2>
-  <table class="table table-striped table-bordered table-hover">
-    <thead class="thead-light">
-      <tr>
-        <th>License Plate</th>
-        <th>Status</th>
-        <th>Capacity</th>
-        <th>Provider</th>
-      </tr>
-    </thead>
-    <tbody>
-      {% for vehicle in recent_vehicles %}
-      <tr>
-        <td>{{ vehicle.license_plate }}</td>
-        <td>{{ vehicle.status.status_name }}</td>
-        <td>{{ vehicle.capacity_type.max_capacity }}</td>
-        <td>{{ vehicle.transport_provider.name }}</td>
-      </tr>
-      {% endfor %}
-    </tbody>
-  </table>
-</div>
+  <!-- Recent Vehicles Section -->
+  <div class="table-container mt-5">
+    <h2 class="text-dark mb-3">Recent Vehicles</h2>
+    <table class="table table-striped table-bordered table-hover">
+      <thead class="thead-light">
+        <tr>
+          <th>License Plate</th>
+          <th>Status</th>
+          <th>Capacity</th>
+          <th>Provider</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for vehicle in recent_vehicles %}
+          <tr>
+            <td>{{ vehicle.license_plate }}</td>
+            <td>{{ vehicle.status.status_name }}</td>
+            <td>{{ vehicle.capacity_type.max_capacity }}</td>
+            <td>{{ vehicle.transport_provider.name }}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
 {% endblock %}
 
 {% block customjs %}

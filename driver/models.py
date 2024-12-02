@@ -22,7 +22,7 @@ class Driver(models.Model):
     name = models.CharField(max_length=25)
     contact = models.CharField(max_length=15)
     license_number = models.CharField(max_length=50)
-    registration_status = models.OneToOneField(DriverStatus, on_delete=models.SET_NULL, null=True)
+    registration_status = models.ForeignKey(DriverStatus, on_delete=models.SET_NULL, null=True)
     appointed_provider = models.ForeignKey(TransportProvider, on_delete=models.CASCADE, related_name = 'drivers')
     appointed_vehicle = models.OneToOneField(Vehicle, on_delete = models.CASCADE)
 

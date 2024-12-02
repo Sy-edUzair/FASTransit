@@ -36,7 +36,7 @@
               {% if notices %}
                 {% for notice in notices %}
                   <div class="post-date bg-skyblue">{{ notice.date_posted }}</div>
-                  <h6 class="notice-title"><a href="#">{{ notice.message }}</a></h6>
+                  <h6 class="notice-title">{{ notice.message }}</h6>
                   <div class="entry-meta">By Admin</div>
                 {% endfor %}
               {% else %}

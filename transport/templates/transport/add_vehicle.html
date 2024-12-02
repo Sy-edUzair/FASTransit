@@ -11,64 +11,64 @@
       border-radius: 5px;
       margin-bottom: 30px;
     }
-
+    
     .breadcrumbs-area h3 {
       font-size: 24px;
       margin-bottom: 10px;
     }
-
+    
     .breadcrumbs-area ul {
       list-style: none;
       padding: 0;
       margin: 0;
     }
-
+    
     .breadcrumbs-area ul li {
       display: inline;
       margin-right: 10px;
     }
-
+    
     .breadcrumbs-area ul li a {
       text-decoration: none;
       color: #007bff;
     }
-
+    
     .breadcrumbs-area ul li::after {
-      content: ">";
+      content: '>';
       margin-left: 10px;
     }
-
+    
     .breadcrumbs-area ul li:last-child::after {
-      content: "";
+      content: '';
     }
-
+    
     .card {
       border-radius: 10px;
       border: none;
       box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     }
-
+    
     .card-body {
       padding: 30px;
     }
-
+    
     .form-group label {
       font-weight: bold;
       font-size: 14px;
       color: #333;
     }
-
+    
     .form-group {
       margin-bottom: 20px;
     }
-
+    
     .form-control {
       border-radius: 5px;
       border: 1px solid #ddd;
       padding: 10px;
       font-size: 14px;
     }
-
+    
     .btn-primary {
       background-color: #007bff;
       border-color: #007bff;
@@ -77,37 +77,37 @@
       border-radius: 5px;
       cursor: pointer;
     }
-
+    
     .btn-primary:hover {
       background-color: #0056b3;
       border-color: #004085;
     }
-
+    
     .vehicle-form {
       max-width: 800px;
       margin: 0 auto;
     }
-
+    
     .table-responsive {
       margin-top: 30px;
     }
-
+    
     .alert-container {
       margin-bottom: 20px;
     }
-
+    
     .alert {
       padding: 15px;
       border-radius: 5px;
       font-size: 16px;
     }
-
+    
     .alert-success {
       background-color: #d4edda;
       color: #155724;
       border: 1px solid #c3e6cb;
     }
-
+    
     .alert-error {
       background-color: #f8d7da;
       color: #721c24;
@@ -117,6 +117,13 @@
 {% endblock %}
 
 {% block maincontent %}
+  {% if messages %}
+    <ul class="messages">
+      {% for message in messages %}
+        <li class="{{ message.tags }}">{{ message }}</li>
+      {% endfor %}
+    </ul>
+  {% endif %}
   <div class="breadcrumbs-area">
     <h3>Add Vehicle</h3>
     <ul>
@@ -134,17 +141,15 @@
           <div class="table-responsive">
             <form method="POST" class="vehicle-form">
               {% csrf_token %}
-              
+
               {% if messages %}
                 <div class="alert-container">
                   {% for message in messages %}
-                    <div class="alert alert-{{ message.tags }}">
-                      {{ message }}
-                    </div>
+                    <div class="alert alert-{{ message.tags }}">{{ message }}</div>
                   {% endfor %}
                 </div>
               {% endif %}
-              
+
               <div class="form-group">
                 <label for="license_plate">License Plate</label>
                 {{ form.license_plate }}
@@ -176,11 +181,6 @@
               </div>
 
               <div class="form-group">
-                <label for="transport_provider">Transport Provider</label>
-                {{ form.transport_provider }}
-              </div>
-
-              <div class="form-group">
                 <label for="route_no">Route Number</label>
                 {{ form.route_no }}
               </div>
@@ -192,5 +192,4 @@
       </div>
     </div>
   </div>
-
 {% endblock %}

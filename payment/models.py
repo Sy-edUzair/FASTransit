@@ -20,8 +20,8 @@ class Voucher(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     
     def save(self, *args, **kwargs):
-        statusname = PaymentStatus.objects.get(status_id=2)
-        self.status.status_name = statusname
+        status = PaymentStatus.objects.get(status_id=2)
+        self.status= status
         super().save(*args, **kwargs)
 
     

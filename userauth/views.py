@@ -1,5 +1,7 @@
+from django.shortcuts import render,redirect
 from django.views.decorators.csrf import csrf_protect
 from django.http import HttpResponseRedirect
+from django.http import HttpResponse
 from django.urls import reverse
 from datetime import datetime
 from django.db import connection
@@ -17,15 +19,12 @@ from noticeboard.forms import *
 from payment.models import *
 from datetime import datetime
 from dateutil.relativedelta import relativedelta
+from transport.forms import SelectRouteForm
+from django.template.loader import render_to_string
+from xhtml2pdf import pisa
 import os
+import qrcode
 
-# Create your views here.
-# user = AppUser.objects.get(roll_num=user_roll_num)
-#                          status = PaymentStatus.objects.get(status_name='Pending')
-#                          current_date = datetime.now()
-#                          due_date = current_date + relativedelta(months=+2)
-#                          Voucher.objects.create(user=user,semester='Fall 2025',status=status,amount=39000,due_date=due_date)
-# Generate voucher after route is regsitered
 @login_required(login_url=settings.LOGIN_URL)
 def dashboard(request):
      if request.user.is_user:
@@ -42,6 +41,8 @@ def dashboard(request):
                """
           providers = TransportProvider.objects.raw(raw_query_2)
           return render(request,'index3.html',{'user':request.user,'notices':Notices,'providers':providers}) 
+     else:
+          return redirect(reverse('userauth:login'))
         
 
 @csrf_protect
@@ -178,6 +179,8 @@ def point_card_view(request):
                """
           providers = TransportProvider.objects.raw(raw_query)
           return render(request, "userauth/point_card.html",{"providers":providers,'user':request.user,})
+     else:
+          return redirect(reverse('userauth:login'))
 
 @login_required(login_url=settings.LOGIN_URL)
 def user_profile_view(request):
@@ -188,21 +191,9 @@ def user_profile_view(request):
                """
           providers = TransportProvider.objects.raw(raw_query)
           return render(request, "userauth/user-profile.html",{"providers":providers,'user':request.user,})
+     else:
+          return redirect(reverse('userauth:login'))
      
-def landing_page_view(request):
-     raw_query= """
-          SELECT * 
-          FROM transport_transportprovider
-          """
-     providers = TransportProvider.objects.raw(raw_query)
-     return render(request, "userauth/landing-page.html",{"providers":providers,'user':request.user,})
-def landing_page2_view(request):
-     raw_query= """
-          SELECT * 
-          FROM transport_transportprovider
-          """
-     providers = TransportProvider.objects.raw(raw_query)
-     return render(request, "userauth/landing-page2.html",{"providers":providers,'user':request.user,})
 
 @login_required(login_url=settings.LOGIN_URL)
 def feedback_view(request):
@@ -229,15 +220,36 @@ def feedback_view(request):
                               with connection.cursor() as cursor:
                                    cursor.execute(query, [user_id, comments, complaint_status_id[0]])
                          messages.success(request,"Feedback Submitted!")
-               else:
-                    form = FeedbackForm()
+          else:
+               form = FeedbackForm()
           return render(request, "userauth/feedback.html",{"providers":providers,'feedbacks':feedbacks,'user':request.user,"form":form})
+     else:
+          return redirect(reverse('userauth:login'))
 
 
 @login_required(login_url=settings.LOGIN_URL)
 def tracking_view(request):
      if request.user.is_user:
+          # playstore_url = "https://play.google.com/store/search?q=cyber%20track&c=apps&hl=es_419"
+          # qr = qrcode.QRCode(
+          #      version=1,
+          #      error_correction=qrcode.constants.ERROR_CORRECT_L,
+          #      box_size=10,  
+          #      border=4, 
+          # )
+          # qr.add_data(playstore_url)
+          # qr.make(fit=True)
+
+          # # Create an image from the QR code
+          # img = qr.make_image(fill="black", back_color="white")
+
+          # # Save the image or display it
+          # img.save("static/img/cybertrack_qr_code.png")
+          # img.show() 
+
           return render(request,"transport/tracking.html")
+     else:
+          return redirect(reverse('userauth:login'))
 
 @login_required(login_url=settings.LOGIN_URL)
 def provider_detail_view(request):
@@ -250,3 +262,79 @@ def provider_detail_view(request):
           assigned_provider=request.user.appuser.assigned_route.appointed_provider
           assigned_rep = assigned_provider.representative
           return render(request, "provider-details.html",{"providers":providers,'user':request.user,'assigned_provider':assigned_provider,'assigned_rep':assigned_rep})
+     else:
+          return redirect(reverse('userauth:login'))
+     
+def render_route_page(request):
+     if request.user.is_user:
+          raw_query= """
+               SELECT * 
+               FROM transport_transportprovider
+               """
+          providers = TransportProvider.objects.raw(raw_query)
+          raw_query_2= """
+          SELECT r.route_num AS route_num, s.id AS stop_id, s.name AS stop_name FROM transport_route AS r JOIN transport_routestop AS rs ON r.route_num = rs.route_id JOIN transport_stop AS s ON rs.stop_id = s.id ORDER BY r.route_num, rs.stop_order;
+          SELECT r.route_num AS route_num, s.id AS stop_id, s.name AS stop_name FROM transport_route AS r JOIN transport_routestop AS rs ON r.route_num = rs.route_id JOIN transport_stop AS s ON rs.stop_id = s.id ORDER BY r.route_num, rs.stop_order;
+          """
+          with connection.cursor() as cursor:
+            cursor.execute(raw_query_2)
+            results = cursor.fetchall()
+
+        # Organize results into a structure suitable for the template
+          routes = {}
+          for route_num, stop_id, stop_name in results:
+               if route_num not in routes:
+                    idx=0
+                    routes[route_num] = {"stops": []}
+               if stop_id:
+                    idx+=1
+                    routes[route_num]["stops"].append({"idx":idx,"id": stop_id, "name": stop_name})
+
+          if request.method == 'POST':
+               form = SelectRouteForm(request.POST)
+               if form.is_valid():
+                    if not request.user.appuser.assigned_route:
+                         user = AppUser.objects.get(roll_num=request.user.appuser.roll_num)
+                         status = PaymentStatus.objects.get(status_name='Pending')
+                         current_date = datetime.now()
+                         due_date = current_date + relativedelta(months=+2)
+                         Voucher.objects.create(user=user,semester='Fall 2025',status=status,amount=39000,due_date=due_date)
+                    route_number = form.cleaned_data['route_number']
+                    with connection.cursor() as cursor:
+                         # Fetch the specific route
+                        cursor.execute("SELECT route_num FROM transport_route WHERE route_num = %s", [route_number])
+                        route = cursor.fetchone()
+                        if route:
+                            route_id = route[0]
+
+                            # Assign the route to the user
+                            cursor.execute(
+                                "UPDATE userauth_appuser SET assigned_route_id = %s WHERE roll_num = %s",
+                                [route_id, request.user.appuser.roll_num]
+                                )
+                            messages.success(request,f"Route {route_number} assigned to user {request.user.appuser.roll_num}.")
+                        else:
+                            messages.error(request,f"Route {route_number} not found.")
+          else:
+               form = SelectRouteForm()
+          return render(request, "transport/routes.html",{"providers":providers,"routes": routes,"form":form})
+     else:
+          return redirect(reverse('userauth:login'))
+     
+def generate_card_pdf(request):
+     if request.user.is_user:
+          image_path = os.path.join(settings.MEDIA_ROOT, request.user.profile_image.name)
+          
+          context={"user":request.user,'image_path': image_path}
+          html_string = render_to_string('userauth/download-point-template.html', context)
+
+          response = HttpResponse(content_type='application/pdf')
+          response['Content-Disposition'] = f'attachment; filename="{request.user.appuser.roll_num}pointcard.pdf"'
+          
+     
+          pisa_status = pisa.CreatePDF(html_string, dest=response)
+          if pisa_status.err:
+               return HttpResponse('Error generating PDF', status=500)
+          return response
+     else:
+          return redirect(reverse('userauth:login'))

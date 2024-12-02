@@ -5,6 +5,7 @@
     .row {
       align-items: center;
       justify-content: center;
+      margin-bottom: 50px;
     }
   </style>
 {% endblock %}
@@ -69,15 +70,9 @@
                 </table>
               </div>
             </div>
-            <!-- QR Code Section -->
-            <div class="qr-code-section text-center mt-4">
-              <h4>Scan QR Code</h4>
-              <img id="qrCodeImage" src="{% static 'path/to/qr-code-image.png' %}" alt="QR Code" />
-              <p>Your Point Card QR Code</p>
-            </div>
             <!-- Download Button -->
             <div class="text-center mt-3">
-              <a href="download_point_card.html" class="btn btn-primary">Download Point Card</a>
+              <a href="{% url 'userauth:card-pdf' %}" class="btn btn-primary">Download Point Card</a>
             </div>
           </div>
         </div>

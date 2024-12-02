@@ -27,9 +27,9 @@
       <div class="item-img">
         <img src="{{ user.appuser.imageURL }}" alt="User Profile" class="list" />
         <br />
-        <button class="update-btn list" id="profile_image-update-btn" onclick="showUpdateField('profile_image')">Update Profile Picture</button>
+        {% comment %} <button class="update-btn list" id="profile_image-update-btn" onclick="showUpdateField('profile_image')">Update Profile Picture</button>
         <input type="file" id="profile_image-input" />
-        <button class="save-btn list" id="profile_image-save-btn" onclick="confirmUpdate('profile_image')">Save</button>
+        <button class="save-btn list" id="profile_image-save-btn" onclick="confirmUpdate('profile_image')">Save</button> {% endcomment %}
       </div>
 
       <div class="profile-container">
@@ -40,21 +40,21 @@
           </li>
           <li class="list">
             <b>Email:</b> {{ user.email }}
-            <button class="update-btn" id="email-update-btn" onclick="showUpdateField('email')">Update</button>
+            {% comment %} <button class="update-btn" id="email-update-btn" onclick="showUpdateField('email')">Update</button>
             <input type="text" id="email-input" value="{{ user.email }}" />
-            <button class="save-btn" id="email-save-btn" onclick="confirmUpdate('email')">Save</button>
+            <button class="save-btn" id="email-save-btn" onclick="confirmUpdate('email')">Save</button> {% endcomment %}
           </li>
           <li class="list">
             <b>Name:</b> {{ user.name }}
-            <button class="update-btn" id="name-update-btn" onclick="showUpdateField('name')">Update</button>
+            {% comment %} <button class="update-btn" id="name-update-btn" onclick="showUpdateField('name')">Update</button>
             <input type="text" id="name-input" value="{{ user.name }}" />
-            <button class="save-btn" id="name-save-btn" onclick="confirmUpdate('name')">Save</button>
+            <button class="save-btn" id="name-save-btn" onclick="confirmUpdate('name')">Save</button> {% endcomment %}
           </li>
           <li class="list">
-            <b>Address:</b> {{ user.Address }}
-            <button class="update-btn" id="Address-update-btn" onclick="showUpdateField('Address')">Update</button>
+            <b>Address:</b> {{ user.appuser.Address }}
+            {% comment %} <button class="update-btn" id="Address-update-btn" onclick="showUpdateField('Address')">Update</button>
             <input type="text" id="Address-input" value="{{ user.Address }}" />
-            <button class="save-btn" id="Address-save-btn" onclick="confirmUpdate('Address')">Save</button>
+            <button class="save-btn" id="Address-save-btn" onclick="confirmUpdate('Address')">Save</button> {% endcomment %}
           </li>
         </ul>
 
@@ -62,15 +62,15 @@
         <ul class="profile-column">
           <li class="list">
             <b>Contact:</b> {{ user.contact }}
-            <button class="update-btn" id="contact-update-btn" onclick="showUpdateField('contact')">Update</button>
+            {% comment %} <button class="update-btn" id="contact-update-btn" onclick="showUpdateField('contact')">Update</button>
             <input type="text" id="contact-input" value="{{ user.contact }}" />
-            <button class="save-btn" id="contact-save-btn" onclick="confirmUpdate('contact')">Save</button>
+            <button class="save-btn" id="contact-save-btn" onclick="confirmUpdate('contact')">Save</button> {% endcomment %}
           </li>
           <li class="list">
             <b>Emergency Contact:</b> {{ user.appuser.emergency_contact }}
-            <button class="update-btn" id="emergency_contact-update-btn" onclick="showUpdateField('emergency_contact')">Update</button>
+            {% comment %} <button class="update-btn" id="emergency_contact-update-btn" onclick="showUpdateField('emergency_contact')">Update</button>
             <input type="text" id="emergency_contact-input" value="{{ user.emergency_contact }}" />
-            <button class="save-btn" id="emergency_contact-save-btn" onclick="confirmUpdate('emergency_contact')">Save</button>
+            <button class="save-btn" id="emergency_contact-save-btn" onclick="confirmUpdate('emergency_contact')">Save</button> {% endcomment %}
           </li>
           <li class="list">
             <b>CNIC:</b> {{ user.appuser.cnic }}

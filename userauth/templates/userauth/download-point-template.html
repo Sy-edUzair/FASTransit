@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f2f2f2;
+      }
+      .card {
+        width: 500px;
+        height: auto;
+        margin: 20px auto;
+        background-color: #ffffff;
+        border-radius: 10px;
+        padding: 20px;
+        box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+      .card-header {
+        font-size: 28px; /* Increased font size */
+        font-weight: bold;
+        margin-bottom: 15px; /* Increased margin */
+      }
+      .card-body {
+        width: 100%;
+        margin-top: 20px;
+        display: flex;
+        justify-content: space-between;
+        padding: 10px;
+        font-size: 18px; /* Increased font size */
+      }
+      .card-body div {
+        width: 48%;
+      }
+      .profile-image {
+        width: 100px;
+        height: 100px;
+        border-radius: 50%; /* Make the image circular */
+        object-fit: cover;
+        margin-bottom: 20px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="card">
+      <div class="card-header">Transport Identity Card</div>
+      <img class="profile-image" src="{{ image_path }}" alt="Profile Image" />
+      <div class="profile-details">
+        <p>
+          <strong>Name:</strong> {{ user.name }}
+        </p>
+        <p>
+          <strong>Roll Number:</strong> {{ user.appuser.roll_num }}
+        </p>
+        <p>
+          <strong>Gender:</strong> {{ user.gender }}
+        </p>
+        <p>
+          <strong>Department:</strong> {{ user.appuser.department.name }}
+        </p>
+        <p>
+          <strong>Pick and drop stop:</strong> {{ user.appuser.assigned_route.start_stop.name }}
+        </p>
+        <p>
+          <strong>Route#:</strong> {{ user.appuser.assigned_route.route_num }}
+        </p>
+      </div>
+    </div>
+  </body>
+</html>

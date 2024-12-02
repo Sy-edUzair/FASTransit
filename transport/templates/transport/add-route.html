@@ -7,6 +7,13 @@
 {% endblock %}
 
 {% block maincontent %}
+  {% if messages %}
+    <ul class="messages">
+      {% for message in messages %}
+        <li class="{{ message.tags }}">{{ message }}</li>
+      {% endfor %}
+    </ul>
+  {% endif %}
   <div class="breadcrumbs-area">
     <h3>Add Route</h3>
     <ul>
@@ -16,7 +23,7 @@
       <li>Add New Route</li>
     </ul>
   </div>
-  
+
   <div class="row">
     <div class="col-12">
       <div class="card">
@@ -33,10 +40,6 @@
                 {{ form.start_stop }}
               </div>
               <div class="form-group">
-                <label for="appointed_provider">Transport Provider</label>
-                {{ form.appointed_provider }}
-              </div>
-              <div class="form-group">
                 <label for="stops">Select Stops</label>
                 {{ form.stops }}
               </div>
@@ -47,5 +50,4 @@
       </div>
     </div>
   </div>
-
 {% endblock %}

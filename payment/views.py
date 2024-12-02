@@ -64,7 +64,7 @@ def voucher_view(request):
                )
 
                # Create Payment and link the Receipt
-               voucher = Voucher.objects.filter(user_id=request.user.appuser.roll_num).last()
+               voucher = Voucher.objects.filter(user_id=request.user.appuser.roll_num,due_date__gt=now(),status__status_name='Pending').last()
                payment_method = PaymentMethod.objects.get(method_name="Cash")  
                Payment.objects.create(
                     voucher=voucher,
@@ -184,8 +184,6 @@ def webhook_view(request):
           session = event['data']['object']
           payment_intent_id = session["payment_intent"]
           user_email = session["customer_email"]
-
-          print(session)
         # Retrieve the Payment Intent from Stripe
           payment_intent = stripe.PaymentIntent.retrieve(payment_intent_id)
 

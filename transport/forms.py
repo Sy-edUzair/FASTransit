@@ -10,18 +10,6 @@ class transportLoginForm(forms.Form):
     email=forms.CharField(widget=forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'Provider Email'}))
     password=forms.CharField(widget=forms.PasswordInput(attrs={'class': 'form-control',"placeholder":"Password"}))
     captcha=ReCaptchaField(widget=ReCaptchaV2Checkbox(), public_key=settings.RECAPTCHA_PUBLIC_KEY,private_key=settings.RECAPTCHA_PRIVATE_KEY,)
-
-
-class RouteForm(forms.Form):
-    route_number = forms.CharField(
-        label="",
-        max_length=100,
-        widget=forms.TextInput(attrs={
-            'id': 'routeInput',
-            'class': 'route-select-input',
-            'placeholder': 'Enter Route Number (e.g., Route 1)'
-        })
-    )
     
 class RouteForm(forms.Form):
     # Input for route number
@@ -35,13 +23,6 @@ class RouteForm(forms.Form):
         queryset=Stop.objects.all(),
         widget=forms.Select(attrs={'class': 'form-control'}),
         label="Start Stop"
-    )
-    
-    # Dropdown to select a transport provider from existing providers
-    appointed_provider = forms.ModelChoiceField(
-        queryset=TransportProvider.objects.all(),
-        widget=forms.Select(attrs={'class': 'form-control'}),
-        label="Transport Provider"
     )
     
     # Multiple selection dropdown to choose stops from existing ones
@@ -68,10 +49,9 @@ class TransportFeeForm(forms.Form):
 class DriverForm(forms.ModelForm):
     class Meta:
         model = Driver
-        fields = ['name', 'cnic', 'contact', 'license_number', 'appointed_provider', 'appointed_vehicle']
+        fields = ['name', 'cnic', 'contact', 'license_number', 'appointed_vehicle']
 
         widgets = {
-            'appointed_provider': forms.Select(),
             'appointed_vehicle': forms.Select(),
         }
 
@@ -79,7 +59,18 @@ class VehicleForm(forms.ModelForm):
     class Meta:
         model = Vehicle
         fields = ['license_plate', 'allotted_seats', 'tracking_id', 'Last_maintenance_date',  # Use exact field name
-                  'status', 'capacity_type', 'transport_provider', 'route_no']
+                  'status', 'capacity_type', 'route_no']
         widgets = {
             'Last_maintenance_date': forms.DateInput(attrs={'type': 'date'})  # Update this as well
         }
+
+class SelectRouteForm(forms.Form):
+    route_number = forms.CharField(
+        label="",
+        max_length=100,
+        widget=forms.TextInput(attrs={
+            'id': 'routeInput',
+            'class': 'route-select-input',
+            'placeholder': 'Enter Route Number (e.g., Route 1)'
+        })
+    )

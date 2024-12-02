@@ -2,6 +2,11 @@
 {% load static %}
 {% block customcss %}
   <link rel="stylesheet" href="{% static 'css/routes.css' %}" />
+  <style>
+    .row {
+      margin-bottom: 100px;
+    }
+  </style>
 {% endblock %}
 
 {% block header %}
@@ -30,7 +35,7 @@
         <li class="navbar-item dropdown header-admin">
           <a class="navbar-nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-expanded="false">
             <div class="admin-title">
-              <h5 class="item-title">{{ provider.representative_name }}</h5>
+              <h5 class="item-title">{{ user.name }}</h5>
               <span></span>
             </div>
             <div class="admin-img">
@@ -39,19 +44,11 @@
           </a>
           <div class="dropdown-menu dropdown-menu-right">
             <div class="item-header">
-              <h6 class="item-title">{{ provider.representative_name }}</h6>
+              <h6 class="item-title">{{ user.name }}</h6>
             </div>
             <div class="item-content">
               <ul class="settings-list">
-                <li>
-                  <a href="#"><i class="flaticon-user"></i>My Profile</a>
-                </li>
-                <li>
-                  <a href="#"><i class="flaticon-gear-loading"></i>Account Settings</a>
-                </li>
-                <li>
-                  <a href="{% url 'transport:logout' %}"><i class="flaticon-turn-off"></i>Log Out</a>
-                </li>
+                <a href="{% url 'transport:logout' %}"><i class="flaticon-turn-off"></i>Log Out</a>
               </ul>
             </div>
           </div>
@@ -91,7 +88,7 @@
               <a href="{% url 'transport:transport-drivers' %}" class="nav-link"><i class="fa-solid fa-id-card"></i>All Drivers</a>
             </li>
             <li class="nav-item">
-              <a href="#" class="nav-link"><i class="fa-solid fa-user-plus"></i>Add Driver</a>
+              <a href="{% url 'transport:add_driver' %}" class="nav-link"><i class="fa-solid fa-user-plus"></i>Add Driver</a>
             </li>
           </ul>
         </li>
@@ -99,18 +96,10 @@
           <a href="{% url 'transport:transport-dashboard' %}" class="nav-link"><i class="fa-solid fa-bus"></i><span>Vehicles</span></a>
           <ul class="nav sub-group-menu">
             <li class="nav-item">
-              <a href="#" class="nav-link"><i class="fa-solid fa-van-shuttle"></i>All Vehicles</a>
+              <a href="{% url 'transport:view-vehicles' %}" class="nav-link"><i class="fa-solid fa-van-shuttle"></i>All Vehicles</a>
             </li>
             <li class="nav-item">
-              <a href="#" class="nav-link"><i class="fa-solid fa-truck-arrow-right"></i>Add Vehicle</a>
-            </li>
-          </ul>
-        </li>
-        <li class="nav-item sidebar-nav-item">
-          <a href="{% url 'transport:transport-dashboard' %}" class="nav-link"><i class="flaticon-technological"></i><span>Account</span></a>
-          <ul class="nav sub-group-menu">
-            <li class="nav-item">
-              <a href="all-fees.html" class="nav-link"><i class="fas fa-angle-right"></i>Profile</a>
+              <a href="{% url 'transport:add_vehicle' %}" class="nav-link"><i class="fa-solid fa-truck-arrow-right"></i>Add Vehicle</a>
             </li>
           </ul>
         </li>
@@ -127,6 +116,13 @@
   </div>
 {% endblock %}
 {% block maincontent %}
+  {% if messages %}
+    <ul class="messages">
+      {% for message in messages %}
+        <li class="{{ message.tags }}">{{ message }}</li>
+      {% endfor %}
+    </ul>
+  {% endif %}
   <!-- Breadcrumbs Area Start Here -->
   <div class="breadcrumbs-area">
     <h3>Transport</h3>
@@ -437,5 +433,15 @@
 {% endblock %}
 
 {% block customjs %}
-
+  <script>
+    const messages = document.querySelector('.messages')
+    if (messages) {
+      setTimeout(function () {
+        messages.classList.add('fade-out')
+        setTimeout(() => {
+          messages.style.display = 'none'
+        }, 500)
+      }, 3000) // Messages will start fading after 3 seconds
+    }
+  </script>
 {% endblock %}
