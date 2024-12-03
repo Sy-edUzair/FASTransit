@@ -222,7 +222,7 @@ def webhook_view(request):
                fees_voucher.save()
 
                # Save Payment
-               payment = Payment.objects.create(
+               Payment.objects.create(
                     user=user,
                     receipt=receipt,
                     voucher=fees_voucher,

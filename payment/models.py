@@ -19,12 +19,6 @@ class Voucher(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     
-    def save(self, *args, **kwargs):
-        status = PaymentStatus.objects.get(status_id=2)
-        self.status= status
-        super().save(*args, **kwargs)
-
-    
     @property
     def is_active(self):
         """
