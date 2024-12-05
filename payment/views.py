@@ -13,7 +13,7 @@ from xhtml2pdf import pisa
 from django.http import HttpResponse
 from django.http import JsonResponse
 from django.core.files.storage import FileSystemStorage
-from django.db import connection
+from django.db import connection,transaction,IntegrityError
 from django.utils.timezone import now
 from transport.models import *
 from .models import *
@@ -48,7 +48,6 @@ def voucher_view(request):
      if request.method == "POST":
           form = VoucherUploadForm(request.POST, request.FILES)
           if form.is_valid():
-            # Get form data
                profile_voucher_number = f"abcdefg{request.user.appuser.roll_num}"
                file = form.cleaned_data["file"]
 
@@ -120,8 +119,6 @@ def payment_history_view(request):
      return render(request, "payment/payment-history.html",{"providers":providers,"payments":payments})
 
 
-
-
 class CreateCheckoutSessionView(View):
      @method_decorator(csrf_protect)
      def post(self,request,*args,**kwargs):
@@ -180,61 +177,84 @@ def webhook_view(request):
           return HttpResponse(status=400)
      
      if event['type']=='checkout.session.completed':
-          
           session = event['data']['object']
+          session_id = session["id"]
           payment_intent_id = session["payment_intent"]
           user_email = session["customer_email"]
-        # Retrieve the Payment Intent from Stripe
+          # Retrieve the Payment Intent from Stripe
           payment_intent = stripe.PaymentIntent.retrieve(payment_intent_id)
 
-        # Extract payment details
+          # Extract payment details
           amount = payment_intent["amount_received"]/100
           metadata = session.get("metadata", {})
           user_rollnum = metadata.get("user_rollnum")  # Assuming you pass user_id in metadata
           product_name = metadata.get("product_name")
-        # Save Payment and Receipt in the database
+          # Save Payment and Receipt in the database
           try:
-               user = AppUser.objects.get(roll_num=user_rollnum)
-            # Create a receipt
-               voucher_id=f"{payment_intent_id}{user_rollnum}"
-              
-               invoice = event["data"]["object"]
-               invoice_id = invoice["invoice"]
-        
-               # Fetch the invoice details to get the invoice URL
-               invoice_details = stripe.Invoice.retrieve(invoice_id)
-        
-               # Get the URL to view the invoice in a browser
-               invoice_url = invoice_details["hosted_invoice_url"]
+               with transaction.atomic():#transaction
+                    user = AppUser.objects.get(roll_num=user_rollnum)
 
-               receipt = Receipt.objects.create(profile_voucher_number=voucher_id,browser_view=invoice_url)
-               # Payment status and method
-               method, _ = PaymentMethod.objects.get_or_create(method_name="Online")
-               
-               fees_voucher = Voucher.objects.filter(
-               user=user, 
-               due_date__gt=now(), 
-               status__status_name='Pending'
-               ).last()
-
-               status=PaymentStatus.objects.get(status_name="Succeeded")
-               fees_voucher.status=status
-               fees_voucher.save()
-
-               # Save Payment
-               Payment.objects.create(
+                    voucher = Voucher.objects.select_for_update().filter(
                     user=user,
-                    receipt=receipt,
-                    voucher=fees_voucher,
-                    method=method,
-                    amount=amount,
-               )
-               
-               #Send receipt email
-               subject = "Your Invoice from Our Service"
-               message = f"Thank you for your payment. You can view your invoice here: {invoice_url}"
+                    status__status_name='Succeeded'
+                    ).last()
 
-               send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, [user_email])
+                    if voucher:
+                         stripe.checkout.Session.expire(session_id)
+                         return redirect(reverse('payment:cancel'))
+                    else:
+                         fees_voucher = Voucher.objects.select_for_update().filter(
+                         user=user,
+                         due_date__gt=now(),
+                         status__status_name='Pending'
+                         ).last()
+
+                         if not fees_voucher:
+                              print("No pending voucher found for the user")
+
+                         if fees_voucher.status.status_name != 'Pending':
+                              print("Voucher has already been paid")
+
+                         # Update voucher status
+                         status = PaymentStatus.objects.get(status_name="Succeeded")
+                         fees_voucher.status = status
+                         fees_voucher.save()
+
+                         # Generate unique receipt details
+                         voucher_id = f"{payment_intent_id}{user_rollnum}"
+                         invoice_id = session.get("invoice")
+
+                         # Fetch the invoice details
+                         invoice_details = stripe.Invoice.retrieve(invoice_id)
+                         invoice_url = invoice_details["hosted_invoice_url"]
+
+                         # Create Receipt
+                         receipt = Receipt.objects.create(
+                              profile_voucher_number=voucher_id,
+                              browser_view=invoice_url
+                         )
+
+                         # Payment method
+                         method, _ = PaymentMethod.objects.get_or_create(method_name="Online")
+
+                         # Save Payment
+                         Payment.objects.create(
+                              user=user,
+                              receipt=receipt,
+                              voucher=fees_voucher,
+                              method=method,
+                              amount=amount,
+                         )
+
+                         subject = "Your Invoice from Our Service"
+                         message = f"Thank you for your payment. You can view your invoice here: {invoice_url}"
+                         send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, [user_email])
+          except IntegrityError as e:
+               stripe.checkout.Session.expire(session_id)
+               if 'Duplicate entry' in str(e):
+                    print("Duplicate payment entry detected. Transaction rolled back.")
+                    messages.warning(request,"Duplicate payment entry detected. Transaction rolled back.")
+                    return redirect(reverse('payment:cancel'))
           except AppUser.DoesNotExist:
             return JsonResponse({"error": "User not found"}, status=404)
 
