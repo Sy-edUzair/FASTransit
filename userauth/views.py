@@ -12,6 +12,7 @@ from django.contrib.auth.hashers import make_password
 from django.shortcuts import render
 from django.conf import settings
 from .forms import *
+from transport.forms import *
 from .models import *
 from transport.models import *
 from noticeboard.models import *
@@ -35,12 +36,8 @@ def dashboard(request):
                ORDER BY date_posted DESC
                """
           Notices = Notice.objects.raw(raw_query)
-          raw_query_2= """
-               SELECT * 
-               FROM transport_transportprovider
-               """
-          providers = TransportProvider.objects.raw(raw_query_2)
-          return render(request,'index3.html',{'user':request.user,'notices':Notices,'providers':providers}) 
+          
+          return render(request,'index3.html',{'user':request.user,'notices':Notices}) 
      else:
           return redirect(reverse('userauth:login'))
         
@@ -55,7 +52,6 @@ def login_view(request):
                try:
                     user = CustomUser.objects.get(email__iexact=email)# using email since it is a unique field
                     auth_user = authenticate(request,username=email,password=password)
-                    print(auth_user)
                     if auth_user is not None:
                          if user.is_user:
                               try:
@@ -173,24 +169,15 @@ def signup_view(request):
 @login_required(login_url=settings.LOGIN_URL)
 def point_card_view(request):
      if request.user.is_user:
-          raw_query= """
-               SELECT * 
-               FROM transport_transportprovider
-               """
-          providers = TransportProvider.objects.raw(raw_query)
-          return render(request, "userauth/point_card.html",{"providers":providers,'user':request.user,})
+          voucher = Voucher.objects.filter(user=request.user.appuser,due_date__gt=now(),status__status_name='Pending').last()
+          return render(request, "userauth/point_card.html",{'user':request.user,'voucher':voucher})
      else:
           return redirect(reverse('userauth:login'))
 
 @login_required(login_url=settings.LOGIN_URL)
 def user_profile_view(request):
      if request.user.is_user:
-          raw_query= """
-               SELECT * 
-               FROM transport_transportprovider
-               """
-          providers = TransportProvider.objects.raw(raw_query)
-          return render(request, "userauth/user-profile.html",{"providers":providers,'user':request.user,})
+          return render(request, "userauth/user-profile.html",{'user':request.user,})
      else:
           return redirect(reverse('userauth:login'))
      
@@ -198,11 +185,6 @@ def user_profile_view(request):
 @login_required(login_url=settings.LOGIN_URL)
 def feedback_view(request):
      if request.user.is_user:
-          raw_query= """
-               SELECT * 
-               FROM transport_transportprovider
-               """
-          providers = TransportProvider.objects.raw(raw_query)
           raw_query2="""SELECT * FROM noticeboard_feedback"""
           feedbacks = Feedback.objects.raw(raw_query2)
           if request.method == "POST":
@@ -222,7 +204,7 @@ def feedback_view(request):
                          messages.success(request,"Feedback Submitted!")
           else:
                form = FeedbackForm()
-          return render(request, "userauth/feedback.html",{"providers":providers,'feedbacks':feedbacks,'user':request.user,"form":form})
+          return render(request, "userauth/feedback.html",{'feedbacks':feedbacks,'user':request.user,"form":form})
      else:
           return redirect(reverse('userauth:login'))
 
@@ -254,33 +236,22 @@ def tracking_view(request):
 @login_required(login_url=settings.LOGIN_URL)
 def provider_detail_view(request):
      if request.user.is_user:
-          raw_query= """
-               SELECT * 
-               FROM transport_transportprovider
-               """
-          providers = TransportProvider.objects.raw(raw_query)
           assigned_provider=request.user.appuser.assigned_route.appointed_provider
           assigned_rep = assigned_provider.representative
-          return render(request, "provider-details.html",{"providers":providers,'user':request.user,'assigned_provider':assigned_provider,'assigned_rep':assigned_rep})
+          return render(request, "provider-details.html",{'user':request.user,'assigned_provider':assigned_provider,'assigned_rep':assigned_rep})
      else:
           return redirect(reverse('userauth:login'))
      
 def render_route_page(request):
      if request.user.is_user:
-          raw_query= """
-               SELECT * 
-               FROM transport_transportprovider
-               """
-          providers = TransportProvider.objects.raw(raw_query)
           raw_query_2= """
-          SELECT r.route_num AS route_num, s.id AS stop_id, s.name AS stop_name FROM transport_route AS r JOIN transport_routestop AS rs ON r.route_num = rs.route_id JOIN transport_stop AS s ON rs.stop_id = s.id ORDER BY r.route_num, rs.stop_order;
           SELECT r.route_num AS route_num, s.id AS stop_id, s.name AS stop_name FROM transport_route AS r JOIN transport_routestop AS rs ON r.route_num = rs.route_id JOIN transport_stop AS s ON rs.stop_id = s.id ORDER BY r.route_num, rs.stop_order;
           """
           with connection.cursor() as cursor:
             cursor.execute(raw_query_2)
             results = cursor.fetchall()
 
-        # Organize results into a structure suitable for the template
+          #Organize results into a structure suitable for the template
           routes = {}
           for route_num, stop_id, stop_name in results:
                if route_num not in routes:
@@ -301,23 +272,63 @@ def render_route_page(request):
                          Voucher.objects.create(user=user,semester='Fall 2025',status=status,amount=39000,due_date=due_date)
                     route_number = form.cleaned_data['route_number']
                     with connection.cursor() as cursor:
-                         # Fetch the specific route
                         cursor.execute("SELECT route_num FROM transport_route WHERE route_num = %s", [route_number])
                         route = cursor.fetchone()
                         if route:
                             route_id = route[0]
-
-                            # Assign the route to the user
                             cursor.execute(
                                 "UPDATE userauth_appuser SET assigned_route_id = %s WHERE roll_num = %s",
                                 [route_id, request.user.appuser.roll_num]
                                 )
                             messages.success(request,f"Route {route_number} assigned to user {request.user.appuser.roll_num}.")
+                            #Notify admin and provider about route change
+                            return redirect(reverse('userauth:select-stop'))
                         else:
                             messages.error(request,f"Route {route_number} not found.")
           else:
                form = SelectRouteForm()
-          return render(request, "transport/routes.html",{"providers":providers,"routes": routes,"form":form})
+          return render(request, "transport/routes.html",{"routes": routes,"form":form})
+     else:
+          return redirect(reverse('userauth:login'))
+
+def select_stop(request):
+     if request.user.is_user:
+          raw_query_2= """
+          SELECT r.route_num AS route_num, s.id AS stop_id, s.name AS stop_name FROM transport_route AS r JOIN transport_routestop AS rs ON r.route_num = rs.route_id JOIN transport_stop AS s ON rs.stop_id = s.id ORDER BY r.route_num, rs.stop_order;
+          """
+          with connection.cursor() as cursor:
+            cursor.execute(raw_query_2)
+            results = cursor.fetchall()
+
+        # Organize results into a structure suitable for the template
+          routes = {}
+          for route_num, stop_id, stop_name in results:
+               if route_num not in routes:
+                    idx=0
+                    routes[route_num] = {"stops": []}
+               if stop_id:
+                    idx+=1
+                    routes[route_num]["stops"].append({"idx":idx,"id": stop_id, "name": stop_name})
+                    
+          if request.method == 'POST':
+               stops_form = SelectStopForm(request.POST,selected_route=request.user.appuser.assigned_route.route_num)
+
+               if stops_form.is_valid():
+                    selected_stop = stops_form.cleaned_data['start_stop']
+                    with connection.cursor() as cursor:
+                         cursor.execute(
+                         "UPDATE userauth_appuser SET stop_id = %s WHERE roll_num = %s",
+                         [selected_stop.id, request.user.appuser.roll_num]
+                         )
+                    request.user.appuser.refresh_from_db()
+                    messages.success(request,f"Stop {selected_stop.name} assigned to user {request.user.appuser.roll_num}.")
+                    #Notify provider and admin about stop change
+          else:
+               stops_form = SelectStopForm(selected_route=request.user.appuser.assigned_route.route_num)
+          return render(request, "transport/select_stop.html", {
+            "form": stops_form,
+            "routes": routes
+          })
      else:
           return redirect(reverse('userauth:login'))
      

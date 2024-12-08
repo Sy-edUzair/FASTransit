@@ -139,27 +139,34 @@ def add_route_view(request):
         if request.method == 'POST':
             form = RouteForm(request.POST)
             if form.is_valid():
-                # Save the route to the database
                 route_num = form.cleaned_data['route_num']
                 start_stop = form.cleaned_data['start_stop']
                 appointed_provider =TransportProvider.objects.get(representative=request.user.providerrepresentative)
                 stops = form.cleaned_data['stops']
+                stop_orders = form.cleaned_data.get('stop_orders', '').split(',')
+                stop_orders = [order.strip() for order in stop_orders if order.strip()]
 
                 try:
-                    # Create the Route instance
                     route = Route.objects.create(
                         route_num=route_num,
                         start_stop=start_stop,
                         appointed_provider=appointed_provider
                     )
 
-                # Add stops to the route through the many-to-many relationship
+                    for idx, stop in enumerate(stops):
+                        # Get the corresponding stop order from the 'stop_orders' field
+                        stop_order = stop_orders[idx] if idx < len(stop_orders) else idx + 1
+
+                        RouteStop.objects.create(
+                            route=route,
+                            stop=stop,
+                            stop_order=int(stop_order)
+                        )               
                     route.stops.set(stops)
                     route.save()
-
                     # Display success message
                     messages.success(request, "Route added successfully!")
-                    return redirect('transport:add-route')  # Redirect to the same page after adding
+                    return redirect('transport:add-route')
                 except Exception as e:
                     messages.error(request, f"Error occurred while adding route: {str(e)}")
         else:
@@ -208,7 +215,6 @@ def add_driver(request):
         return redirect(reverse('userauth:login'))
 
 def view_routes(request):
-    # Adjust query based on actual database schema
     if request.user.is_transporter:
         raw_query = """SELECT 
         r.route_num, 
@@ -238,7 +244,6 @@ def view_routes(request):
             messages.error(request, f"Error occurred while fetching routes: {str(e)}")
             results = []
 
-        # Preparing routes data for rendering
         routes = []
         for result in results:
             route_data = {
@@ -256,8 +261,7 @@ def add_vehicle(request):
     if request.user.is_transporter:
         if request.method == 'POST':
             form = VehicleForm(request.POST)
-            if form.is_valid():  # Validate the form before accessing cleaned_data
-                # Now you can safely access cleaned_data
+            if form.is_valid():
                 license_plate = form.cleaned_data['license_plate']
                 allotted_seats = form.cleaned_data['allotted_seats']
                 tracking_id = form.cleaned_data['tracking_id']
@@ -267,7 +271,7 @@ def add_vehicle(request):
                 transport_provider = TransportProvider.objects.get(representative=request.user.providerrepresentative)
                 route_no = form.cleaned_data['route_no']
                 
-                # Now save the data to the database or perform other actions
+             
                 new_vehicle = Vehicle(
                     license_plate=license_plate,
                     allotted_seats=allotted_seats,
@@ -280,22 +284,21 @@ def add_vehicle(request):
                 )
                 new_vehicle.save()
                 
-                # Success message
+       
                 messages.success(request, 'Vehicle has been successfully added!')
                 
-                return redirect('transport:add_vehicle')  # Redirect to the same page or a success page
+                return redirect('transport:add_vehicle') 
             else:
-                # If the form is not valid, render the form again with errors
+                
                 messages.error(request, 'Please fix the errors in the form.')
                 return render(request, 'transport/add_vehicle.html', {'form': form})
         else:
-            form = VehicleForm()  # Create an empty form for GET requests
+            form = VehicleForm()
             return render(request, 'transport/add_vehicle.html', {'form': form})
     else:
         return redirect(reverse('userauth:login'))
 
 def view_vehicles(request):
-    # Raw MySQL query to fetch all vehicles
     if request.user.is_transporter:
         query = """
         SELECT
@@ -311,7 +314,7 @@ def view_vehicles(request):
         with connection.cursor() as cursor:
             cursor.execute(query)
             vehicles = cursor.fetchall()
-        # Process the result into a more readable format
+    
         vehicle_list = []
         for vehicle in vehicles:
             vehicle_data = {
@@ -323,7 +326,7 @@ def view_vehicles(request):
             }
             vehicle_list.append(vehicle_data)
 
-        # Example of adding messages for success or warning
+       
         if vehicle_list:
             messages.success(request, "Vehicles loaded successfully.")
         else:
@@ -335,7 +338,6 @@ def view_vehicles(request):
 
 def payment_status_view(request):
         users_paid = AppUser.objects.filter(payments__voucher__status__status_name="Succeeded").distinct()
-        print(users_paid)
         users_paid_with_amount = []
         for user in users_paid:
             total_paid = user.payments.aggregate(total=Sum('amount'))['total'] or 0
@@ -344,10 +346,9 @@ def payment_status_view(request):
                 'total_paid': total_paid
             })
 
-        # Query users who haven't paid
+      
         users_not_paid = AppUser.objects.filter(vouchers__status__status_name="Pending").distinct()
-        print(users_not_paid[0].assigned_route)
-        # Pass to context
+
         context = {
             'users_paid': users_paid_with_amount,
             'users_not_paid': users_not_paid,

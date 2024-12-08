@@ -14,5 +14,6 @@ urlpatterns=[
     path("provider-details/",views.provider_detail_view,name='provider-details'),
     path("feedback/",views.feedback_view,name='feedback'),
     path("tracking/",views.tracking_view,name="tracking"),
-    path("render-routes/",views.render_route_page,name="render-routes")
+    path("render-routes/",views.render_route_page,name="render-routes"),
+    path("select-stop/",views.select_stop,name="select-stop")
 ]

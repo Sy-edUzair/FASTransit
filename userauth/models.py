@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser,BaseUserManager,PermissionsMixin
 from django.core.validators import RegexValidator
-from transport.models import Route
+from transport.models import Route,Stop
 from django.contrib.auth.hashers import make_password
 
 Gender=(
@@ -64,11 +64,12 @@ class AppUser(models.Model):
     emergency_contact=models.CharField(max_length=11)
     department = models.ForeignKey(Department, on_delete=models.SET_NULL,null=True,blank=True)
     assigned_route = models.ForeignKey(Route, on_delete=models.SET_NULL, null=True, blank=True, related_name='users')
+    stop = models.ForeignKey(Stop, on_delete=models.SET_NULL,null=True,blank=True)
     base_user= models.OneToOneField(CustomUser, on_delete=models.CASCADE)
-
 
     def __str__(self):
         return self.roll_num
+    
     @property
     def imageURL(self):
         try:

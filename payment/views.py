@@ -210,10 +210,10 @@ def webhook_view(request):
                          ).last()
 
                          if not fees_voucher:
-                              print("No pending voucher found for the user")
+                              messages.warning(request,"No pending voucher found for the user")
 
                          if fees_voucher.status.status_name != 'Pending':
-                              print("Voucher has already been paid")
+                              messages.warning(request,"Voucher has already been paid")
 
                          # Update voucher status
                          status = PaymentStatus.objects.get(status_name="Succeeded")
