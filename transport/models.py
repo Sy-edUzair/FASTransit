@@ -67,8 +67,14 @@ class Vehicle(models.Model):
         )
     ],
     default='ABC-123')
+    tracking_validator = RegexValidator(
+        regex=r'^cbt@route\d{2}.com$', 
+        message='Trakcing must be in the format cbt@route(number).com'
+    )
     allotted_seats = models.IntegerField()
-    tracking_id = models.IntegerField()
+    tracking_id = models.EmailField(
+        validators = [tracking_validator]
+    )
     Last_maintenance_date = models.DateField()
     status = models.ForeignKey(VehicleStatus, on_delete=models.SET_NULL, null=True)
     capacity_type = models.ForeignKey(CapacityType, on_delete=models.SET_NULL, null=True)
