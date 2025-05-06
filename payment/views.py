@@ -120,8 +120,6 @@ def payment_history_view(request):
      return render(request, "payment/payment-history.html",{"providers":providers,"payments":payments})
 
 
-
-
 class CreateCheckoutSessionView(View):
      @method_decorator(csrf_protect)
      def post(self,request,*args,**kwargs):
