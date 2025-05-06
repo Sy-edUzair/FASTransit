@@ -58,9 +58,6 @@
     <div class="col-12">
       <div class="card">
         <div class="card-body">
-          {% if user.appuser.stop %}
-            <a href="{% url 'userauth:select-stop' %}">Just want to change your stop? Click here</a>
-          {% endif %}
           {% for route_num, route_data in routes.items %}
             <ul class="route-list">
               <li>
@@ -76,25 +73,13 @@
             </ul>
           {% endfor %}
 
-          <!-- Route Selection Section -->
           <div class="route-select-area">
-            <label for="routeInput">Select a Route:</label>
             <form method="POST">
               {% csrf_token %}
               {{ form.as_p }}
-              <button class="route-submit-button" onclick="submitRoute()">Submit</button>
+              <button class="route-submit-button">Submit</button>
             </form>
           </div>
-
-          {% if stop_form %}
-            <div class="route-select-area">
-              <form method="POST">
-                {% csrf_token %}
-                {{ stop_form.as_p }}
-                <button class="route-submit-button" onclick="submitRoute()">Submit</button>
-              </form>
-            </div>
-          {% endif %}
         </div>
       </div>
     </div>
@@ -112,16 +97,6 @@
       } else {
         stops.style.display = 'none'
         icon.textContent = '▶'
-      }
-    }
-    
-    function submitRoute() {
-      const routeInput = document.getElementById('routeInput').value
-      if (routeInput) {
-        alert(`You have selected: ${routeInput}`)
-        // Add further processing as needed
-      } else {
-        alert('Please enter a route number.')
       }
     }
   </script>

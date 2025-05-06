@@ -11,68 +11,69 @@
       border-radius: 5px;
       margin-bottom: 30px;
     }
-
+    
     .breadcrumbs-area h3 {
       font-size: 24px;
       margin-bottom: 10px;
     }
-
+    
     .breadcrumbs-area ul {
       list-style: none;
       padding: 0;
       margin: 0;
     }
-
+    
     .breadcrumbs-area ul li {
       display: inline;
       margin-right: 10px;
     }
-
+    
     .breadcrumbs-area ul li a {
       text-decoration: none;
       color: #007bff;
     }
-
+    
     .breadcrumbs-area ul li::after {
-      content: ">";
+      content: '>';
       margin-left: 10px;
     }
-
+    
     .breadcrumbs-area ul li:last-child::after {
-      content: "";
+      content: '';
     }
-
+    
     .card {
       border-radius: 10px;
       border: none;
       box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     }
-
+    
     .card-body {
       padding: 30px;
     }
-
+    
     .table {
       width: 100%;
       margin-top: 20px;
       border-collapse: collapse;
     }
-
-    .table th, .table td {
+    
+    .table th,
+    .table td {
       padding: 12px;
       text-align: left;
       border: 1px solid #ddd;
     }
-
+    
     .table th {
       background-color: #f1f1f1;
       font-weight: bold;
     }
-
+    
     .table tbody tr:nth-child(even) {
       background-color: #f9f9f9;
     }
-
+    
     .btn-primary {
       background-color: #007bff;
       border-color: #007bff;
@@ -81,7 +82,7 @@
       border-radius: 5px;
       cursor: pointer;
     }
-
+    
     .btn-primary:hover {
       background-color: #0056b3;
       border-color: #004085;
@@ -100,7 +101,7 @@
     </ul>
   </div>
 
-  <div class="row">
+  <div class="row" style="height: 450px;">
     <div class="col-12">
       <div class="card">
         <div class="card-body">
@@ -108,13 +109,11 @@
             {% if messages %}
               <div class="alert-container">
                 {% for message in messages %}
-                  <div class="alert alert-{{ message.tags }}">
-                    {{ message }}
-                  </div>
+                  <div class="alert alert-{{ message.tags }}">{{ message }}</div>
                 {% endfor %}
               </div>
             {% endif %}
-            
+
             <table class="table">
               <thead>
                 <tr>
@@ -146,5 +145,4 @@
       </div>
     </div>
   </div>
-
 {% endblock %}

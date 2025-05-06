@@ -19,6 +19,9 @@ class Voucher(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     
+    def __str__(self):
+        return f"User {self.user.roll_num}"
+    
     @property
     def is_active(self):
         """
