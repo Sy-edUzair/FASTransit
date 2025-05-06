@@ -146,4 +146,4 @@ If tests fail due to missing environment variables:
 
 ## Contact
 
-For any questions or issues regarding the testing process, please contact the development team at fastransit@example.com. 
+For any questions or issues regarding the testing process, please contact the development team at k224212@nu.edu.pk or k224634@nu.edu.pk
